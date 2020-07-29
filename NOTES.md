@@ -1453,3 +1453,6 @@ feed in a little extra data (equal to the depth of pipeline) so that all _releva
   + Go back to groundup debug example 
 + 
 
+20200729
++ Reboot
+
