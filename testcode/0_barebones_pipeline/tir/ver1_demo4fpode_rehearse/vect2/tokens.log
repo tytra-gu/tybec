@@ -1,0 +1,1103 @@
+$VAR1 = {
+          'launch' => {
+                        'wordsPerTuple' => 0
+                      },
+          'kernel_A' => {
+                          'func_type' => 'pipe',
+                          'performance' => {
+                                             'lfi' => 1,
+                                             'afi' => 1,
+                                             'fpo' => 1,
+                                             'sd' => 0,
+                                             'efi' => 1,
+                                             'lat' => 2
+                                           },
+                          'resource' => {
+                                          'regs' => 128,
+                                          'bram' => 0,
+                                          'dsps' => 0,
+                                          'propDelay' => 3,
+                                          'aluts' => 64
+                                        },
+                          'symbols' => {
+                                         '%local1' => {
+                                                        'resource' => {
+                                                                        'bram' => 0,
+                                                                        'dsps' => 0,
+                                                                        'regs' => 64,
+                                                                        'propDelay' => 3,
+                                                                        'aluts' => 32
+                                                                      },
+                                                        'funcunit' => 'add',
+                                                        'performance' => {
+                                                                           'lat' => 1,
+                                                                           'efi' => 1,
+                                                                           'sd' => 0,
+                                                                           'fpo' => 1,
+                                                                           'lfi' => 1,
+                                                                           'afi' => 1
+                                                                         },
+                                                        'oper1form' => 'inPort',
+                                                        'oper2form' => 'inPort',
+                                                        'synthDtype' => 'i32',
+                                                        'dtype' => 'i32',
+                                                        'dfgnode' => '%local1',
+                                                        'cat' => 'impscal',
+                                                        'produces' => [
+                                                                        '%local1'
+                                                                      ],
+                                                        'consumes' => [
+                                                                        '%ka_vin0',
+                                                                        '%ka_vin1'
+                                                                      ],
+                                                        'synthunit' => 'add'
+                                                      },
+                                         '%ka_vin0' => {
+                                                         'dir' => 'input',
+                                                         'dfgnode' => '%ka_vin0',
+                                                         'cat' => 'arg',
+                                                         'dtype' => 'i32',
+                                                         'consumes' => [],
+                                                         'produces' => [
+                                                                         '%ka_vin0'
+                                                                       ],
+                                                         'maxNegOffset' => 0,
+                                                         'maxPosOffset' => 0,
+                                                         'numOffsetStreams' => 0,
+                                                         'performance' => {
+                                                                            'afi' => 1,
+                                                                            'lfi' => 1,
+                                                                            'lat' => 0,
+                                                                            'efi' => 1,
+                                                                            'fpo' => 1,
+                                                                            'sd' => 0
+                                                                          },
+                                                         'resource' => {
+                                                                         'bram' => 0,
+                                                                         'dsps' => 0,
+                                                                         'regs' => 0,
+                                                                         'propDelay' => 0,
+                                                                         'aluts' => 0
+                                                                       }
+                                                       },
+                                         '%ka_vout' => {
+                                                         'funcunit' => 'add',
+                                                         'oper2form' => 'local',
+                                                         'oper1form' => 'local',
+                                                         'numOffsetStreams' => 0,
+                                                         'performance' => {
+                                                                            'afi' => 1,
+                                                                            'lfi' => 1,
+                                                                            'sd' => 1,
+                                                                            'fpo' => 1,
+                                                                            'efi' => 1,
+                                                                            'lat' => 1
+                                                                          },
+                                                         'maxPosOffset' => 0,
+                                                         'maxNegOffset' => 0,
+                                                         'synthunit' => 'add',
+                                                         'synthDtype' => 'i32',
+                                                         'dir' => 'output',
+                                                         'dfgnode' => '%ka_vout',
+                                                         'cat' => 'func-arg',
+                                                         'resource' => {
+                                                                         'bram' => 0,
+                                                                         'dsps' => 0,
+                                                                         'regs' => 64,
+                                                                         'propDelay' => 3,
+                                                                         'aluts' => 32
+                                                                       },
+                                                         'produces' => [
+                                                                         '%ka_vout'
+                                                                       ],
+                                                         'consumes' => [
+                                                                         '%local1',
+                                                                         '%local1'
+                                                                       ],
+                                                         'dtype' => 'i32'
+                                                       },
+                                         '%ka_vin1' => {
+                                                         'performance' => {
+                                                                            'lfi' => 1,
+                                                                            'afi' => 1,
+                                                                            'fpo' => 1,
+                                                                            'sd' => 0,
+                                                                            'lat' => 0,
+                                                                            'efi' => 1
+                                                                          },
+                                                         'numOffsetStreams' => 0,
+                                                         'resource' => {
+                                                                         'regs' => 0,
+                                                                         'dsps' => 0,
+                                                                         'bram' => 0,
+                                                                         'aluts' => 0,
+                                                                         'propDelay' => 0
+                                                                       },
+                                                         'maxNegOffset' => 0,
+                                                         'maxPosOffset' => 0,
+                                                         'produces' => [
+                                                                         '%ka_vin1'
+                                                                       ],
+                                                         'consumes' => [],
+                                                         'dfgnode' => '%ka_vin1',
+                                                         'cat' => 'arg',
+                                                         'dir' => 'input',
+                                                         'dtype' => 'i32'
+                                                       }
+                                       },
+                          'instrCount' => 0,
+                          'insCntrFcall' => 0,
+                          'depth' => 'flat',
+                          'noutputs' => 1,
+                          'funcName' => 'kernel_A',
+                          'args' => {
+                                      '1' => {
+                                               'name' => '%ka_vin1',
+                                               'isOffsetStream' => 0,
+                                               'dtype' => 'i32',
+                                               'dir' => 'input'
+                                             },
+                                      '0' => {
+                                               'dir' => 'input',
+                                               'dtype' => 'i32',
+                                               'name' => '%ka_vin0',
+                                               'isOffsetStream' => 0
+                                             },
+                                      '2' => {
+                                               'name' => '%ka_vout',
+                                               'isOffsetStream' => 0,
+                                               'dir' => 'output',
+                                               'dtype' => 'i32'
+                                             }
+                                    },
+                          'synthDtype' => 'i32',
+                          'ninputs' => 2
+                        },
+          'kernelTop' => {
+                           'instrCount' => 4,
+                           'insCntrFcall' => 4,
+                           'depth' => 'hier',
+                           'symbols' => {
+                                          '%kt_vin0' => {
+                                                          'resource' => {
+                                                                          'propDelay' => 0,
+                                                                          'aluts' => 0,
+                                                                          'regs' => 0,
+                                                                          'bram' => 0,
+                                                                          'dsps' => 0
+                                                                        },
+                                                          'numOffsetStreams' => 0,
+                                                          'performance' => {
+                                                                             'lfi' => 1,
+                                                                             'afi' => 1,
+                                                                             'fpo' => 1,
+                                                                             'sd' => 0,
+                                                                             'lat' => 0,
+                                                                             'efi' => 1
+                                                                           },
+                                                          'maxPosOffset' => 0,
+                                                          'maxNegOffset' => 0,
+                                                          'produces' => [
+                                                                          '%kt_vin0'
+                                                                        ],
+                                                          'consumes' => [],
+                                                          'dtype' => 'i32',
+                                                          'dir' => 'input',
+                                                          'cat' => 'arg',
+                                                          'dfgnode' => '%kt_vin0'
+                                                        },
+                                          'kernel_C.2' => {
+                                                            'resource' => {
+                                                                            'bram' => 0,
+                                                                            'dsps' => 0,
+                                                                            'regs' => 64,
+                                                                            'propDelay' => 0,
+                                                                            'aluts' => 0
+                                                                          },
+                                                            'performance' => {
+                                                                               'efi' => 1,
+                                                                               'lat' => 1,
+                                                                               'sd' => 3,
+                                                                               'fpo' => 1,
+                                                                               'lfi' => 1,
+                                                                               'afi' => 1
+                                                                             },
+                                                            'instrType' => 'funcCall',
+                                                            'produces' => [
+                                                                            '%vconn_C_to_D'
+                                                                          ],
+                                                            'consumes' => [
+                                                                            '%vconn_B_to_C'
+                                                                          ],
+                                                            'funcType' => undef,
+                                                            'funcName' => 'kernel_C',
+                                                            'instrSequence' => 2,
+                                                            'args2child' => {
+                                                                              '0' => {
+                                                                                       'nameChildPort' => '%kc_vin',
+                                                                                       'dir' => 'input',
+                                                                                       'type' => 'i32',
+                                                                                       'name' => '%vconn_B_to_C'
+                                                                                     },
+                                                                              '1' => {
+                                                                                       'name' => '%vconn_C_to_D',
+                                                                                       'type' => 'i32',
+                                                                                       'dir' => 'output',
+                                                                                       'nameChildPort' => '%kc_vout'
+                                                                                     }
+                                                                            },
+                                                            'funcRepeatCounter' => 2,
+                                                            'dfgnode' => 'kernel_C.2',
+                                                            'cat' => 'funcall'
+                                                          },
+                                          '%kt_vin1' => {
+                                                          'produces' => [
+                                                                          '%kt_vin1'
+                                                                        ],
+                                                          'consumes' => [],
+                                                          'dtype' => 'i32',
+                                                          'dfgnode' => '%kt_vin1',
+                                                          'cat' => 'arg',
+                                                          'dir' => 'input',
+                                                          'resource' => {
+                                                                          'propDelay' => 0,
+                                                                          'aluts' => 0,
+                                                                          'regs' => 0,
+                                                                          'bram' => 0,
+                                                                          'dsps' => 0
+                                                                        },
+                                                          'performance' => {
+                                                                             'sd' => 0,
+                                                                             'fpo' => 1,
+                                                                             'efi' => 1,
+                                                                             'lat' => 0,
+                                                                             'afi' => 1,
+                                                                             'lfi' => 1
+                                                                           },
+                                                          'numOffsetStreams' => 0,
+                                                          'maxPosOffset' => 0,
+                                                          'maxNegOffset' => 0
+                                                        },
+                                          'kernel_B.1' => {
+                                                            'instrType' => 'funcCall',
+                                                            'performance' => {
+                                                                               'lat' => 1,
+                                                                               'efi' => 1,
+                                                                               'fpo' => 1,
+                                                                               'sd' => 2,
+                                                                               'lfi' => 1,
+                                                                               'afi' => 1
+                                                                             },
+                                                            'resource' => {
+                                                                            'aluts' => 32,
+                                                                            'propDelay' => 3,
+                                                                            'regs' => 64,
+                                                                            'dsps' => 0,
+                                                                            'bram' => 0
+                                                                          },
+                                                            'dfgnode' => 'kernel_B.1',
+                                                            'cat' => 'funcall',
+                                                            'args2child' => {
+                                                                              '1' => {
+                                                                                       'dir' => 'output',
+                                                                                       'nameChildPort' => '%kb_vout',
+                                                                                       'name' => '%vconn_B_to_C',
+                                                                                       'type' => 'i32'
+                                                                                     },
+                                                                              '0' => {
+                                                                                       'dir' => 'input',
+                                                                                       'nameChildPort' => '%kb_vin',
+                                                                                       'name' => '%vconn_A_to_B',
+                                                                                       'type' => 'i32'
+                                                                                     }
+                                                                            },
+                                                            'funcRepeatCounter' => 1,
+                                                            'instrSequence' => 1,
+                                                            'funcType' => undef,
+                                                            'funcName' => 'kernel_B',
+                                                            'consumes' => [
+                                                                            '%vconn_A_to_B'
+                                                                          ],
+                                                            'produces' => [
+                                                                            '%vconn_B_to_C'
+                                                                          ]
+                                                          },
+                                          'kernel_A.0' => {
+                                                            'instrType' => 'funcCall',
+                                                            'performance' => {
+                                                                               'afi' => 1,
+                                                                               'lfi' => 1,
+                                                                               'fpo' => 1,
+                                                                               'sd' => 0,
+                                                                               'lat' => 2,
+                                                                               'efi' => 1
+                                                                             },
+                                                            'resource' => {
+                                                                            'propDelay' => 3,
+                                                                            'aluts' => 64,
+                                                                            'bram' => 0,
+                                                                            'dsps' => 0,
+                                                                            'regs' => 128
+                                                                          },
+                                                            'instrSequence' => 0,
+                                                            'funcType' => undef,
+                                                            'funcName' => 'kernel_A',
+                                                            'produces' => [
+                                                                            '%vconn_A_to_B'
+                                                                          ],
+                                                            'consumes' => [
+                                                                            '%kt_vin0',
+                                                                            '%kt_vin1'
+                                                                          ],
+                                                            'cat' => 'funcall',
+                                                            'dfgnode' => 'kernel_A.0',
+                                                            'args2child' => {
+                                                                              '0' => {
+                                                                                       'type' => 'i32',
+                                                                                       'name' => '%kt_vin0',
+                                                                                       'nameChildPort' => '%ka_vin0',
+                                                                                       'dir' => 'input'
+                                                                                     },
+                                                                              '2' => {
+                                                                                       'name' => '%vconn_A_to_B',
+                                                                                       'type' => 'i32',
+                                                                                       'dir' => 'output',
+                                                                                       'nameChildPort' => '%ka_vout'
+                                                                                     },
+                                                                              '1' => {
+                                                                                       'dir' => 'input',
+                                                                                       'nameChildPort' => '%ka_vin1',
+                                                                                       'name' => '%kt_vin1',
+                                                                                       'type' => 'i32'
+                                                                                     }
+                                                                            },
+                                                            'funcRepeatCounter' => 0
+                                                          },
+                                          'kernel_D.3' => {
+                                                            'funcName' => 'kernel_D',
+                                                            'funcType' => undef,
+                                                            'consumes' => [
+                                                                            '%vconn_C_to_D'
+                                                                          ],
+                                                            'produces' => [
+                                                                            '%kt_vout'
+                                                                          ],
+                                                            'instrSequence' => 3,
+                                                            'funcRepeatCounter' => 3,
+                                                            'args2child' => {
+                                                                              '0' => {
+                                                                                       'name' => '%vconn_C_to_D',
+                                                                                       'type' => 'i32',
+                                                                                       'dir' => 'input',
+                                                                                       'nameChildPort' => '%kd_vin'
+                                                                                     },
+                                                                              '1' => {
+                                                                                       'type' => 'i32',
+                                                                                       'name' => '%kt_vout',
+                                                                                       'nameChildPort' => '%kd_vout',
+                                                                                       'dir' => 'output'
+                                                                                     }
+                                                                            },
+                                                            'cat' => 'funcall',
+                                                            'dfgnode' => 'kernel_D.3',
+                                                            'resource' => {
+                                                                            'dsps' => 0,
+                                                                            'bram' => 0,
+                                                                            'regs' => 64,
+                                                                            'aluts' => 32,
+                                                                            'propDelay' => 3
+                                                                          },
+                                                            'instrType' => 'funcCall',
+                                                            'performance' => {
+                                                                               'efi' => 1,
+                                                                               'lat' => 1,
+                                                                               'sd' => 4,
+                                                                               'fpo' => 1,
+                                                                               'afi' => 1,
+                                                                               'lfi' => 1
+                                                                             }
+                                                          },
+                                          '%kt_vout' => {
+                                                          'dfgnode' => '%kt_vout',
+                                                          'cat' => 'arg',
+                                                          'dir' => 'output',
+                                                          'dtype' => 'i32',
+                                                          'produces' => [
+                                                                          '%kt_vout'
+                                                                        ],
+                                                          'consumes' => [
+                                                                          '%kt_vout'
+                                                                        ],
+                                                          'maxNegOffset' => 0,
+                                                          'maxPosOffset' => 0,
+                                                          'performance' => {
+                                                                             'lfi' => 1,
+                                                                             'afi' => 1,
+                                                                             'fpo' => 1,
+                                                                             'sd' => 5,
+                                                                             'efi' => 1,
+                                                                             'lat' => 0
+                                                                           },
+                                                          'numOffsetStreams' => 0,
+                                                          'resource' => {
+                                                                          'dsps' => 0,
+                                                                          'bram' => 0,
+                                                                          'regs' => 0,
+                                                                          'aluts' => 0,
+                                                                          'propDelay' => 0
+                                                                        }
+                                                        }
+                                        },
+                           'resource' => {
+                                           'aluts' => 128,
+                                           'propDelay' => 3,
+                                           'dsps' => 0,
+                                           'bram' => 0,
+                                           'regs' => 320
+                                         },
+                           'performance' => {
+                                              'efi' => 1,
+                                              'lat' => 5,
+                                              'sd' => 0,
+                                              'fpo' => 1,
+                                              'lfi' => 1,
+                                              'afi' => 1
+                                            },
+                           'func_type' => 'pipe',
+                           'synthDtype' => 'i32',
+                           'ninputs' => 2,
+                           'args' => {
+                                       '1' => {
+                                                'isOffsetStream' => 0,
+                                                'name' => '%kt_vin1',
+                                                'dir' => 'input',
+                                                'dtype' => 'i32'
+                                              },
+                                       '0' => {
+                                                'name' => '%kt_vin0',
+                                                'isOffsetStream' => 0,
+                                                'dtype' => 'i32',
+                                                'dir' => 'input'
+                                              },
+                                       '2' => {
+                                                'name' => '%kt_vout',
+                                                'isOffsetStream' => 0,
+                                                'dtype' => 'i32',
+                                                'dir' => 'output'
+                                              }
+                                     },
+                           'noutputs' => 1,
+                           'funcName' => 'kernelTop'
+                         },
+          'kernel_B' => {
+                          'synthDtype' => 'i32',
+                          'ninputs' => 1,
+                          'args' => {
+                                      '1' => {
+                                               'dtype' => 'i32',
+                                               'dir' => 'output',
+                                               'name' => '%kb_vout',
+                                               'isOffsetStream' => 0
+                                             },
+                                      '0' => {
+                                               'dtype' => 'i32',
+                                               'dir' => 'input',
+                                               'name' => '%kb_vin',
+                                               'isOffsetStream' => 0
+                                             }
+                                    },
+                          'noutputs' => 1,
+                          'funcName' => 'kernel_B',
+                          'instrCount' => 0,
+                          'insCntrFcall' => 0,
+                          'depth' => 'flat',
+                          'resource' => {
+                                          'regs' => 64,
+                                          'bram' => 0,
+                                          'dsps' => 0,
+                                          'propDelay' => 3,
+                                          'aluts' => 32
+                                        },
+                          'symbols' => {
+                                         '%kb_vin' => {
+                                                        'dtype' => 'i32',
+                                                        'dfgnode' => '%kb_vin',
+                                                        'cat' => 'arg',
+                                                        'dir' => 'input',
+                                                        'consumes' => [],
+                                                        'produces' => [
+                                                                        '%kb_vin'
+                                                                      ],
+                                                        'maxPosOffset' => 0,
+                                                        'maxNegOffset' => 0,
+                                                        'resource' => {
+                                                                        'aluts' => 0,
+                                                                        'propDelay' => 0,
+                                                                        'regs' => 0,
+                                                                        'dsps' => 0,
+                                                                        'bram' => 0
+                                                                      },
+                                                        'performance' => {
+                                                                           'lfi' => 1,
+                                                                           'afi' => 1,
+                                                                           'efi' => 1,
+                                                                           'lat' => 0,
+                                                                           'sd' => 0,
+                                                                           'fpo' => 1
+                                                                         },
+                                                        'numOffsetStreams' => 0
+                                                      },
+                                         '%kb_vout' => {
+                                                         'performance' => {
+                                                                            'afi' => 1,
+                                                                            'lfi' => 1,
+                                                                            'lat' => 1,
+                                                                            'efi' => 1,
+                                                                            'fpo' => 1,
+                                                                            'sd' => 0
+                                                                          },
+                                                         'oper2form' => 'inPort',
+                                                         'oper1form' => 'inPort',
+                                                         'numOffsetStreams' => 0,
+                                                         'funcunit' => 'add',
+                                                         'maxNegOffset' => 0,
+                                                         'maxPosOffset' => 0,
+                                                         'synthunit' => 'add',
+                                                         'dfgnode' => '%kb_vout',
+                                                         'cat' => 'func-arg',
+                                                         'dir' => 'output',
+                                                         'synthDtype' => 'i32',
+                                                         'resource' => {
+                                                                         'dsps' => 0,
+                                                                         'bram' => 0,
+                                                                         'regs' => 64,
+                                                                         'aluts' => 32,
+                                                                         'propDelay' => 3
+                                                                       },
+                                                         'produces' => [
+                                                                         '%kb_vout'
+                                                                       ],
+                                                         'consumes' => [
+                                                                         '%kb_vin',
+                                                                         '%kb_vin'
+                                                                       ],
+                                                         'dtype' => 'i32'
+                                                       }
+                                       },
+                          'func_type' => 'pipe',
+                          'performance' => {
+                                             'afi' => 1,
+                                             'lfi' => 1,
+                                             'fpo' => 1,
+                                             'sd' => 2,
+                                             'efi' => 1,
+                                             'lat' => 1
+                                           }
+                        },
+          'macros' => {
+                        'NLinear' => '1048576'
+                      },
+          'main' => {
+                      'offsetStreams' => {},
+                      'args' => {},
+                      'symbols' => {
+                                     '%vout_stream_store' => {
+                                                               'stride' => '1',
+                                                               'performance' => {
+                                                                                  'afi' => 1,
+                                                                                  'lfi' => 1,
+                                                                                  'lat' => 0,
+                                                                                  'efi' => 0,
+                                                                                  'sd' => 0,
+                                                                                  'fpo' => 1
+                                                                                },
+                                                               'resource' => {
+                                                                               'propDelay' => 0,
+                                                                               'aluts' => 0,
+                                                                               'regs' => 0,
+                                                                               'bram' => 0,
+                                                                               'dsps' => 0
+                                                                             },
+                                                               'dfgnode' => '%vout',
+                                                               'cat' => 'streamwrite',
+                                                               'dtype' => 'i32',
+                                                               'streamtype' => 'stream1d',
+                                                               'memConnAddrSpace' => undef,
+                                                               'produces' => [
+                                                                               '%vout'
+                                                                             ],
+                                                               'consumes' => [
+                                                                               '%vout_stream_store'
+                                                                             ],
+                                                               'startAddr' => 0,
+                                                               'size' => '1048576'
+                                                             },
+                                     '%vin1' => {
+                                                  'connOutStreamCount' => 0,
+                                                  'cat' => 'alloca',
+                                                  'dfgnode' => '%vin1',
+                                                  'dtype' => 'i32.1048576',
+                                                  'size' => '1048576',
+                                                  'produces' => [
+                                                                  '%vin1'
+                                                                ],
+                                                  'consumes' => [],
+                                                  'aspace' => '1',
+                                                  'connInStreamCount' => 1,
+                                                  'streamConn' => {
+                                                                    '0' => {
+                                                                             'name' => '%vin1_stream_load',
+                                                                             'dir' => 'input'
+                                                                           }
+                                                                  },
+                                                  'performance' => {
+                                                                     'lfi' => 1,
+                                                                     'afi' => 1,
+                                                                     'fpo' => 1,
+                                                                     'sd' => 0,
+                                                                     'efi' => 1,
+                                                                     'lat' => 0
+                                                                   },
+                                                  'resource' => {
+                                                                  'propDelay' => 0,
+                                                                  'aluts' => 0,
+                                                                  'bram' => 0,
+                                                                  'dsps' => 0,
+                                                                  'regs' => 0
+                                                                },
+                                                  'connStreamCount' => 1
+                                                },
+                                     '%vin1_stream_load' => {
+                                                              'streamtype' => 'stream1d',
+                                                              'memConnAddrSpace' => undef,
+                                                              'consumes' => [
+                                                                              '%vin1'
+                                                                            ],
+                                                              'startAddr' => 0,
+                                                              'produces' => [
+                                                                              '%vin1_stream_load'
+                                                                            ],
+                                                              'size' => '1048576',
+                                                              'cat' => 'streamread',
+                                                              'dfgnode' => '%vin1',
+                                                              'dtype' => 'i32',
+                                                              'performance' => {
+                                                                                 'afi' => 1,
+                                                                                 'lfi' => 1,
+                                                                                 'efi' => 0,
+                                                                                 'lat' => 0,
+                                                                                 'sd' => 0,
+                                                                                 'fpo' => 1
+                                                                               },
+                                                              'numOffsetStreams' => 0,
+                                                              'resource' => {
+                                                                              'aluts' => 0,
+                                                                              'propDelay' => 0,
+                                                                              'regs' => 0,
+                                                                              'dsps' => 0,
+                                                                              'bram' => 0
+                                                                            },
+                                                              'maxNegOffset' => 0,
+                                                              'stride' => '1',
+                                                              'maxPosOffset' => 0
+                                                            },
+                                     '%vout' => {
+                                                  'produces' => [
+                                                                  '%vout'
+                                                                ],
+                                                  'consumes' => [],
+                                                  'size' => '1048576',
+                                                  'dtype' => 'i32.1048576',
+                                                  'cat' => 'alloca',
+                                                  'dfgnode' => '%vout',
+                                                  'connOutStreamCount' => 1,
+                                                  'connStreamCount' => 1,
+                                                  'resource' => {
+                                                                  'propDelay' => 0,
+                                                                  'aluts' => 0,
+                                                                  'regs' => 0,
+                                                                  'bram' => 0,
+                                                                  'dsps' => 0
+                                                                },
+                                                  'performance' => {
+                                                                     'sd' => 0,
+                                                                     'fpo' => 1,
+                                                                     'lat' => 0,
+                                                                     'efi' => 1,
+                                                                     'afi' => 1,
+                                                                     'lfi' => 1
+                                                                   },
+                                                  'streamConn' => {
+                                                                    '0' => {
+                                                                             'dir' => 'output',
+                                                                             'name' => '%vout_stream_store'
+                                                                           }
+                                                                  },
+                                                  'connInStreamCount' => 0,
+                                                  'aspace' => '1'
+                                                },
+                                     '%vin0' => {
+                                                  'aspace' => '1',
+                                                  'streamConn' => {
+                                                                    '0' => {
+                                                                             'dir' => 'input',
+                                                                             'name' => '%vin0_stream_load'
+                                                                           }
+                                                                  },
+                                                  'connInStreamCount' => 1,
+                                                  'performance' => {
+                                                                     'lfi' => 1,
+                                                                     'afi' => 1,
+                                                                     'fpo' => 1,
+                                                                     'sd' => 0,
+                                                                     'lat' => 0,
+                                                                     'efi' => 1
+                                                                   },
+                                                  'resource' => {
+                                                                  'aluts' => 0,
+                                                                  'propDelay' => 0,
+                                                                  'dsps' => 0,
+                                                                  'bram' => 0,
+                                                                  'regs' => 0
+                                                                },
+                                                  'connStreamCount' => 1,
+                                                  'dfgnode' => '%vin0',
+                                                  'cat' => 'alloca',
+                                                  'connOutStreamCount' => 0,
+                                                  'dtype' => 'i32.1048576',
+                                                  'consumes' => [],
+                                                  'produces' => [
+                                                                  '%vin0'
+                                                                ],
+                                                  'size' => '1048576'
+                                                },
+                                     '%vin0_stream_load' => {
+                                                              'size' => '1048576',
+                                                              'consumes' => [
+                                                                              '%vin0'
+                                                                            ],
+                                                              'startAddr' => 0,
+                                                              'produces' => [
+                                                                              '%vin0_stream_load'
+                                                                            ],
+                                                              'memConnAddrSpace' => undef,
+                                                              'streamtype' => 'stream1d',
+                                                              'dtype' => 'i32',
+                                                              'dfgnode' => '%vin0',
+                                                              'cat' => 'streamread',
+                                                              'resource' => {
+                                                                              'regs' => 0,
+                                                                              'dsps' => 0,
+                                                                              'bram' => 0,
+                                                                              'aluts' => 0,
+                                                                              'propDelay' => 0
+                                                                            },
+                                                              'numOffsetStreams' => 0,
+                                                              'performance' => {
+                                                                                 'afi' => 1,
+                                                                                 'lfi' => 1,
+                                                                                 'lat' => 0,
+                                                                                 'efi' => 0,
+                                                                                 'fpo' => 1,
+                                                                                 'sd' => 0
+                                                                               },
+                                                              'maxPosOffset' => 0,
+                                                              'stride' => '1',
+                                                              'maxNegOffset' => 0
+                                                            },
+                                     'kernelTop.0' => {
+                                                        'resource' => {
+                                                                        'propDelay' => 3,
+                                                                        'aluts' => 128,
+                                                                        'regs' => 320,
+                                                                        'bram' => 0,
+                                                                        'dsps' => 0
+                                                                      },
+                                                        'instrType' => 'funcCall',
+                                                        'performance' => {
+                                                                           'efi' => 1,
+                                                                           'lat' => 5,
+                                                                           'sd' => 0,
+                                                                           'fpo' => 1,
+                                                                           'lfi' => 1,
+                                                                           'afi' => 1
+                                                                         },
+                                                        'funcType' => undef,
+                                                        'funcName' => 'kernelTop',
+                                                        'produces' => [
+                                                                        '%vout_stream_store'
+                                                                      ],
+                                                        'consumes' => [
+                                                                        '%vin1_stream_load',
+                                                                        '%vin0_stream_load'
+                                                                      ],
+                                                        'instrSequence' => 0,
+                                                        'funcRepeatCounter' => 0,
+                                                        'args2child' => {
+                                                                          '1' => {
+                                                                                   'dir' => 'input',
+                                                                                   'nameChildPort' => '%kt_vin1',
+                                                                                   'name' => '%vin1_stream_load',
+                                                                                   'type' => 'i32'
+                                                                                 },
+                                                                          '0' => {
+                                                                                   'name' => '%vin0_stream_load',
+                                                                                   'type' => 'i32',
+                                                                                   'dir' => 'input',
+                                                                                   'nameChildPort' => '%kt_vin0'
+                                                                                 },
+                                                                          '2' => {
+                                                                                   'name' => '%vout_stream_store',
+                                                                                   'type' => 'i32',
+                                                                                   'dir' => 'output',
+                                                                                   'nameChildPort' => '%kt_vout'
+                                                                                 }
+                                                                        },
+                                                        'cat' => 'funcall',
+                                                        'dfgnode' => 'kernelTop.0'
+                                                      }
+                                   },
+                      'resource' => {
+                                      'propDelay' => 3,
+                                      'aluts' => 128,
+                                      'bram' => 1,
+                                      'dsps' => 1,
+                                      'regs' => 320
+                                    },
+                      'performance' => {
+                                         'sd' => 0,
+                                         'fpo' => 1,
+                                         'efi' => 1,
+                                         'lat' => 5,
+                                         'lfi' => 1,
+                                         'afi' => 1
+                                       },
+                      'depth' => 'hier',
+                      'topKernelName' => 'kernelTop',
+                      'allocaports' => {
+                                         'vin1_stream_load' => {
+                                                                 'dir' => 'input'
+                                                               },
+                                         'vout_stream_store' => {
+                                                                  'dir' => 'output'
+                                                                },
+                                         'vin0_stream_load' => {
+                                                                 'dir' => 'input'
+                                                               }
+                                       },
+                      'bufsize' => 1048576
+                    },
+          'kernel_D' => {
+                          'performance' => {
+                                             'afi' => 1,
+                                             'lfi' => 1,
+                                             'fpo' => 1,
+                                             'sd' => 4,
+                                             'lat' => 1,
+                                             'efi' => 1
+                                           },
+                          'func_type' => 'pipe',
+                          'resource' => {
+                                          'propDelay' => 3,
+                                          'aluts' => 32,
+                                          'bram' => 0,
+                                          'dsps' => 0,
+                                          'regs' => 64
+                                        },
+                          'symbols' => {
+                                         '%kd_vout' => {
+                                                         'maxPosOffset' => 0,
+                                                         'maxNegOffset' => 0,
+                                                         'funcunit' => 'add',
+                                                         'oper2form' => 'inPort',
+                                                         'numOffsetStreams' => 0,
+                                                         'oper1form' => 'inPort',
+                                                         'performance' => {
+                                                                            'efi' => 1,
+                                                                            'lat' => 1,
+                                                                            'sd' => 0,
+                                                                            'fpo' => 1,
+                                                                            'afi' => 1,
+                                                                            'lfi' => 1
+                                                                          },
+                                                         'synthDtype' => 'i32',
+                                                         'dir' => 'output',
+                                                         'dfgnode' => '%kd_vout',
+                                                         'cat' => 'func-arg',
+                                                         'synthunit' => 'add',
+                                                         'resource' => {
+                                                                         'regs' => 64,
+                                                                         'bram' => 0,
+                                                                         'dsps' => 0,
+                                                                         'propDelay' => 3,
+                                                                         'aluts' => 32
+                                                                       },
+                                                         'dtype' => 'i32',
+                                                         'consumes' => [
+                                                                         '%kd_vin',
+                                                                         '%kd_vin'
+                                                                       ],
+                                                         'produces' => [
+                                                                         '%kd_vout'
+                                                                       ]
+                                                       },
+                                         '%kd_vin' => {
+                                                        'consumes' => [],
+                                                        'produces' => [
+                                                                        '%kd_vin'
+                                                                      ],
+                                                        'dir' => 'input',
+                                                        'cat' => 'arg',
+                                                        'dfgnode' => '%kd_vin',
+                                                        'dtype' => 'i32',
+                                                        'numOffsetStreams' => 0,
+                                                        'performance' => {
+                                                                           'afi' => 1,
+                                                                           'lfi' => 1,
+                                                                           'fpo' => 1,
+                                                                           'sd' => 0,
+                                                                           'efi' => 1,
+                                                                           'lat' => 0
+                                                                         },
+                                                        'resource' => {
+                                                                        'aluts' => 0,
+                                                                        'propDelay' => 0,
+                                                                        'regs' => 0,
+                                                                        'dsps' => 0,
+                                                                        'bram' => 0
+                                                                      },
+                                                        'maxNegOffset' => 0,
+                                                        'maxPosOffset' => 0
+                                                      }
+                                       },
+                          'depth' => 'flat',
+                          'insCntrFcall' => 0,
+                          'instrCount' => 0,
+                          'funcName' => 'kernel_D',
+                          'noutputs' => 1,
+                          'args' => {
+                                      '0' => {
+                                               'dir' => 'input',
+                                               'dtype' => 'i32',
+                                               'name' => '%kd_vin',
+                                               'isOffsetStream' => 0
+                                             },
+                                      '1' => {
+                                               'dir' => 'output',
+                                               'dtype' => 'i32',
+                                               'name' => '%kd_vout',
+                                               'isOffsetStream' => 0
+                                             }
+                                    },
+                          'synthDtype' => 'i32',
+                          'ninputs' => 1
+                        },
+          'kernel_C' => {
+                          'noutputs' => 1,
+                          'funcName' => 'kernel_C',
+                          'args' => {
+                                      '1' => {
+                                               'dir' => 'output',
+                                               'dtype' => 'i32',
+                                               'name' => '%kc_vout',
+                                               'isOffsetStream' => 0
+                                             },
+                                      '0' => {
+                                               'dir' => 'input',
+                                               'dtype' => 'i32',
+                                               'name' => '%kc_vin',
+                                               'isOffsetStream' => 0
+                                             }
+                                    },
+                          'ninputs' => 1,
+                          'synthDtype' => 'i32',
+                          'performance' => {
+                                             'efi' => 1,
+                                             'lat' => 1,
+                                             'fpo' => 1,
+                                             'sd' => 3,
+                                             'afi' => 1,
+                                             'lfi' => 1
+                                           },
+                          'func_type' => 'pipe',
+                          'resource' => {
+                                          'aluts' => 0,
+                                          'propDelay' => 0,
+                                          'regs' => 64,
+                                          'dsps' => 0,
+                                          'bram' => 0
+                                        },
+                          'symbols' => {
+                                         '%kc_vout' => {
+                                                         'maxPosOffset' => 0,
+                                                         'maxNegOffset' => 0,
+                                                         'propDelay' => 3,
+                                                         'funcunit' => 'mul',
+                                                         'performance' => {
+                                                                            'fpo' => 1,
+                                                                            'sd' => 0,
+                                                                            'lat' => 1,
+                                                                            'efi' => 1,
+                                                                            'lfi' => 1,
+                                                                            'afi' => 1
+                                                                          },
+                                                         'oper2form' => 'inPort',
+                                                         'numOffsetStreams' => 0,
+                                                         'oper1form' => 'inPort',
+                                                         'synthDtype' => 'i32',
+                                                         'cat' => 'func-arg',
+                                                         'dfgnode' => '%kc_vout',
+                                                         'dir' => 'output',
+                                                         'synthunit' => 'mul',
+                                                         'aluts' => 0,
+                                                         'resource' => {
+                                                                         'propDelay' => 0,
+                                                                         'aluts' => 0,
+                                                                         'bram' => 0,
+                                                                         'dsps' => 0,
+                                                                         'regs' => 64
+                                                                       },
+                                                         'dtype' => 'i32',
+                                                         'produces' => [
+                                                                         '%kc_vout'
+                                                                       ],
+                                                         'consumes' => [
+                                                                         '%kc_vin',
+                                                                         '%kc_vin'
+                                                                       ],
+                                                         'dsps' => 2
+                                                       },
+                                         '%kc_vin' => {
+                                                        'consumes' => [],
+                                                        'produces' => [
+                                                                        '%kc_vin'
+                                                                      ],
+                                                        'dir' => 'input',
+                                                        'cat' => 'arg',
+                                                        'dfgnode' => '%kc_vin',
+                                                        'dtype' => 'i32',
+                                                        'numOffsetStreams' => 0,
+                                                        'performance' => {
+                                                                           'sd' => 0,
+                                                                           'fpo' => 1,
+                                                                           'lat' => 0,
+                                                                           'efi' => 1,
+                                                                           'lfi' => 1,
+                                                                           'afi' => 1
+                                                                         },
+                                                        'resource' => {
+                                                                        'bram' => 0,
+                                                                        'dsps' => 0,
+                                                                        'regs' => 0,
+                                                                        'propDelay' => 0,
+                                                                        'aluts' => 0
+                                                                      },
+                                                        'maxNegOffset' => 0,
+                                                        'maxPosOffset' => 0
+                                                      }
+                                       },
+                          'insCntrFcall' => 0,
+                          'depth' => 'flat',
+                          'instrCount' => 0
+                        }
+        };

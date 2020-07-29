@@ -1,0 +1,144 @@
+TyBEC: Found macro SIZE = 262144
+TyBEC: Found macro data_t = float32
+TyBEC: Found macro fadd = add
+TyBEC: Found macro fsub = sub
+TyBEC: Found macro fmul = mul
+TyBEC: Found macro fdiv = udiv
+TyBEC: Found macro ALPHA = -0.062832
+TyBEC: Found macro BETA = 0.000987
+TyBEC: Found macro DT = 432.000000
+TyBEC: Found macro ONE_MINUS_BETA = 0.999013
+TyBEC: Found macro ONE_PLUS_BETA = 1.000987
+TyBEC: Found macro mode = 1
+
+=====================================
+       Running TyBEC Parser          
+=====================================
+Found FUNCT_DECLR coriolis_ker0
+TyBEC: Found function definition of coriolis_ker0 
+>>> %vn, 24, 0, 11, 13
+>>> %un, 24, 0, 11, 13
+Found FUNCTION
+Found FUNCT_DECLR coriolis_ker1_subker0
+TyBEC: Found function definition of coriolis_ker1_subker0 
+>>> %xn, 24, 0, 16, 8
+Found FUNCTION
+Found FUNCT_DECLR coriolis_ker1_subker1
+TyBEC: Found function definition of coriolis_ker1_subker1 
+>>> %yn, 24, 0, 16, 8
+Found FUNCTION
+Found FUNCT_DECLR kernel_top
+TyBEC: coriolis_ker0 called by kernel_top
+TyBEC: coriolis_ker1_subker0 called by kernel_top
+TyBEC: coriolis_ker1_subker1 called by kernel_top
+TyBEC: Found function definition of kernel_top 
+>>> %vn, 25, 0, 24, 1
+>>> %un, 25, 0, 24, 1
+>>> %xn, 48, 0, 48, 0
+>>> %yn, 48, 0, 48, 0
+Found FUNCTION
+TyBEC: Found allocated memory: %u, float32 , 262144 words , addressspace = 1 
+TyBEC: Found allocated memory: %v, float32 , 262144 words , addressspace = 1 
+TyBEC: Found allocated memory: %x, float32 , 262144 words , addressspace = 1 
+TyBEC: Found allocated memory: %y, float32 , 262144 words , addressspace = 1 
+TyBEC: Found allocated memory: %un, float32 , 262144 words , addressspace = 1 
+TyBEC: Found allocated memory: %vn, float32 , 262144 words , addressspace = 1 
+TyBEC: Found allocated memory: %xn, float32 , 262144 words , addressspace = 1 
+TyBEC: Found allocated memory: %yn, float32 , 262144 words , addressspace = 1 
+TyBEC: Found STREAMREAD: %u_stream, connected to  %u
+TyBEC: Found STREAMREAD: %v_stream, connected to  %v
+TyBEC: Found STREAMREAD: %x_stream, connected to  %x
+TyBEC: Found STREAMREAD: %y_stream, connected to  %y
+TyBEC: Found STREAMWRITE: %un_stream, connected to  %un
+TyBEC: Found STREAMWRITE: %vn_stream, connected to  %vn
+TyBEC: Found STREAMWRITE: %xn_stream, connected to  %xn
+TyBEC: Found STREAMWRITE: %yn_stream, connected to  %yn
+TyBEC: kernel_top called by main
+The top kernel called from Main is  = kernel_top_0
+TyBEC: Found function definition of main.
+
+
+=================================================
+ Verilog HDL Code Generation   					
+=================================================
+TyBEC: Generated module coriolis_ker1_subker0_mul
+TyBEC: Generated module coriolis_ker1_subker0_div
+TyBEC: Generated module coriolis_ker1_subker0_xn
+TyBEC: Generated module coriolis_ker1_subker0_x_xn_b
+TyBEC: Generated module coriolis_ker0_mul4
+TyBEC: Generated module coriolis_ker0_mul1
+TyBEC: Generated module coriolis_ker0_add
+TyBEC: Generated module coriolis_ker0_un
+TyBEC: Generated module coriolis_ker0_mul
+TyBEC: Generated module coriolis_ker0_mul5
+TyBEC: Generated module coriolis_ker0_sub6
+TyBEC: Generated module coriolis_ker0_vn
+TyBEC: Generated module kernel_top_coriolis_ker1_subker1
+TyBEC: Generated module kernel_top_y_coriolis_ker1_subker1_2_b
+TyBEC: Generated module kernel_top_coriolis_ker0
+TyBEC: Generated module kernel_top_coriolis_ker1_subker0
+TyBEC: Generated module kernel_top_x_coriolis_ker1_subker0_1_b
+TyBEC: Generated module kernel_top_coriolis_ker0_0_un_b
+TyBEC: Generated module kernel_top_un
+TyBEC: Generated module kernel_top_coriolis_ker0_0_vn_b
+TyBEC: Generated module kernel_top_vn
+TyBEC: Generated module coriolis_ker1_subker1_mul1
+TyBEC: Generated module coriolis_ker1_subker1_div2
+TyBEC: Generated module coriolis_ker1_subker1_yn
+TyBEC: Generated module coriolis_ker1_subker1_y_yn_b
+TyBEC: Generated module main
+TyBEC: Generated module main_kernel_top
+TyBEC: Generated module func_hdl_top
+TyBEC: Generated module krnl_vadd_rtl
+TyBEC: Generated module testbench
+
+=================================================
+ OCL Wrapper Code Generation   					
+=================================================
+TyBEC: Generated host.cpp
+TyBEC: Generated krenel.xml
+=================================================
+Build took 1.36 seconds
+The graph is: 
+ coriolis_ker0.%add-coriolis_ker0.%un
+coriolis_ker0.%mul-coriolis_ker0.%add
+coriolis_ker0.%mul1-coriolis_ker0.%add
+coriolis_ker0.%mul4-coriolis_ker0.%sub6
+coriolis_ker0.%mul5-coriolis_ker0.%sub6
+coriolis_ker0.%sub6-coriolis_ker0.%vn
+coriolis_ker0.%u-coriolis_ker0.%mul
+coriolis_ker0.%u-coriolis_ker0.%mul5
+coriolis_ker0.%v-coriolis_ker0.%mul1
+coriolis_ker0.%v-coriolis_ker0.%mul4
+coriolis_ker1_subker0.%div-coriolis_ker1_subker0.%xn
+coriolis_ker1_subker0.%mul-coriolis_ker1_subker0.%div
+coriolis_ker1_subker0.%un-coriolis_ker1_subker0.%mul
+coriolis_ker1_subker0.%x-coriolis_ker1_subker0.x_xn_b
+coriolis_ker1_subker0.x_xn_b-coriolis_ker1_subker0.%xn
+coriolis_ker1_subker1.%div2-coriolis_ker1_subker1.%yn
+coriolis_ker1_subker1.%mul1-coriolis_ker1_subker1.%div2
+coriolis_ker1_subker1.%vn-coriolis_ker1_subker1.%mul1
+coriolis_ker1_subker1.%y-coriolis_ker1_subker1.y_yn_b
+coriolis_ker1_subker1.y_yn_b-coriolis_ker1_subker1.%yn
+kernel_top.%u-kernel_top.coriolis_ker0_0
+kernel_top.%v-kernel_top.coriolis_ker0_0
+kernel_top.%x-kernel_top.x_coriolis_ker1_subker0_1_b
+kernel_top.%y-kernel_top.y_coriolis_ker1_subker1_2_b
+kernel_top.coriolis_ker0_0-kernel_top.coriolis_ker0_0_un_b
+kernel_top.coriolis_ker0_0-kernel_top.coriolis_ker0_0_vn_b
+kernel_top.coriolis_ker0_0-kernel_top.coriolis_ker1_subker0_1
+kernel_top.coriolis_ker0_0-kernel_top.coriolis_ker1_subker1_2
+kernel_top.coriolis_ker0_0_un_b-kernel_top.%un
+kernel_top.coriolis_ker0_0_vn_b-kernel_top.%vn
+kernel_top.coriolis_ker1_subker0_1-kernel_top.%xn
+kernel_top.coriolis_ker1_subker1_2-kernel_top.%yn
+kernel_top.x_coriolis_ker1_subker0_1_b-kernel_top.coriolis_ker1_subker0_1
+kernel_top.y_coriolis_ker1_subker1_2_b-kernel_top.coriolis_ker1_subker1_2
+main.%u-main.kernel_top_0
+main.%v-main.kernel_top_0
+main.%x-main.kernel_top_0
+main.%y-main.kernel_top_0
+main.kernel_top_0-main.%un
+main.kernel_top_0-main.%vn
+main.kernel_top_0-main.%xn
+main.kernel_top_0-main.%yn

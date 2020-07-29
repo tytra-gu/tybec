@@ -1,0 +1,40 @@
+WN, Glasgow, 2019.08.19
+=======================
+
+This is based on zeroth test-case for TyBEC-17. 
+It is a synthetic, barebones example to get the entire flow working (all the way to rtl and opencl-wrapper generation).
+This particular extension has multi-cycle (stub) instructions to test split/merge integration.
+
+FORTRAN has not been written. 
+TODO: Do fortran so that can test with  Wim's tool.
+
+#BUILD & RUN (C and Fortran)
+#------------
+#0. cd ./c (./fortran)
+#1. scons
+#2. ./barebones.exe
+
+------------
+VERSIONS
+------------
+// ver1 //
++ Introducing a multi-cycle iterative "pow" function into the testcode #0 barebones example.
++ "pow" presumed to be imlemented by a stub (peforming addition) by the backend
+
+// ver2 //
++ barebones of barebones
++ just one kernel with one (pow) instruction to debug multi-cycle unit
+
+// ver 3 //
++ Copy of ver1, with split and merge now (using [pndmap N] syntax)
++ Redundant second input added to kernel_B for testing
+(+ Not tested with multiple outputs in pndmap unit though)
++ Different values of pndmap tested.
+
+// ver 4 //
++ Modified DFG, to have parallel DFG paths, with one path having stalls (due to multi-cycle stubs) and the other path not.
++ Verified for both multi-cycle nodes, pndmap multi-cycle nodes
+
+// ver 5 (not complete)//
++ Further modifications to add select path and see if that fails too
++ LEFT INCOMPLETE, I debugged this issue inside 2dshallowwater example

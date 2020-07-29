@@ -1,0 +1,17 @@
+2019.11.04
+----------
+
+A barebones example to test integration of stencils with vectorization
+
+ver 1::
++ No stencils at all, just testing vectorization one level lower then before
+  - before, I would replicate kernelTop V times
+  - now, I need to replicate all top level nodes _inside_ kernelTop V times
++ IR code as testcode0, ver0 
+  
+ver 2::
++ Now introducing stencils
++ IR code same as testcode8, ver 3
+
+
+  

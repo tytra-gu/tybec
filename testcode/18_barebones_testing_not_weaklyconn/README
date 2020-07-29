@@ -1,0 +1,21 @@
+WN, Glasgow, 2019.09.16
+=======================
+
+This is based on zeroth test-case for TyBEC-17. 
+It is a synthetic, barebones example to get the entire flow working (all the way to rtl and opencl-wrapper generation).
+
+This particular extension is for testing functions that are NOT internally weakly connected. Until this testcode this was a requirement, I want to remove it.
+
+FORTRAN has not been written. 
+TODO: Do fortran so that can test with  Wim's tool.
+
+#BUILD & RUN (C and Fortran)
+#------------
+#0. cd ./c (./fortran)
+#1. scons
+#2. ./barebones.exe
+
+------------
+VERSIONS
+------------
+// ver1 //

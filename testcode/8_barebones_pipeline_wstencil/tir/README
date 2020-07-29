@@ -1,0 +1,18 @@
+ver 1:
+------
+Vanilla version, nothing fancy, MINIMAL FOR TESTING used (stencils, no boundaries or autoindex)
+
+ver 2:
+-------
+Bring in the full IR, including boundaries and autoindex
+
+ver 3:
+-------
++ Using new template (coalesced IOs, template gen from sdx)
++ Added a second output, so that IOs are symmetrical (2 ins, 2 outs), to meet aritificial contraint set by the template. FIXME
++ hostrun.c snippet is incorrect (from testcode 12); put here just so tybec does not complain
+
+ver 4:
+-------
++ Testing vectorization.
++ hostrun.c snippet is incorrect (from testcode 12); put here just so tybec does not complain

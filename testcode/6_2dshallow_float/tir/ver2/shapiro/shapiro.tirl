@@ -1,0 +1,209 @@
+
+;-- =============================================================================
+;-- Company      : Unversity of Glasgow, Comuting Science
+;-- Author:        Syed Waqar Nabi
+;-- 
+;-- Create Date  : 2014.11.03
+;-- Project Name : TyTra
+;--
+;-- Dependencies : 
+;--
+;-- Revision     : 
+;-- Revision 0.01. File Created
+;-- 
+;-- Conventions  : 
+;-- =============================================================================
+;--
+;-- =============================================================================
+;-- General Description
+;-- -----------------------------------------------------------------------------
+;-- Tytra-IR BACKEND file DYN1 kernel from 2d-shallow-water
+;--
+;--
+;-- =============================================================================
+;--
+#define ROWS    8
+#define COLS    8
+#define SIZE    (ROWS*COLS)
+
+;--I have the same arithmetic instructions for data_t/int for now
+#define fadd add
+#define fsub sub
+#define fmul mul
+#define fdiv udiv
+
+;--#define data_t float32
+#define data_t i32
+
+;--constants (init to random values)
+#define dx        1 
+#define dy        2
+#define dt        3
+#define g         10
+#define eps       5
+#define epsX4     20
+
+
+; -----------------------------------------------------------------------------
+; shapiro
+; -----------------------------------------------------------------------------
+
+define void @shapiro  ( data_t %etan_j_k
+                      , data_t %etan_jm1_k
+                      , data_t %etan_j_km1
+                      , data_t %etan_j_kp1
+                      , data_t %etan_jp1_k
+                      , data_t %wet_j_k
+                      , data_t %wet_jm1_k
+                      , data_t %wet_j_km1
+                      , data_t %wet_j_kp1
+                      , data_t %wet_jp1_k
+                      , data_t %eta_j_k
+                      , data_t %eta_j_k_dumm1                      
+                      , data_t %j
+                      , data_t %k                      
+                      ) pipe  
+{
+  ;-- boundary condition (
+  data_t %local1  = icmp eq i32 %j, 0
+  data_t %local2  = icmp eq i32 %j, (ROWS-1)
+  data_t %local3  = icmp eq i32 %k, 0
+  data_t %local4  = icmp eq i32 %k, (COLS-1)
+  data_t %local5  = or i32 %local1, %local2                      
+  data_t %local6  = or i32 %local3, %local4                      
+  data_t %bound   = or i32 %local5, %local6       
+  ;-- )
+    ;--%bound is true for boundaries
+    
+  ;-- bound==TRUE {
+    data_t %eta_j_k_brT  = load data_t %etan_j_k
+  ;--}    
+  
+  
+  ;-- bound==FALSE {
+    
+    data_t %cond2 = icmp eq i32 %wet_j_k, 1
+      ;--nested branch condition
+      
+    ;-- nested branch TRUE {  
+      data_t %add = fadd data_t %wet_j_kp1, %wet_j_km1
+      data_t %add1 = fadd data_t %add, %wet_jp1_k
+      data_t %add2 = fadd data_t %add1, %wet_jm1_k
+      data_t %mul3 = fmul data_t %add2, epsX4
+      
+      ;--data_t %one = load data_t 1 
+      ;--since constant can't be first operand, this is a workaround
+      
+      ;--sub swapped for add
+      ;--data_t %sub  = fsub data_t %one, %mul3
+      data_t %sub  = fadd data_t %mul3, 1
+      data_t %mul4 = fmul data_t %sub, %etan_j_k ;--term1
+      
+      data_t %mul6 = fmul data_t %wet_j_kp1, %etan_j_kp1
+      data_t %mul7 = fmul data_t %wet_j_km1, %etan_j_km1
+      data_t %add8 = fadd data_t %mul6, %mul7
+      data_t %mul9 = fmul data_t %add8, epsX4 ;--term2
+      
+      data_t %mul11 = fmul data_t %wet_jp1_k, %etan_jp1_k
+      data_t %mul12 = fmul data_t %wet_jm1_k, %etan_jm1_k
+      data_t %add13 = fadd data_t %mul11, %mul12
+      data_t %mul14 = fmul data_t %add13, epsX4 ;--term3
+      
+      data_t %add15 = fadd data_t %mul4, %mul9
+      data_t %eta_j_k_nested_brT = fadd data_t %add15, %mul14
+    ;--}
+    
+    ;-- nested branch FALSE {  
+      data_t %eta_j_k_nested_brF = load data_t %etan_j_k
+    ;--}
+    
+    ;--nested branch select
+    data_t %eta_j_k_brF   = select data_t %cond2, data_t %eta_j_k_nested_brT, data_t %eta_j_k_nested_brF
+  ;--}
+  
+  ;--outside branch select
+  data_t %eta_j_k       = select data_t %bound, data_t %eta_j_k_brT, data_t %eta_j_k_brF
+  data_t %eta_j_k_dumm1 = select data_t %bound, data_t %eta_j_k_brT, data_t %eta_j_k_brF
+  
+#if 0
+#endif  
+  ret void
+}
+
+
+; ----------------------------------------------------------
+; -- top
+; ----------------------------------------------------------
+define void @kernelTop ( data_t %etan_j_k
+                      , data_t  %wet_j_k
+                      , data_t  %eta_j_k
+                      , data_t  %eta_j_k_dumm1
+                      )  pipe
+{
+  ;----------------------------------------------
+  ;--offset streams
+  ;----------------------------------------------
+  data_t %etan_jm1_k = offstream  %etan_j_k, !tir.stream.offset !-COLS
+  data_t %etan_j_km1 = offstream  %etan_j_k, !tir.stream.offset !-1
+  data_t %etan_j_kp1 = offstream  %etan_j_k, !tir.stream.offset !+1
+  data_t %etan_jp1_k = offstream  %etan_j_k, !tir.stream.offset !+COLS
+
+  data_t %wet_jm1_k = offstream  %wet_j_k, !tir.stream.offset !-COLS
+  data_t %wet_j_km1 = offstream  %wet_j_k, !tir.stream.offset !-1
+  data_t %wet_j_kp1 = offstream  %wet_j_k, !tir.stream.offset !+1
+  data_t %wet_jp1_k = offstream  %wet_j_k, !tir.stream.offset !+COLS
+  
+  ;----------------------------------------------
+  ;--auto indices
+  ;----------------------------------------------
+  data_t %j = autoindex %etan_j_k , !tir.aindex.type      !2d
+                               , !tir.aindex.range      !0 !ROWS-1
+                               , !tir.aindex.dimNum     !1
+                               , !tir.aindex.nestOver   !%k
+                              
+  data_t %k = autoindex %etan_j_k , !tir.aindex.type      !2d
+                               , !tir.aindex.range      !0 !COLS-1
+                               , !tir.aindex.dimNum     !2  
+                               
+  ;----------------------------------------------
+  ;-- Connect peer KERNELS for CG-pipeline
+  ;----------------------------------------------
+  call @shapiro   ( data_t %etan_j_k
+                  , data_t %etan_jm1_k
+                  , data_t %etan_j_km1
+                  , data_t %etan_j_kp1
+                  , data_t %etan_jp1_k
+                  , data_t %wet_j_k
+                  , data_t %wet_jm1_k
+                  , data_t %wet_j_km1
+                  , data_t %wet_j_kp1
+                  , data_t %wet_jp1_k
+                  , data_t %eta_j_k
+                  , data_t %eta_j_k_dumm1                      
+                  , data_t %j
+                  , data_t %k                      
+                  ) 
+}
+
+; ----------------------------------------------------------
+; -- ** MAIN
+; ----------------------------------------------------------
+define void @main () {
+  %etan_j_k       = alloca [SIZE x data_t], addrspace(1)
+  %wet_j_k        = alloca [SIZE x data_t], addrspace(1)
+  %eta_j_k        = alloca [SIZE x data_t], addrspace(1)
+  %eta_j_k_dumm1  = alloca [SIZE x data_t], addrspace(1)
+  
+  %etan_j_k_stream  = streamread data_t, data_t*  %etan_j_k , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %wet_j_k_stream   = streamread data_t, data_t*  %wet_j_k  , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  
+  streamwrite data_t %eta_j_k_stream       , data_t* %eta_j_k      , !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+  streamwrite data_t %eta_j_k_dumm1_stream , data_t* %eta_j_k_dumm1, !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+
+  call @kernelTop  ( data_t %etan_j_k_stream
+                   , data_t %wet_j_k_stream 
+                   , data_t %eta_j_k_stream      
+                   , data_t %eta_j_k_dumm1_stream
+                   )        
+  ret void
+}

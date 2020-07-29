@@ -1,0 +1,153 @@
+
+=====================================
+       Running TyBEC Parser          
+=====================================
+Found FUNCT_DECLR coriolis_ker0
+TyBEC: Found function definition of coriolis_ker0 
+Found FUNCTION
+Found FUNCT_DECLR coriolis_ker1_subker0
+TyBEC: Found function definition of coriolis_ker1_subker0 
+Found FUNCTION
+Found FUNCT_DECLR coriolis_ker1_subker1
+TyBEC: Found function definition of coriolis_ker1_subker1 
+Found FUNCTION
+Found FUNCT_DECLR kernel_top
+TyBEC: coriolis_ker0 called by kernel_top
+TyBEC: coriolis_ker1_subker0 called by kernel_top
+TyBEC: coriolis_ker1_subker1 called by kernel_top
+TyBEC: Found function definition of kernel_top 
+Found FUNCTION
+TyBEC: Found allocated memory: %u, i32 , 64 words , addressspace = 1 
+TyBEC: Found allocated memory: %v, i32 , 64 words , addressspace = 1 
+TyBEC: Found allocated memory: %x, i32 , 64 words , addressspace = 1 
+TyBEC: Found allocated memory: %y, i32 , 64 words , addressspace = 1 
+TyBEC: Found allocated memory: %un, i32 , 64 words , addressspace = 1 
+TyBEC: Found allocated memory: %vn, i32 , 64 words , addressspace = 1 
+TyBEC: Found allocated memory: %xn, i32 , 64 words , addressspace = 1 
+TyBEC: Found allocated memory: %yn, i32 , 64 words , addressspace = 1 
+TyBEC: Found STREAMREAD: %u_stream, connected to  %u
+TyBEC: Found STREAMREAD: %v_stream, connected to  %v
+TyBEC: Found STREAMREAD: %x_stream, connected to  %x
+TyBEC: Found STREAMREAD: %y_stream, connected to  %y
+TyBEC: Found STREAMWRITE: %un_stream, connected to  %un
+TyBEC: Found STREAMWRITE: %vn_stream, connected to  %vn
+TyBEC: Found STREAMWRITE: %xn_stream, connected to  %xn
+TyBEC: Found STREAMWRITE: %yn_stream, connected to  %yn
+TyBEC: kernel_top called by main
+The top kernel called from Main is  = kernel_top_0
+TyBEC: Found function definition of main.
+
+============================================================================
+ Running the Cost Model (Performance and Resource Estimates)       
+============================================================================
+
+Target node is   : awsf12x
+Target board is  : awsf1Board
+Target device is : ultrascale
+
+>>>>>>>>>>>>>>>>>> 4, 4, 8
+
+----------------------------------------------------------------------------
+ BANDWIDTH ESTIMATES 
+----------------------------------------------------------------------------
+TyBEC: f  = 90.9 MHz 90900000 Hz
+TyBEC: host peak_Mbps  = 63000 Mbps
+TyBEC: host sust Mbps  = 63000 Mbps
+TyBEC: mem  peak Mbps  = 83200 Mbps
+TyBEC: mem  sust Mbps  = 47424 Mbps
+
+----------------------------------------------------------------------------
+ RESOURCE ESTIMATES (Kernel & Shell) 
+----------------------------------------------------------------------------
+
+::KERNEL::
+TyBEC: aluts = 4716 (0.05 %)
+TyBEC: regs  = 1152  (1.41 %)
+TyBEC: bram  = 1  (0.48 %)
+TyBEC: dsp   = 13   (0.21 %)
+
+::SHELL::
+TyBEC: aluts = 42272 (12.29 %)
+TyBEC: regs  = 61312  (8.93 %)
+TyBEC: bram  =   (0.05 %)
+TyBEC: dsp   = 0   (0.05 %)
+
+::TOTAL::
+TyBEC: aluts = 46988 (13.7 %)
+TyBEC: regs  = 62464  (9.14 %)
+TyBEC: bram  = 1  (0.1 %)
+TyBEC: dsp   = 13   (0.53 %)
+
+----------------------------------------------------------------------------
+ ROOFLINE ANALYSIS                                                           
+----------------------------------------------------------------------------
+TYBEC: Size of 1 input array (n_gs)              = 64
+TYBEC: Firing interval/II (n_to)                 = 1
+TYBEC: Total word operations per kernel (n_wops) = 16
+TYBEC: Words per tuple (from GMEM)      (w_pt)   = 8
+TYBEC: Size of problem (array size, words)       = 64
+TYBEC: Word size in bits (w_s_bits)              = 32
+TYBEC: Bytes per word (b_pw)                     = 4
+TYBEC: Kernel Pipeline  Latency (k_pd)           = 6
+
+TyBEC: CP of one PE              = 5.3 GBops/sec
+TyBEC: CP of one PE (Asymptotic) = 5.8 GBops/sec
+
+TyBEC: Theoretical maximum PE scaling         = 51.6
+
+TyBEC: Computational Intensity = 2 Byte-op/Byte-trasfer
+
+TyBEC: Sustained Memory Bandwidth (this variant)         = 5.9 GB/sec
+TyBEC: Theoretical Peak Memory Bandwidth (chosen target) = 10.4 GB/sec
+
+
+TyBEC: Computation-Bound, CP_PE  x SCALE  = 5.3	GBops/sec
+TyBEC: Bandwidth-Bound,   CI x BW         = 11.9	GBops/sec
+
+[33mTyBEC: Estimated Performance from Roofline Analysis	= ***5.3 GBop/sec***
+[0m
+TyBEC: Generating TEX file to plot performance on roofline graph
+TyBEC: Generated custom ROOFLINE plot TEX file 
+----------------------------------------------------------------------------
+
+=================================================
+ Verilog HDL Code Generation   					
+=================================================
+TyBEC: Generated module coriolis_ker1_subker0_x_buff1
+TyBEC: Generated module coriolis_ker1_subker0_xn
+TyBEC: Generated module coriolis_ker1_subker0_div
+TyBEC: Generated module coriolis_ker1_subker0_mul
+TyBEC: Generated module coriolis_ker1_subker1_mul1
+TyBEC: Generated module coriolis_ker1_subker1_div2
+TyBEC: Generated module coriolis_ker1_subker1_yn
+TyBEC: Generated module coriolis_ker1_subker1_y_buff1
+TyBEC: Generated module kernel_top_coriolis_ker1_subker1
+TyBEC: Generated module kernel_top_coriolis_ker0
+TyBEC: Generated module kernel_top_coriolis_ker1_subker0
+TyBEC: Generated module kernel_top_x_buff2
+TyBEC: Generated module kernel_top_vn_local_buff1
+TyBEC: Generated module kernel_top_vn
+TyBEC: Generated module kernel_top_un_local_buff1
+TyBEC: Generated module kernel_top_un
+TyBEC: Generated module kernel_top_y_buff2
+TyBEC: Generated module coriolis_ker0_mul4
+TyBEC: Generated module coriolis_ker0_mul1
+TyBEC: Generated module coriolis_ker0_add
+TyBEC: Generated module coriolis_ker0_mul
+TyBEC: Generated module coriolis_ker0_mul5
+TyBEC: Generated module coriolis_ker0_sub6
+TyBEC: Generated module coriolis_ker0_vn
+TyBEC: Generated module coriolis_ker0_un
+TyBEC: Generated module main
+TyBEC: Generated module main_kernel_top
+TyBEC: Generated module func_hdl_top
+TyBEC: Generated module krnl_vadd_rtl
+TyBEC: Generated module testbench
+
+=================================================
+ OCL Wrapper Code Generation   					
+=================================================
+TyBEC: Generated host.cpp
+TyBEC: Generated krenel.xml
+=================================================
+Build took 0.82 seconds

@@ -1,0 +1,321 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass report
+\begin_preamble
+
+
+
+% Title Page
+\title{TyTra Backend - Design Document}
+\author{Waqar Nabi}
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 0
+\use_mathdots 0
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\listings_params "commentstyle={\color{red}},keywordstyle={\color{blue}},keywordstyle={\color{black}\bfseries\underbar},stringstyle={\ttfamily}"
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Chapter*
+Integrating TyBEC cost model with CHREC cost model
+\end_layout
+
+\begin_layout Standard
+The TyBEC cost model can estimate resources and performance of an application
+ (1 or more kernels) on a single device.
+ It works from the IR code and a perl-based compiler parses it to generate
+ the estimates (on a roofline model).
+\end_layout
+
+\begin_layout Standard
+At CHREC, a VisualSim based model has been developed to model the performance
+ of (as far as I can understand) 3D -FFT application.
+ However, as part of that process, microbenchmarks have been used to estimate
+ paramters that lead to an overall performance estimate.
+ The results from these microbenchmarks can be used to create an integrated
+ cost model that estimate the cost of an different varations of application's
+ implementation on a cluster.
+ This observation forms the basis of this work.
+\end_layout
+
+\begin_layout Section*
+Scope
+\end_layout
+
+\begin_layout Standard
+We will cost designs expressed in the IR code, and targetted at Novo-G#
+ cluster initially.
+ Also:
+\end_layout
+
+\begin_layout Enumerate
+For device-parallelism, we will limit the partitioning to task-parallelism
+ initially (different kernels to different devices), and data-parallelism
+ will be left for later.
+\end_layout
+
+\begin_layout Enumerate
+We will limit the model to a single (CPU) node with a device cluster (rather
+ than a cluster of nodes).
+ 
+\end_layout
+
+\begin_layout Section*
+Notes on the Current TyBEC Cost Model
+\end_layout
+
+\begin_layout Standard
+The TyBEC model assumes a single-device implementation, parses a given IR
+ code, and generates a performance and resource cost-estimate.
+\end_layout
+
+\begin_layout Standard
+It required the prior execution of microbenchmarks on the device which calculate
+ the resource and performance for various primitive instructions, and also
+ estimate sustained bandwidth to the global memory.
+\end_layout
+
+\begin_layout Section*
+Notes on the Current Novo-G# Cost Model
+\end_layout
+
+\begin_layout Standard
+Initially, the Anton machine was modelled, implemented 3D FFT.
+\end_layout
+
+\begin_layout Itemize
+Can actually run the algorithm (and verify results), or turn that off to
+ speed things up, and just get estimates.
+\end_layout
+
+\begin_layout Itemize
+The following modelling parameters were used (based on papers)
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+system frequency
+\end_layout
+
+\begin_layout Itemize
+internal bandwidth
+\end_layout
+
+\begin_layout Itemize
+external bandwidth
+\end_layout
+
+\begin_layout Itemize
+synch delay
+\end_layout
+
+\begin_layout Itemize
+package writing delay
+\end_layout
+
+\begin_layout Itemize
+wire delay, x, y, z
+\end_layout
+
+\begin_layout Itemize
+tranceiver delay
+\end_layout
+
+\begin_layout Itemize
+FFT calculation time on 1/4 
+\emph on
+Geometry cores
+\emph default
+ (GCs) [That is, the computation time, in cycles].
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+FFT algorithm and routing algorithm are implemented as scripts inside the
+ VSim blocks.
+\end_layout
+
+\begin_layout Standard
+Then, once this Anton model was verified, a similar model for Novo-G# was
+ built.
+\end_layout
+
+\begin_layout Itemize
+The Novo-G# cluster is configured as a 3D-torus.
+\end_layout
+
+\begin_layout Itemize
+Various PHY options are possible, with different latencies and other parameter.
+ However, for our purpose, we would just fix the PHY in our model depending
+ on what is currently being used in the cluster (Interlaken, 118-151 ns
+ latency)
+\end_layout
+
+\begin_layout Itemize
+Packet size will have an impact on the performance.
+\end_layout
+
+\begin_layout Itemize
+The implementation uses a Nios-II soft processor alongwith Altera 1D FFT
+ Megacore IP.
+\end_layout
+
+\begin_layout Itemize
+The available figures in the thesis are for a 2x2x2 torus.
+\end_layout
+
+\begin_layout Itemize
+Resource estimates for Gidel's PCI interface (BSP) and the 3D-torus network
+ stack are available (i.e.
+ resource utilization excluding application logic)
+\end_layout
+
+\begin_layout Itemize
+Overhead of using inter-FPGA linkes has minimal impact on the resources
+ available for application acceleration.
+\end_layout
+
+\begin_layout Itemize
+The various modelling parameters used (and hence available) for Novo-G#
+ cluster are:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+System frequency
+\end_layout
+
+\begin_layout Itemize
+FFT Latency (cycles)
+\end_layout
+
+\begin_layout Itemize
+Num cores
+\end_layout
+
+\begin_layout Itemize
+Nios core latency
+\end_layout
+
+\begin_layout Itemize
+Packet generation latency
+\end_layout
+
+\begin_layout Itemize
+Inter-FPGA latency (Interlaken PHY)
+\end_layout
+
+\begin_layout Itemize
+Router latency
+\end_layout
+
+\begin_layout Itemize
+Ext Rx/Tx latency
+\end_layout
+
+\begin_layout Itemize
+Channel rate (per channel of a link)
+\end_layout
+
+\begin_layout Itemize
+Channel width (= 4 in each direction, so 6x4)
+\end_layout
+
+\begin_layout Itemize
+Number of routers
+\end_layout
+
+\begin_layout Itemize
+Packet buffer length
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+A script running in the VM in the applicaiton layer generates packets based
+ on the psuedo-code.
+\end_layout
+
+\begin_layout Section*
+Suggested Approach for a TyBEC--Nov-G# Cost Model
+\end_layout
+
+\begin_layout Standard
+Two possible approaches:
+\end_layout
+
+\begin_layout Enumerate
+
+\emph on
+Analytical+Empirical (Basic):
+\emph default
+ Use the latency, bandwidth and resource parameters available from the work
+ at CHREC on the Novo-G# cluster, and intergrate them into the curernt perl-base
+d TyBEC backend.
+ 
+\end_layout
+
+\begin_layout Enumerate
+
+\emph on
+Functional+Empirical (Advanced):
+\emph default
+ Build a functional model, most likely on SystemC and one that involves
+ a network model as well, and ``run'' the application (i.e, at least realistic
+ number/size of packets, data can be dummy).
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,2217 @@
+$VAR1 = {
+          'kernel_top' => {
+                            'insCntrFcall' => 3,
+                            'noutputs' => 4,
+                            'args' => {
+                                        '6' => {
+                                                 'dtype' => 'float32',
+                                                 'name' => '%xn',
+                                                 'isOffsetStream' => 0,
+                                                 'dir' => 'output'
+                                               },
+                                        '3' => {
+                                                 'dtype' => 'float32',
+                                                 'name' => '%y',
+                                                 'isOffsetStream' => 0,
+                                                 'dir' => 'input'
+                                               },
+                                        '7' => {
+                                                 'dtype' => 'float32',
+                                                 'name' => '%yn',
+                                                 'isOffsetStream' => 0,
+                                                 'dir' => 'output'
+                                               },
+                                        '2' => {
+                                                 'dtype' => 'float32',
+                                                 'name' => '%x',
+                                                 'isOffsetStream' => 0,
+                                                 'dir' => 'input'
+                                               },
+                                        '1' => {
+                                                 'dtype' => 'float32',
+                                                 'name' => '%v',
+                                                 'isOffsetStream' => 0,
+                                                 'dir' => 'input'
+                                               },
+                                        '4' => {
+                                                 'dtype' => 'float32',
+                                                 'name' => '%un',
+                                                 'isOffsetStream' => 0,
+                                                 'dir' => 'output'
+                                               },
+                                        '0' => {
+                                                 'dtype' => 'float32',
+                                                 'name' => '%u',
+                                                 'isOffsetStream' => 0,
+                                                 'dir' => 'input'
+                                               },
+                                        '5' => {
+                                                 'dtype' => 'float32',
+                                                 'name' => '%vn',
+                                                 'isOffsetStream' => 0,
+                                                 'dir' => 'output'
+                                               }
+                                      },
+                            'depth' => 'hier',
+                            'instrCount' => 3,
+                            'resource' => {
+                                            'propDelay' => 11,
+                                            'regs' => 4736,
+                                            'dsps' => 12,
+                                            'bram' => 0,
+                                            'aluts' => 6272
+                                          },
+                            'symbols' => {
+                                           '%un' => {
+                                                      'funcunit' => 'load',
+                                                      'dfgnode' => '%un',
+                                                      'oper2form' => 'local',
+                                                      'maxPosOffset' => 0,
+                                                      'consumes' => [
+                                                                      '%un_local_b_22'
+                                                                    ],
+                                                      'produces' => [
+                                                                      '%un'
+                                                                    ],
+                                                      'dir' => 'output',
+                                                      'dtype' => 'float32',
+                                                      'synthunit' => 'load',
+                                                      'cat' => 'func-arg',
+                                                      'oper1form' => 'local',
+                                                      'numOffsetStreams' => 0,
+                                                      'maxNegOffset' => 0,
+                                                      'resource' => {
+                                                                      'propDelay' => 1,
+                                                                      'regs' => 64,
+                                                                      'dsps' => 0,
+                                                                      'bram' => 0,
+                                                                      'aluts' => 32
+                                                                    },
+                                                      'synthDtype' => 'float32',
+                                                      'performance' => {
+                                                                         'lat' => 1,
+                                                                         'afi' => 1,
+                                                                         'fpo' => 1,
+                                                                         'efi' => 1,
+                                                                         'lfi' => 1,
+                                                                         'sd' => 47
+                                                                       }
+                                                    },
+                                           'coriolis_ker0_0_un_b' => {
+                                                                       'funcunit' => 'fifobuf',
+                                                                       'dfgnode' => 'coriolis_ker0_0_un_b',
+                                                                       'bufferSizeBits' => 736,
+                                                                       'bufferSizeWords' => 23,
+                                                                       'produces' => [
+                                                                                       '%un_local_b_22'
+                                                                                     ],
+                                                                       'consumes' => [
+                                                                                       '%un_local'
+                                                                                     ],
+                                                                       'resource' => {
+                                                                                       'propDelay' => 1,
+                                                                                       'regs' => 736,
+                                                                                       'dsps' => 0,
+                                                                                       'bram' => 0,
+                                                                                       'aluts' => 0
+                                                                                     },
+                                                                       'dtype' => 'float32',
+                                                                       'cat' => 'fifobuffer',
+                                                                       'synthunit' => 'fifobuf',
+                                                                       'synthDtype' => 'float32',
+                                                                       'performance' => {
+                                                                                          'lat' => 23,
+                                                                                          'afi' => 1,
+                                                                                          'fpo' => 1,
+                                                                                          'efi' => 1,
+                                                                                          'lfi' => 1,
+                                                                                          'sd' => 0
+                                                                                        },
+                                                                       'tapsAtDelays' => [
+                                                                                           23
+                                                                                         ]
+                                                                     },
+                                           'coriolis_ker1_subker1_2' => {
+                                                                          'instrType' => 'funcCall',
+                                                                          'dfgnode' => 'coriolis_ker1_subker1_2',
+                                                                          'instrSequence' => 2,
+                                                                          'produces' => [
+                                                                                          '%yn'
+                                                                                        ],
+                                                                          'consumes' => [
+                                                                                          '%vn_local',
+                                                                                          '%y_b_23'
+                                                                                        ],
+                                                                          'resource' => {
+                                                                                          'propDelay' => 11,
+                                                                                          'regs' => 640,
+                                                                                          'dsps' => 2,
+                                                                                          'bram' => 0,
+                                                                                          'aluts' => 1552
+                                                                                        },
+                                                                          'args2child' => {
+                                                                                            '1' => {
+                                                                                                     'nameChildPort' => '%vn',
+                                                                                                     'name' => '%vn_local',
+                                                                                                     'type' => 'float32',
+                                                                                                     'dir' => 'input'
+                                                                                                   },
+                                                                                            '0' => {
+                                                                                                     'nameChildPort' => '%y',
+                                                                                                     'name' => '%y_b_23',
+                                                                                                     'type' => 'float32',
+                                                                                                     'dir' => 'input'
+                                                                                                   },
+                                                                                            '2' => {
+                                                                                                     'nameChildPort' => '%yn',
+                                                                                                     'name' => '%yn',
+                                                                                                     'type' => 'float32',
+                                                                                                     'dir' => 'output'
+                                                                                                   }
+                                                                                          },
+                                                                          'funcRepeatCounter' => 2,
+                                                                          'cat' => 'funcall',
+                                                                          'funcType' => undef,
+                                                                          'funcName' => 'coriolis_ker1_subker1',
+                                                                          'performance' => {
+                                                                                             'lat' => 24,
+                                                                                             'afi' => 1,
+                                                                                             'fpo' => 1,
+                                                                                             'efi' => 1,
+                                                                                             'lfi' => 1,
+                                                                                             'sd' => 24
+                                                                                           }
+                                                                        },
+                                           '%xn' => {
+                                                      'dfgnode' => '%xn',
+                                                      'maxNegOffset' => 0,
+                                                      'maxPosOffset' => 0,
+                                                      'consumes' => [
+                                                                      '%xn'
+                                                                    ],
+                                                      'produces' => [
+                                                                      '%xn'
+                                                                    ],
+                                                      'dir' => 'output',
+                                                      'resource' => {
+                                                                      'propDelay' => 0,
+                                                                      'regs' => 0,
+                                                                      'dsps' => 0,
+                                                                      'bram' => 0,
+                                                                      'aluts' => 0
+                                                                    },
+                                                      'dtype' => 'float32',
+                                                      'cat' => 'arg',
+                                                      'performance' => {
+                                                                         'lat' => 0,
+                                                                         'afi' => 1,
+                                                                         'fpo' => 1,
+                                                                         'efi' => 1,
+                                                                         'lfi' => 1,
+                                                                         'sd' => 48
+                                                                       },
+                                                      'numOffsetStreams' => 0
+                                                    },
+                                           'coriolis_ker0_0' => {
+                                                                  'instrType' => 'funcCall',
+                                                                  'dfgnode' => 'coriolis_ker0_0',
+                                                                  'instrSequence' => 0,
+                                                                  'produces' => [
+                                                                                  '%vn_local',
+                                                                                  '%un_local'
+                                                                                ],
+                                                                  'consumes' => [
+                                                                                  '%v',
+                                                                                  '%u'
+                                                                                ],
+                                                                  'resource' => {
+                                                                                  'propDelay' => 11,
+                                                                                  'regs' => 320,
+                                                                                  'dsps' => 8,
+                                                                                  'bram' => 0,
+                                                                                  'aluts' => 3104
+                                                                                },
+                                                                  'args2child' => {
+                                                                                    '1' => {
+                                                                                             'nameChildPort' => '%v',
+                                                                                             'name' => '%v',
+                                                                                             'type' => 'float32',
+                                                                                             'dir' => 'input'
+                                                                                           },
+                                                                                    '3' => {
+                                                                                             'nameChildPort' => '%vn',
+                                                                                             'name' => '%vn_local',
+                                                                                             'type' => 'float32',
+                                                                                             'dir' => 'output'
+                                                                                           },
+                                                                                    '0' => {
+                                                                                             'nameChildPort' => '%u',
+                                                                                             'name' => '%u',
+                                                                                             'type' => 'float32',
+                                                                                             'dir' => 'input'
+                                                                                           },
+                                                                                    '2' => {
+                                                                                             'nameChildPort' => '%un',
+                                                                                             'name' => '%un_local',
+                                                                                             'type' => 'float32',
+                                                                                             'dir' => 'output'
+                                                                                           }
+                                                                                  },
+                                                                  'funcRepeatCounter' => 0,
+                                                                  'cat' => 'funcall',
+                                                                  'funcType' => undef,
+                                                                  'funcName' => 'coriolis_ker0',
+                                                                  'performance' => {
+                                                                                     'lat' => 24,
+                                                                                     'afi' => 1,
+                                                                                     'fpo' => 1,
+                                                                                     'efi' => 1,
+                                                                                     'lfi' => 1,
+                                                                                     'sd' => 0
+                                                                                   }
+                                                                },
+                                           '%vn' => {
+                                                      'funcunit' => 'load',
+                                                      'dfgnode' => '%vn',
+                                                      'oper2form' => 'local',
+                                                      'maxPosOffset' => 0,
+                                                      'consumes' => [
+                                                                      '%vn_local_b_22'
+                                                                    ],
+                                                      'produces' => [
+                                                                      '%vn'
+                                                                    ],
+                                                      'dir' => 'output',
+                                                      'dtype' => 'float32',
+                                                      'synthunit' => 'load',
+                                                      'cat' => 'func-arg',
+                                                      'oper1form' => 'local',
+                                                      'numOffsetStreams' => 0,
+                                                      'maxNegOffset' => 0,
+                                                      'resource' => {
+                                                                      'propDelay' => 1,
+                                                                      'regs' => 64,
+                                                                      'dsps' => 0,
+                                                                      'bram' => 0,
+                                                                      'aluts' => 32
+                                                                    },
+                                                      'synthDtype' => 'float32',
+                                                      'performance' => {
+                                                                         'lat' => 1,
+                                                                         'afi' => 1,
+                                                                         'fpo' => 1,
+                                                                         'efi' => 1,
+                                                                         'lfi' => 1,
+                                                                         'sd' => 47
+                                                                       }
+                                                    },
+                                           '%x' => {
+                                                     'dfgnode' => '%x',
+                                                     'maxNegOffset' => 0,
+                                                     'maxPosOffset' => 0,
+                                                     'consumes' => [],
+                                                     'produces' => [
+                                                                     '%x'
+                                                                   ],
+                                                     'dir' => 'input',
+                                                     'resource' => {
+                                                                     'propDelay' => 0,
+                                                                     'regs' => 0,
+                                                                     'dsps' => 0,
+                                                                     'bram' => 0,
+                                                                     'aluts' => 0
+                                                                   },
+                                                     'dtype' => 'float32',
+                                                     'cat' => 'arg',
+                                                     'performance' => {
+                                                                        'lat' => 0,
+                                                                        'afi' => 1,
+                                                                        'fpo' => 1,
+                                                                        'efi' => 1,
+                                                                        'lfi' => 1,
+                                                                        'sd' => 0
+                                                                      },
+                                                     'numOffsetStreams' => 0
+                                                   },
+                                           'y_coriolis_ker1_subker1_2_b' => {
+                                                                              'funcunit' => 'fifobuf',
+                                                                              'dfgnode' => 'y_coriolis_ker1_subker1_2_b',
+                                                                              'bufferSizeBits' => 768,
+                                                                              'bufferSizeWords' => 24,
+                                                                              'produces' => [
+                                                                                              '%y_b_23'
+                                                                                            ],
+                                                                              'consumes' => [
+                                                                                              '%y'
+                                                                                            ],
+                                                                              'resource' => {
+                                                                                              'propDelay' => 1,
+                                                                                              'regs' => 768,
+                                                                                              'dsps' => 0,
+                                                                                              'bram' => 0,
+                                                                                              'aluts' => 0
+                                                                                            },
+                                                                              'dtype' => 'float32',
+                                                                              'cat' => 'fifobuffer',
+                                                                              'synthunit' => 'fifobuf',
+                                                                              'synthDtype' => 'float32',
+                                                                              'performance' => {
+                                                                                                 'lat' => 24,
+                                                                                                 'afi' => 1,
+                                                                                                 'fpo' => 1,
+                                                                                                 'efi' => 1,
+                                                                                                 'lfi' => 1,
+                                                                                                 'sd' => 0
+                                                                                               },
+                                                                              'tapsAtDelays' => [
+                                                                                                  24
+                                                                                                ]
+                                                                            },
+                                           'coriolis_ker1_subker0_1' => {
+                                                                          'instrType' => 'funcCall',
+                                                                          'dfgnode' => 'coriolis_ker1_subker0_1',
+                                                                          'instrSequence' => 1,
+                                                                          'produces' => [
+                                                                                          '%xn'
+                                                                                        ],
+                                                                          'consumes' => [
+                                                                                          '%un_local',
+                                                                                          '%x_b_23'
+                                                                                        ],
+                                                                          'resource' => {
+                                                                                          'propDelay' => 11,
+                                                                                          'regs' => 640,
+                                                                                          'dsps' => 2,
+                                                                                          'bram' => 0,
+                                                                                          'aluts' => 1552
+                                                                                        },
+                                                                          'args2child' => {
+                                                                                            '1' => {
+                                                                                                     'nameChildPort' => '%un',
+                                                                                                     'name' => '%un_local',
+                                                                                                     'type' => 'float32',
+                                                                                                     'dir' => 'input'
+                                                                                                   },
+                                                                                            '0' => {
+                                                                                                     'nameChildPort' => '%x',
+                                                                                                     'name' => '%x_b_23',
+                                                                                                     'type' => 'float32',
+                                                                                                     'dir' => 'input'
+                                                                                                   },
+                                                                                            '2' => {
+                                                                                                     'nameChildPort' => '%xn',
+                                                                                                     'name' => '%xn',
+                                                                                                     'type' => 'float32',
+                                                                                                     'dir' => 'output'
+                                                                                                   }
+                                                                                          },
+                                                                          'funcRepeatCounter' => 1,
+                                                                          'cat' => 'funcall',
+                                                                          'funcType' => undef,
+                                                                          'funcName' => 'coriolis_ker1_subker0',
+                                                                          'performance' => {
+                                                                                             'lat' => 24,
+                                                                                             'afi' => 1,
+                                                                                             'fpo' => 1,
+                                                                                             'efi' => 1,
+                                                                                             'lfi' => 1,
+                                                                                             'sd' => 24
+                                                                                           }
+                                                                        },
+                                           'x_coriolis_ker1_subker0_1_b' => {
+                                                                              'funcunit' => 'fifobuf',
+                                                                              'dfgnode' => 'x_coriolis_ker1_subker0_1_b',
+                                                                              'bufferSizeBits' => 768,
+                                                                              'bufferSizeWords' => 24,
+                                                                              'produces' => [
+                                                                                              '%x_b_23'
+                                                                                            ],
+                                                                              'consumes' => [
+                                                                                              '%x'
+                                                                                            ],
+                                                                              'resource' => {
+                                                                                              'propDelay' => 1,
+                                                                                              'regs' => 768,
+                                                                                              'dsps' => 0,
+                                                                                              'bram' => 0,
+                                                                                              'aluts' => 0
+                                                                                            },
+                                                                              'dtype' => 'float32',
+                                                                              'cat' => 'fifobuffer',
+                                                                              'synthunit' => 'fifobuf',
+                                                                              'synthDtype' => 'float32',
+                                                                              'performance' => {
+                                                                                                 'lat' => 24,
+                                                                                                 'afi' => 1,
+                                                                                                 'fpo' => 1,
+                                                                                                 'efi' => 1,
+                                                                                                 'lfi' => 1,
+                                                                                                 'sd' => 0
+                                                                                               },
+                                                                              'tapsAtDelays' => [
+                                                                                                  24
+                                                                                                ]
+                                                                            },
+                                           '%v' => {
+                                                     'dfgnode' => '%v',
+                                                     'maxNegOffset' => 0,
+                                                     'maxPosOffset' => 0,
+                                                     'consumes' => [],
+                                                     'produces' => [
+                                                                     '%v'
+                                                                   ],
+                                                     'dir' => 'input',
+                                                     'resource' => {
+                                                                     'propDelay' => 0,
+                                                                     'regs' => 0,
+                                                                     'dsps' => 0,
+                                                                     'bram' => 0,
+                                                                     'aluts' => 0
+                                                                   },
+                                                     'dtype' => 'float32',
+                                                     'cat' => 'arg',
+                                                     'performance' => {
+                                                                        'lat' => 0,
+                                                                        'afi' => 1,
+                                                                        'fpo' => 1,
+                                                                        'efi' => 1,
+                                                                        'lfi' => 1,
+                                                                        'sd' => 0
+                                                                      },
+                                                     'numOffsetStreams' => 0
+                                                   },
+                                           '%y' => {
+                                                     'dfgnode' => '%y',
+                                                     'maxNegOffset' => 0,
+                                                     'maxPosOffset' => 0,
+                                                     'consumes' => [],
+                                                     'produces' => [
+                                                                     '%y'
+                                                                   ],
+                                                     'dir' => 'input',
+                                                     'resource' => {
+                                                                     'propDelay' => 0,
+                                                                     'regs' => 0,
+                                                                     'dsps' => 0,
+                                                                     'bram' => 0,
+                                                                     'aluts' => 0
+                                                                   },
+                                                     'dtype' => 'float32',
+                                                     'cat' => 'arg',
+                                                     'performance' => {
+                                                                        'lat' => 0,
+                                                                        'afi' => 1,
+                                                                        'fpo' => 1,
+                                                                        'efi' => 1,
+                                                                        'lfi' => 1,
+                                                                        'sd' => 0
+                                                                      },
+                                                     'numOffsetStreams' => 0
+                                                   },
+                                           '%yn' => {
+                                                      'dfgnode' => '%yn',
+                                                      'maxNegOffset' => 0,
+                                                      'maxPosOffset' => 0,
+                                                      'consumes' => [
+                                                                      '%yn'
+                                                                    ],
+                                                      'produces' => [
+                                                                      '%yn'
+                                                                    ],
+                                                      'dir' => 'output',
+                                                      'resource' => {
+                                                                      'propDelay' => 0,
+                                                                      'regs' => 0,
+                                                                      'dsps' => 0,
+                                                                      'bram' => 0,
+                                                                      'aluts' => 0
+                                                                    },
+                                                      'dtype' => 'float32',
+                                                      'cat' => 'arg',
+                                                      'performance' => {
+                                                                         'lat' => 0,
+                                                                         'afi' => 1,
+                                                                         'fpo' => 1,
+                                                                         'efi' => 1,
+                                                                         'lfi' => 1,
+                                                                         'sd' => 48
+                                                                       },
+                                                      'numOffsetStreams' => 0
+                                                    },
+                                           'coriolis_ker0_0_vn_b' => {
+                                                                       'funcunit' => 'fifobuf',
+                                                                       'dfgnode' => 'coriolis_ker0_0_vn_b',
+                                                                       'bufferSizeBits' => 736,
+                                                                       'bufferSizeWords' => 23,
+                                                                       'produces' => [
+                                                                                       '%vn_local_b_22'
+                                                                                     ],
+                                                                       'consumes' => [
+                                                                                       '%vn_local'
+                                                                                     ],
+                                                                       'resource' => {
+                                                                                       'propDelay' => 1,
+                                                                                       'regs' => 736,
+                                                                                       'dsps' => 0,
+                                                                                       'bram' => 0,
+                                                                                       'aluts' => 0
+                                                                                     },
+                                                                       'dtype' => 'float32',
+                                                                       'cat' => 'fifobuffer',
+                                                                       'synthunit' => 'fifobuf',
+                                                                       'synthDtype' => 'float32',
+                                                                       'performance' => {
+                                                                                          'lat' => 23,
+                                                                                          'afi' => 1,
+                                                                                          'fpo' => 1,
+                                                                                          'efi' => 1,
+                                                                                          'lfi' => 1,
+                                                                                          'sd' => 0
+                                                                                        },
+                                                                       'tapsAtDelays' => [
+                                                                                           23
+                                                                                         ]
+                                                                     },
+                                           '%u' => {
+                                                     'dfgnode' => '%u',
+                                                     'maxNegOffset' => 0,
+                                                     'maxPosOffset' => 0,
+                                                     'consumes' => [],
+                                                     'produces' => [
+                                                                     '%u'
+                                                                   ],
+                                                     'dir' => 'input',
+                                                     'resource' => {
+                                                                     'propDelay' => 0,
+                                                                     'regs' => 0,
+                                                                     'dsps' => 0,
+                                                                     'bram' => 0,
+                                                                     'aluts' => 0
+                                                                   },
+                                                     'dtype' => 'float32',
+                                                     'cat' => 'arg',
+                                                     'performance' => {
+                                                                        'lat' => 0,
+                                                                        'afi' => 1,
+                                                                        'fpo' => 1,
+                                                                        'efi' => 1,
+                                                                        'lfi' => 1,
+                                                                        'sd' => 0
+                                                                      },
+                                                     'numOffsetStreams' => 0
+                                                   }
+                                         },
+                            'func_type' => 'pipe',
+                            'ninputs' => 4,
+                            'synthDtype' => 'float32',
+                            'funcName' => 'kernel_top',
+                            'performance' => {
+                                               'lat' => 48,
+                                               'afi' => -1,
+                                               'fpo' => 1,
+                                               'efi' => -1,
+                                               'lfi' => 1,
+                                               'sd' => -1
+                                             }
+                          },
+          'coriolis_ker1_subker1_2' => {
+                                         'resource' => {
+                                                         'regs' => 640,
+                                                         'propDelay' => 11,
+                                                         'dsps' => 2,
+                                                         'bram' => 0,
+                                                         'aluts' => 1552
+                                                       },
+                                         'performance' => {
+                                                            'lat' => 24,
+                                                            'afi' => 1,
+                                                            'fpo' => 1,
+                                                            'efi' => 1,
+                                                            'lfi' => 1,
+                                                            'sd' => 24
+                                                          }
+                                       },
+          'coriolis_ker0_0' => {
+                                 'resource' => {
+                                                 'regs' => 320,
+                                                 'propDelay' => 11,
+                                                 'dsps' => 8,
+                                                 'bram' => 0,
+                                                 'aluts' => 3104
+                                               },
+                                 'performance' => {
+                                                    'lat' => 24,
+                                                    'afi' => 1,
+                                                    'fpo' => 1,
+                                                    'efi' => 1,
+                                                    'lfi' => 1,
+                                                    'sd' => 0
+                                                  }
+                               },
+          'launch' => {
+                        'wordsPerTuple' => 0
+                      },
+          'main' => {
+                      'allocaports' => {
+                                         'x_stream' => {
+                                                         'dir' => 'input'
+                                                       },
+                                         'u_stream' => {
+                                                         'dir' => 'input'
+                                                       },
+                                         'y_stream' => {
+                                                         'dir' => 'input'
+                                                       },
+                                         'v_stream' => {
+                                                         'dir' => 'input'
+                                                       },
+                                         'xn_stream' => {
+                                                          'dir' => 'output'
+                                                        },
+                                         'vn_stream' => {
+                                                          'dir' => 'output'
+                                                        },
+                                         'un_stream' => {
+                                                          'dir' => 'output'
+                                                        },
+                                         'yn_stream' => {
+                                                          'dir' => 'output'
+                                                        }
+                                       },
+                      'args' => {},
+                      'depth' => 'hier',
+                      'resource' => {
+                                      'propDelay' => 11,
+                                      'regs' => 4736,
+                                      'dsps' => 13,
+                                      'bram' => 1,
+                                      'aluts' => 6272
+                                    },
+                      'topKernelName' => 'kernel_top_0',
+                      'symbols' => {
+                                     '%un' => {
+                                                'dfgnode' => '%un',
+                                                'connInStreamCount' => 0,
+                                                'connStreamCount' => 1,
+                                                'consumes' => [],
+                                                'produces' => [
+                                                                '%un'
+                                                              ],
+                                                'aspace' => '1',
+                                                'size' => '262144',
+                                                'resource' => {
+                                                                'propDelay' => 0,
+                                                                'regs' => 0,
+                                                                'dsps' => 0,
+                                                                'bram' => 0,
+                                                                'aluts' => 0
+                                                              },
+                                                'dtype' => 'float32.262144',
+                                                'cat' => 'alloca',
+                                                'streamConn' => {
+                                                                  '0' => {
+                                                                           'name' => '%un_stream',
+                                                                           'dir' => 'output'
+                                                                         }
+                                                                },
+                                                'connOutStreamCount' => 1,
+                                                'performance' => {
+                                                                   'lat' => 0,
+                                                                   'afi' => 1,
+                                                                   'fpo' => 1,
+                                                                   'efi' => 1,
+                                                                   'lfi' => 1,
+                                                                   'sd' => 0
+                                                                 }
+                                              },
+                                     '%yn_stream' => {
+                                                       'dfgnode' => '%yn',
+                                                       'memConnAddrSpace' => undef,
+                                                       'produces' => [
+                                                                       '%yn'
+                                                                     ],
+                                                       'consumes' => [
+                                                                       '%yn_stream'
+                                                                     ],
+                                                       'size' => 262144,
+                                                       'resource' => {
+                                                                       'propDelay' => 0,
+                                                                       'regs' => 0,
+                                                                       'dsps' => 0,
+                                                                       'bram' => 0,
+                                                                       'aluts' => 0
+                                                                     },
+                                                       'dtype' => 'float32',
+                                                       'cat' => 'streamwrite',
+                                                       'streamtype' => 'stream1d',
+                                                       'performance' => {
+                                                                          'lat' => 0,
+                                                                          'afi' => 1,
+                                                                          'fpo' => 1,
+                                                                          'efi' => 0,
+                                                                          'lfi' => 1,
+                                                                          'sd' => 0
+                                                                        }
+                                                     },
+                                     '%un_stream' => {
+                                                       'dfgnode' => '%un',
+                                                       'memConnAddrSpace' => undef,
+                                                       'produces' => [
+                                                                       '%un'
+                                                                     ],
+                                                       'consumes' => [
+                                                                       '%un_stream'
+                                                                     ],
+                                                       'size' => 262144,
+                                                       'resource' => {
+                                                                       'propDelay' => 0,
+                                                                       'regs' => 0,
+                                                                       'dsps' => 0,
+                                                                       'bram' => 0,
+                                                                       'aluts' => 0
+                                                                     },
+                                                       'dtype' => 'float32',
+                                                       'cat' => 'streamwrite',
+                                                       'streamtype' => 'stream1d',
+                                                       'performance' => {
+                                                                          'lat' => 0,
+                                                                          'afi' => 1,
+                                                                          'fpo' => 1,
+                                                                          'efi' => 0,
+                                                                          'lfi' => 1,
+                                                                          'sd' => 0
+                                                                        }
+                                                     },
+                                     '%vn' => {
+                                                'dfgnode' => '%vn',
+                                                'connInStreamCount' => 0,
+                                                'connStreamCount' => 1,
+                                                'consumes' => [],
+                                                'produces' => [
+                                                                '%vn'
+                                                              ],
+                                                'aspace' => '1',
+                                                'size' => '262144',
+                                                'resource' => {
+                                                                'propDelay' => 0,
+                                                                'regs' => 0,
+                                                                'dsps' => 0,
+                                                                'bram' => 0,
+                                                                'aluts' => 0
+                                                              },
+                                                'dtype' => 'float32.262144',
+                                                'cat' => 'alloca',
+                                                'streamConn' => {
+                                                                  '0' => {
+                                                                           'name' => '%vn_stream',
+                                                                           'dir' => 'output'
+                                                                         }
+                                                                },
+                                                'connOutStreamCount' => 1,
+                                                'performance' => {
+                                                                   'lat' => 0,
+                                                                   'afi' => 1,
+                                                                   'fpo' => 1,
+                                                                   'efi' => 1,
+                                                                   'lfi' => 1,
+                                                                   'sd' => 0
+                                                                 }
+                                              },
+                                     '%y_stream' => {
+                                                      'dfgnode' => '%y',
+                                                      'maxNegOffset' => 0,
+                                                      'memConnAddrSpace' => undef,
+                                                      'maxPosOffset' => 0,
+                                                      'consumes' => [
+                                                                      '%y'
+                                                                    ],
+                                                      'produces' => [
+                                                                      '%y_stream'
+                                                                    ],
+                                                      'size' => 262144,
+                                                      'resource' => {
+                                                                      'propDelay' => 0,
+                                                                      'regs' => 0,
+                                                                      'dsps' => 0,
+                                                                      'bram' => 0,
+                                                                      'aluts' => 0
+                                                                    },
+                                                      'stride' => 1,
+                                                      'dtype' => 'float32',
+                                                      'cat' => 'streamread',
+                                                      'streamtype' => 'stream1d',
+                                                      'startAddr' => 0,
+                                                      'performance' => {
+                                                                         'lat' => 0,
+                                                                         'afi' => 1,
+                                                                         'fpo' => 1,
+                                                                         'efi' => 0,
+                                                                         'lfi' => 1,
+                                                                         'sd' => 0
+                                                                       },
+                                                      'numOffsetStreams' => 0
+                                                    },
+                                     '%vn_stream' => {
+                                                       'dfgnode' => '%vn',
+                                                       'memConnAddrSpace' => undef,
+                                                       'produces' => [
+                                                                       '%vn'
+                                                                     ],
+                                                       'consumes' => [
+                                                                       '%vn_stream'
+                                                                     ],
+                                                       'size' => 262144,
+                                                       'resource' => {
+                                                                       'propDelay' => 0,
+                                                                       'regs' => 0,
+                                                                       'dsps' => 0,
+                                                                       'bram' => 0,
+                                                                       'aluts' => 0
+                                                                     },
+                                                       'dtype' => 'float32',
+                                                       'cat' => 'streamwrite',
+                                                       'streamtype' => 'stream1d',
+                                                       'performance' => {
+                                                                          'lat' => 0,
+                                                                          'afi' => 1,
+                                                                          'fpo' => 1,
+                                                                          'efi' => 0,
+                                                                          'lfi' => 1,
+                                                                          'sd' => 0
+                                                                        }
+                                                     },
+                                     '%xn_stream' => {
+                                                       'dfgnode' => '%xn',
+                                                       'memConnAddrSpace' => undef,
+                                                       'produces' => [
+                                                                       '%xn'
+                                                                     ],
+                                                       'consumes' => [
+                                                                       '%xn_stream'
+                                                                     ],
+                                                       'size' => 262144,
+                                                       'resource' => {
+                                                                       'propDelay' => 0,
+                                                                       'regs' => 0,
+                                                                       'dsps' => 0,
+                                                                       'bram' => 0,
+                                                                       'aluts' => 0
+                                                                     },
+                                                       'dtype' => 'float32',
+                                                       'cat' => 'streamwrite',
+                                                       'streamtype' => 'stream1d',
+                                                       'performance' => {
+                                                                          'lat' => 0,
+                                                                          'afi' => 1,
+                                                                          'fpo' => 1,
+                                                                          'efi' => 0,
+                                                                          'lfi' => 1,
+                                                                          'sd' => 0
+                                                                        }
+                                                     },
+                                     '%u' => {
+                                               'dfgnode' => '%u',
+                                               'connInStreamCount' => 1,
+                                               'connStreamCount' => 1,
+                                               'consumes' => [],
+                                               'produces' => [
+                                                               '%u'
+                                                             ],
+                                               'aspace' => '1',
+                                               'size' => '262144',
+                                               'resource' => {
+                                                               'propDelay' => 0,
+                                                               'regs' => 0,
+                                                               'dsps' => 0,
+                                                               'bram' => 0,
+                                                               'aluts' => 0
+                                                             },
+                                               'dtype' => 'float32.262144',
+                                               'cat' => 'alloca',
+                                               'streamConn' => {
+                                                                 '0' => {
+                                                                          'name' => '%u_stream',
+                                                                          'dir' => 'input'
+                                                                        }
+                                                               },
+                                               'connOutStreamCount' => 0,
+                                               'performance' => {
+                                                                  'lat' => 0,
+                                                                  'afi' => 1,
+                                                                  'fpo' => 1,
+                                                                  'efi' => 1,
+                                                                  'lfi' => 1,
+                                                                  'sd' => 0
+                                                                }
+                                             },
+                                     '%xn' => {
+                                                'dfgnode' => '%xn',
+                                                'connInStreamCount' => 0,
+                                                'connStreamCount' => 1,
+                                                'consumes' => [],
+                                                'produces' => [
+                                                                '%xn'
+                                                              ],
+                                                'aspace' => '1',
+                                                'size' => '262144',
+                                                'resource' => {
+                                                                'propDelay' => 0,
+                                                                'regs' => 0,
+                                                                'dsps' => 0,
+                                                                'bram' => 0,
+                                                                'aluts' => 0
+                                                              },
+                                                'dtype' => 'float32.262144',
+                                                'cat' => 'alloca',
+                                                'streamConn' => {
+                                                                  '0' => {
+                                                                           'name' => '%xn_stream',
+                                                                           'dir' => 'output'
+                                                                         }
+                                                                },
+                                                'connOutStreamCount' => 1,
+                                                'performance' => {
+                                                                   'lat' => 0,
+                                                                   'afi' => 1,
+                                                                   'fpo' => 1,
+                                                                   'efi' => 1,
+                                                                   'lfi' => 1,
+                                                                   'sd' => 0
+                                                                 }
+                                              },
+                                     '%x' => {
+                                               'dfgnode' => '%x',
+                                               'connInStreamCount' => 1,
+                                               'connStreamCount' => 1,
+                                               'consumes' => [],
+                                               'produces' => [
+                                                               '%x'
+                                                             ],
+                                               'aspace' => '1',
+                                               'size' => '262144',
+                                               'resource' => {
+                                                               'propDelay' => 0,
+                                                               'regs' => 0,
+                                                               'dsps' => 0,
+                                                               'bram' => 0,
+                                                               'aluts' => 0
+                                                             },
+                                               'dtype' => 'float32.262144',
+                                               'cat' => 'alloca',
+                                               'streamConn' => {
+                                                                 '0' => {
+                                                                          'name' => '%x_stream',
+                                                                          'dir' => 'input'
+                                                                        }
+                                                               },
+                                               'connOutStreamCount' => 0,
+                                               'performance' => {
+                                                                  'lat' => 0,
+                                                                  'afi' => 1,
+                                                                  'fpo' => 1,
+                                                                  'efi' => 1,
+                                                                  'lfi' => 1,
+                                                                  'sd' => 0
+                                                                }
+                                             },
+                                     '%v_stream' => {
+                                                      'dfgnode' => '%v',
+                                                      'maxNegOffset' => 0,
+                                                      'memConnAddrSpace' => undef,
+                                                      'maxPosOffset' => 0,
+                                                      'consumes' => [
+                                                                      '%v'
+                                                                    ],
+                                                      'produces' => [
+                                                                      '%v_stream'
+                                                                    ],
+                                                      'size' => 262144,
+                                                      'resource' => {
+                                                                      'propDelay' => 0,
+                                                                      'regs' => 0,
+                                                                      'dsps' => 0,
+                                                                      'bram' => 0,
+                                                                      'aluts' => 0
+                                                                    },
+                                                      'stride' => 1,
+                                                      'dtype' => 'float32',
+                                                      'cat' => 'streamread',
+                                                      'streamtype' => 'stream1d',
+                                                      'startAddr' => 0,
+                                                      'performance' => {
+                                                                         'lat' => 0,
+                                                                         'afi' => 1,
+                                                                         'fpo' => 1,
+                                                                         'efi' => 0,
+                                                                         'lfi' => 1,
+                                                                         'sd' => 0
+                                                                       },
+                                                      'numOffsetStreams' => 0
+                                                    },
+                                     '%x_stream' => {
+                                                      'dfgnode' => '%x',
+                                                      'maxNegOffset' => 0,
+                                                      'memConnAddrSpace' => undef,
+                                                      'maxPosOffset' => 0,
+                                                      'consumes' => [
+                                                                      '%x'
+                                                                    ],
+                                                      'produces' => [
+                                                                      '%x_stream'
+                                                                    ],
+                                                      'size' => 262144,
+                                                      'resource' => {
+                                                                      'propDelay' => 0,
+                                                                      'regs' => 0,
+                                                                      'dsps' => 0,
+                                                                      'bram' => 0,
+                                                                      'aluts' => 0
+                                                                    },
+                                                      'stride' => 1,
+                                                      'dtype' => 'float32',
+                                                      'cat' => 'streamread',
+                                                      'streamtype' => 'stream1d',
+                                                      'startAddr' => 0,
+                                                      'performance' => {
+                                                                         'lat' => 0,
+                                                                         'afi' => 1,
+                                                                         'fpo' => 1,
+                                                                         'efi' => 0,
+                                                                         'lfi' => 1,
+                                                                         'sd' => 0
+                                                                       },
+                                                      'numOffsetStreams' => 0
+                                                    },
+                                     '%yn' => {
+                                                'dfgnode' => '%yn',
+                                                'connInStreamCount' => 0,
+                                                'connStreamCount' => 1,
+                                                'consumes' => [],
+                                                'produces' => [
+                                                                '%yn'
+                                                              ],
+                                                'aspace' => '1',
+                                                'size' => '262144',
+                                                'resource' => {
+                                                                'propDelay' => 0,
+                                                                'regs' => 0,
+                                                                'dsps' => 0,
+                                                                'bram' => 0,
+                                                                'aluts' => 0
+                                                              },
+                                                'dtype' => 'float32.262144',
+                                                'cat' => 'alloca',
+                                                'streamConn' => {
+                                                                  '0' => {
+                                                                           'name' => '%yn_stream',
+                                                                           'dir' => 'output'
+                                                                         }
+                                                                },
+                                                'connOutStreamCount' => 1,
+                                                'performance' => {
+                                                                   'lat' => 0,
+                                                                   'afi' => 1,
+                                                                   'fpo' => 1,
+                                                                   'efi' => 1,
+                                                                   'lfi' => 1,
+                                                                   'sd' => 0
+                                                                 }
+                                              },
+                                     '%y' => {
+                                               'dfgnode' => '%y',
+                                               'connInStreamCount' => 1,
+                                               'connStreamCount' => 1,
+                                               'consumes' => [],
+                                               'produces' => [
+                                                               '%y'
+                                                             ],
+                                               'aspace' => '1',
+                                               'size' => '262144',
+                                               'resource' => {
+                                                               'propDelay' => 0,
+                                                               'regs' => 0,
+                                                               'dsps' => 0,
+                                                               'bram' => 0,
+                                                               'aluts' => 0
+                                                             },
+                                               'dtype' => 'float32.262144',
+                                               'cat' => 'alloca',
+                                               'streamConn' => {
+                                                                 '0' => {
+                                                                          'name' => '%y_stream',
+                                                                          'dir' => 'input'
+                                                                        }
+                                                               },
+                                               'connOutStreamCount' => 0,
+                                               'performance' => {
+                                                                  'lat' => 0,
+                                                                  'afi' => 1,
+                                                                  'fpo' => 1,
+                                                                  'efi' => 1,
+                                                                  'lfi' => 1,
+                                                                  'sd' => 0
+                                                                }
+                                             },
+                                     '%v' => {
+                                               'dfgnode' => '%v',
+                                               'connInStreamCount' => 1,
+                                               'connStreamCount' => 1,
+                                               'consumes' => [],
+                                               'produces' => [
+                                                               '%v'
+                                                             ],
+                                               'aspace' => '1',
+                                               'size' => '262144',
+                                               'resource' => {
+                                                               'propDelay' => 0,
+                                                               'regs' => 0,
+                                                               'dsps' => 0,
+                                                               'bram' => 0,
+                                                               'aluts' => 0
+                                                             },
+                                               'dtype' => 'float32.262144',
+                                               'cat' => 'alloca',
+                                               'streamConn' => {
+                                                                 '0' => {
+                                                                          'name' => '%v_stream',
+                                                                          'dir' => 'input'
+                                                                        }
+                                                               },
+                                               'connOutStreamCount' => 0,
+                                               'performance' => {
+                                                                  'lat' => 0,
+                                                                  'afi' => 1,
+                                                                  'fpo' => 1,
+                                                                  'efi' => 1,
+                                                                  'lfi' => 1,
+                                                                  'sd' => 0
+                                                                }
+                                             },
+                                     'kernel_top_0' => {
+                                                         'instrType' => 'funcCall',
+                                                         'dfgnode' => 'kernel_top_0',
+                                                         'instrSequence' => 0,
+                                                         'consumes' => [
+                                                                         '%y_stream',
+                                                                         '%x_stream',
+                                                                         '%v_stream',
+                                                                         '%u_stream'
+                                                                       ],
+                                                         'produces' => [
+                                                                         '%xn_stream',
+                                                                         '%yn_stream',
+                                                                         '%un_stream',
+                                                                         '%vn_stream'
+                                                                       ],
+                                                         'resource' => {
+                                                                         'propDelay' => 11,
+                                                                         'regs' => 4736,
+                                                                         'dsps' => 12,
+                                                                         'bram' => 0,
+                                                                         'aluts' => 6272
+                                                                       },
+                                                         'args2child' => {
+                                                                           '6' => {
+                                                                                    'nameChildPort' => '%xn',
+                                                                                    'name' => '%xn_stream',
+                                                                                    'type' => 'float32',
+                                                                                    'dir' => 'output'
+                                                                                  },
+                                                                           '3' => {
+                                                                                    'nameChildPort' => '%y',
+                                                                                    'name' => '%y_stream',
+                                                                                    'type' => 'float32',
+                                                                                    'dir' => 'input'
+                                                                                  },
+                                                                           '7' => {
+                                                                                    'nameChildPort' => '%yn',
+                                                                                    'name' => '%yn_stream',
+                                                                                    'type' => 'float32',
+                                                                                    'dir' => 'output'
+                                                                                  },
+                                                                           '2' => {
+                                                                                    'nameChildPort' => '%x',
+                                                                                    'name' => '%x_stream',
+                                                                                    'type' => 'float32',
+                                                                                    'dir' => 'input'
+                                                                                  },
+                                                                           '1' => {
+                                                                                    'nameChildPort' => '%v',
+                                                                                    'name' => '%v_stream',
+                                                                                    'type' => 'float32',
+                                                                                    'dir' => 'input'
+                                                                                  },
+                                                                           '4' => {
+                                                                                    'nameChildPort' => '%un',
+                                                                                    'name' => '%un_stream',
+                                                                                    'type' => 'float32',
+                                                                                    'dir' => 'output'
+                                                                                  },
+                                                                           '0' => {
+                                                                                    'nameChildPort' => '%u',
+                                                                                    'name' => '%u_stream',
+                                                                                    'type' => 'float32',
+                                                                                    'dir' => 'input'
+                                                                                  },
+                                                                           '5' => {
+                                                                                    'nameChildPort' => '%vn',
+                                                                                    'name' => '%vn_stream',
+                                                                                    'type' => 'float32',
+                                                                                    'dir' => 'output'
+                                                                                  }
+                                                                         },
+                                                         'funcRepeatCounter' => 0,
+                                                         'cat' => 'funcall',
+                                                         'funcType' => undef,
+                                                         'funcName' => 'kernel_top',
+                                                         'performance' => {
+                                                                            'lat' => 48,
+                                                                            'afi' => 1,
+                                                                            'fpo' => 1,
+                                                                            'efi' => 1,
+                                                                            'lfi' => 1,
+                                                                            'sd' => 0
+                                                                          }
+                                                       },
+                                     '%u_stream' => {
+                                                      'dfgnode' => '%u',
+                                                      'maxNegOffset' => 0,
+                                                      'memConnAddrSpace' => undef,
+                                                      'maxPosOffset' => 0,
+                                                      'consumes' => [
+                                                                      '%u'
+                                                                    ],
+                                                      'produces' => [
+                                                                      '%u_stream'
+                                                                    ],
+                                                      'size' => 262144,
+                                                      'resource' => {
+                                                                      'propDelay' => 0,
+                                                                      'regs' => 0,
+                                                                      'dsps' => 0,
+                                                                      'bram' => 0,
+                                                                      'aluts' => 0
+                                                                    },
+                                                      'stride' => 1,
+                                                      'dtype' => 'float32',
+                                                      'cat' => 'streamread',
+                                                      'streamtype' => 'stream1d',
+                                                      'startAddr' => 0,
+                                                      'performance' => {
+                                                                         'lat' => 0,
+                                                                         'afi' => 1,
+                                                                         'fpo' => 1,
+                                                                         'efi' => 0,
+                                                                         'lfi' => 1,
+                                                                         'sd' => 0
+                                                                       },
+                                                      'numOffsetStreams' => 0
+                                                    }
+                                   },
+                      'bufsize' => 262144,
+                      'offsetStreams' => {},
+                      'performance' => {
+                                         'lat' => 48,
+                                         'afi' => 1,
+                                         'fpo' => 1,
+                                         'efi' => 1,
+                                         'lfi' => 1,
+                                         'sd' => 0
+                                       }
+                    },
+          'macros' => {
+                        'BETA' => '0.000987',
+                        'SIZE' => '262144',
+                        'mode' => '1',
+                        'fadd' => 'add',
+                        'data_t' => 'float32',
+                        'fmul' => 'mul',
+                        'fdiv' => 'udiv',
+                        'ONE_MINUS_BETA' => '0.999013',
+                        'ALPHA' => '-0.062832',
+                        'fsub' => 'sub',
+                        'ONE_PLUS_BETA' => '1.000987',
+                        'DT' => '432.000000'
+                      },
+          'coriolis_ker1_subker1' => {
+                                       'insCntrFcall' => 0,
+                                       'noutputs' => 1,
+                                       'args' => {
+                                                   '1' => {
+                                                            'dtype' => 'float32',
+                                                            'name' => '%vn',
+                                                            'isOffsetStream' => 0,
+                                                            'dir' => 'input'
+                                                          },
+                                                   '0' => {
+                                                            'dtype' => 'float32',
+                                                            'name' => '%y',
+                                                            'isOffsetStream' => 0,
+                                                            'dir' => 'input'
+                                                          },
+                                                   '2' => {
+                                                            'dtype' => 'float32',
+                                                            'name' => '%yn',
+                                                            'isOffsetStream' => 0,
+                                                            'dir' => 'output'
+                                                          }
+                                                 },
+                                       'depth' => 'flat',
+                                       'instrCount' => 0,
+                                       'resource' => {
+                                                       'propDelay' => 11,
+                                                       'regs' => 640,
+                                                       'dsps' => 2,
+                                                       'bram' => 0,
+                                                       'aluts' => 1552
+                                                     },
+                                       'symbols' => {
+                                                      '%mul1' => {
+                                                                   'funcunit' => 'mul',
+                                                                   'dfgnode' => '%mul1',
+                                                                   'consumes' => [
+                                                                                   '%vn'
+                                                                                 ],
+                                                                   'oper2form' => 'constant',
+                                                                   'produces' => [
+                                                                                   '%mul1'
+                                                                                 ],
+                                                                   'resource' => {
+                                                                                   'regs' => 32,
+                                                                                   'propDelay' => 3,
+                                                                                   'dsps' => 2,
+                                                                                   'bram' => 0,
+                                                                                   'aluts' => 0
+                                                                                 },
+                                                                   'dtype' => 'float32',
+                                                                   'cat' => 'impscal',
+                                                                   'synthunit' => 'mul',
+                                                                   'synthDtype' => 'float32',
+                                                                   'performance' => {
+                                                                                      'lat' => 3,
+                                                                                      'afi' => 1,
+                                                                                      'fpo' => 1,
+                                                                                      'efi' => 1,
+                                                                                      'lfi' => 1,
+                                                                                      'sd' => 0
+                                                                                    },
+                                                                   'oper2val' => '432.000000',
+                                                                   'oper1form' => 'inPort'
+                                                                 },
+                                                      '%yn' => {
+                                                                 'funcunit' => 'add',
+                                                                 'dfgnode' => '%yn',
+                                                                 'oper2form' => 'local',
+                                                                 'maxPosOffset' => 0,
+                                                                 'consumes' => [
+                                                                                 '%y_b_15',
+                                                                                 '%div2'
+                                                                               ],
+                                                                 'produces' => [
+                                                                                 '%yn'
+                                                                               ],
+                                                                 'dir' => 'output',
+                                                                 'dtype' => 'float32',
+                                                                 'synthunit' => 'add',
+                                                                 'cat' => 'func-arg',
+                                                                 'oper1form' => 'inPort',
+                                                                 'numOffsetStreams' => 0,
+                                                                 'maxNegOffset' => 0,
+                                                                 'resource' => {
+                                                                                 'propDelay' => 3,
+                                                                                 'regs' => 64,
+                                                                                 'dsps' => 0,
+                                                                                 'bram' => 0,
+                                                                                 'aluts' => 421
+                                                                               },
+                                                                 'synthDtype' => 'float32',
+                                                                 'performance' => {
+                                                                                    'lat' => 8,
+                                                                                    'afi' => 1,
+                                                                                    'fpo' => 1,
+                                                                                    'efi' => 1,
+                                                                                    'lfi' => 1,
+                                                                                    'sd' => 16
+                                                                                  }
+                                                               },
+                                                      '%y' => {
+                                                                'dfgnode' => '%y',
+                                                                'maxNegOffset' => 0,
+                                                                'maxPosOffset' => 0,
+                                                                'consumes' => [],
+                                                                'produces' => [
+                                                                                '%y'
+                                                                              ],
+                                                                'dir' => 'input',
+                                                                'resource' => {
+                                                                                'propDelay' => 0,
+                                                                                'regs' => 0,
+                                                                                'dsps' => 0,
+                                                                                'bram' => 0,
+                                                                                'aluts' => 0
+                                                                              },
+                                                                'dtype' => 'float32',
+                                                                'cat' => 'arg',
+                                                                'performance' => {
+                                                                                   'lat' => 0,
+                                                                                   'afi' => 1,
+                                                                                   'fpo' => 1,
+                                                                                   'efi' => 1,
+                                                                                   'lfi' => 1,
+                                                                                   'sd' => 0
+                                                                                 },
+                                                                'numOffsetStreams' => 0
+                                                              },
+                                                      '%vn' => {
+                                                                 'dfgnode' => '%vn',
+                                                                 'maxNegOffset' => 0,
+                                                                 'maxPosOffset' => 0,
+                                                                 'consumes' => [],
+                                                                 'produces' => [
+                                                                                 '%vn'
+                                                                               ],
+                                                                 'dir' => 'input',
+                                                                 'resource' => {
+                                                                                 'propDelay' => 0,
+                                                                                 'regs' => 0,
+                                                                                 'dsps' => 0,
+                                                                                 'bram' => 0,
+                                                                                 'aluts' => 0
+                                                                               },
+                                                                 'dtype' => 'float32',
+                                                                 'cat' => 'arg',
+                                                                 'performance' => {
+                                                                                    'lat' => 0,
+                                                                                    'afi' => 1,
+                                                                                    'fpo' => 1,
+                                                                                    'efi' => 1,
+                                                                                    'lfi' => 1,
+                                                                                    'sd' => 0
+                                                                                  },
+                                                                 'numOffsetStreams' => 0
+                                                               },
+                                                      'y_yn_b' => {
+                                                                    'funcunit' => 'fifobuf',
+                                                                    'dfgnode' => 'y_yn_b',
+                                                                    'bufferSizeBits' => 512,
+                                                                    'bufferSizeWords' => 16,
+                                                                    'produces' => [
+                                                                                    '%y_b_15'
+                                                                                  ],
+                                                                    'consumes' => [
+                                                                                    '%y'
+                                                                                  ],
+                                                                    'resource' => {
+                                                                                    'propDelay' => 1,
+                                                                                    'regs' => 512,
+                                                                                    'dsps' => 0,
+                                                                                    'bram' => 0,
+                                                                                    'aluts' => 0
+                                                                                  },
+                                                                    'dtype' => 'float32',
+                                                                    'cat' => 'fifobuffer',
+                                                                    'synthunit' => 'fifobuf',
+                                                                    'synthDtype' => 'float32',
+                                                                    'performance' => {
+                                                                                       'lat' => 16,
+                                                                                       'afi' => 1,
+                                                                                       'fpo' => 1,
+                                                                                       'efi' => 1,
+                                                                                       'lfi' => 1,
+                                                                                       'sd' => 0
+                                                                                     },
+                                                                    'tapsAtDelays' => [
+                                                                                        16
+                                                                                      ]
+                                                                  },
+                                                      '%div2' => {
+                                                                   'funcunit' => 'udiv',
+                                                                   'dfgnode' => '%div2',
+                                                                   'consumes' => [
+                                                                                   '%mul1'
+                                                                                 ],
+                                                                   'oper2form' => 'constant',
+                                                                   'produces' => [
+                                                                                   '%div2'
+                                                                                 ],
+                                                                   'resource' => {
+                                                                                   'regs' => 32,
+                                                                                   'propDelay' => 11,
+                                                                                   'dsps' => 0,
+                                                                                   'bram' => 0,
+                                                                                   'aluts' => 1131
+                                                                                 },
+                                                                   'dtype' => 'float32',
+                                                                   'cat' => 'impscal',
+                                                                   'synthunit' => 'udiv',
+                                                                   'synthDtype' => 'float32',
+                                                                   'performance' => {
+                                                                                      'lat' => 13,
+                                                                                      'afi' => 1,
+                                                                                      'fpo' => 1,
+                                                                                      'efi' => 1,
+                                                                                      'lfi' => 1,
+                                                                                      'sd' => 3
+                                                                                    },
+                                                                   'oper2val' => '1000.0',
+                                                                   'oper1form' => 'local'
+                                                                 }
+                                                    },
+                                       'func_type' => 'pipe',
+                                       'ninputs' => 2,
+                                       'synthDtype' => 'float32',
+                                       'funcName' => 'coriolis_ker1_subker1',
+                                       'performance' => {
+                                                          'lat' => 24,
+                                                          'afi' => -1,
+                                                          'fpo' => 1,
+                                                          'efi' => -1,
+                                                          'lfi' => 1,
+                                                          'sd' => -1
+                                                        }
+                                     },
+          'coriolis_ker1_subker0_1' => {
+                                         'resource' => {
+                                                         'regs' => 640,
+                                                         'propDelay' => 11,
+                                                         'dsps' => 2,
+                                                         'bram' => 0,
+                                                         'aluts' => 1552
+                                                       },
+                                         'performance' => {
+                                                            'lat' => 24,
+                                                            'afi' => 1,
+                                                            'fpo' => 1,
+                                                            'efi' => 1,
+                                                            'lfi' => 1,
+                                                            'sd' => 24
+                                                          }
+                                       },
+          'coriolis_ker0' => {
+                               'insCntrFcall' => 0,
+                               'noutputs' => 2,
+                               'args' => {
+                                           '1' => {
+                                                    'dtype' => 'float32',
+                                                    'name' => '%v',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'input'
+                                                  },
+                                           '3' => {
+                                                    'dtype' => 'float32',
+                                                    'name' => '%vn',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'output'
+                                                  },
+                                           '0' => {
+                                                    'dtype' => 'float32',
+                                                    'name' => '%u',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'input'
+                                                  },
+                                           '2' => {
+                                                    'dtype' => 'float32',
+                                                    'name' => '%un',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'output'
+                                                  }
+                                         },
+                               'depth' => 'flat',
+                               'instrCount' => 0,
+                               'resource' => {
+                                               'propDelay' => 11,
+                                               'regs' => 320,
+                                               'dsps' => 8,
+                                               'bram' => 0,
+                                               'aluts' => 3104
+                                             },
+                               'symbols' => {
+                                              '%mul1' => {
+                                                           'funcunit' => 'mul',
+                                                           'dfgnode' => '%mul1',
+                                                           'consumes' => [
+                                                                           '%v'
+                                                                         ],
+                                                           'oper2form' => 'constant',
+                                                           'produces' => [
+                                                                           '%mul1'
+                                                                         ],
+                                                           'resource' => {
+                                                                           'regs' => 32,
+                                                                           'propDelay' => 3,
+                                                                           'dsps' => 2,
+                                                                           'bram' => 0,
+                                                                           'aluts' => 0
+                                                                         },
+                                                           'dtype' => 'float32',
+                                                           'cat' => 'impscal',
+                                                           'synthunit' => 'mul',
+                                                           'synthDtype' => 'float32',
+                                                           'performance' => {
+                                                                              'lat' => 3,
+                                                                              'afi' => 1,
+                                                                              'fpo' => 1,
+                                                                              'efi' => 1,
+                                                                              'lfi' => 1,
+                                                                              'sd' => 0
+                                                                            },
+                                                           'oper2val' => '-0.062832',
+                                                           'oper1form' => 'inPort'
+                                                         },
+                                              '%un' => {
+                                                         'funcunit' => 'udiv',
+                                                         'dfgnode' => '%un',
+                                                         'oper2form' => 'constant',
+                                                         'maxPosOffset' => 0,
+                                                         'consumes' => [
+                                                                         '%add'
+                                                                       ],
+                                                         'produces' => [
+                                                                         '%un'
+                                                                       ],
+                                                         'dir' => 'output',
+                                                         'dtype' => 'float32',
+                                                         'synthunit' => 'udiv',
+                                                         'cat' => 'func-arg',
+                                                         'oper1form' => 'local',
+                                                         'numOffsetStreams' => 0,
+                                                         'maxNegOffset' => 0,
+                                                         'resource' => {
+                                                                         'propDelay' => 11,
+                                                                         'regs' => 32,
+                                                                         'dsps' => 0,
+                                                                         'bram' => 0,
+                                                                         'aluts' => 1131
+                                                                       },
+                                                         'synthDtype' => 'float32',
+                                                         'oper2val' => '1.000987',
+                                                         'performance' => {
+                                                                            'lat' => 13,
+                                                                            'afi' => 1,
+                                                                            'fpo' => 1,
+                                                                            'efi' => 1,
+                                                                            'lfi' => 1,
+                                                                            'sd' => 11
+                                                                          }
+                                                       },
+                                              '%vn' => {
+                                                         'funcunit' => 'udiv',
+                                                         'dfgnode' => '%vn',
+                                                         'oper2form' => 'constant',
+                                                         'maxPosOffset' => 0,
+                                                         'consumes' => [
+                                                                         '%sub6'
+                                                                       ],
+                                                         'produces' => [
+                                                                         '%vn'
+                                                                       ],
+                                                         'dir' => 'output',
+                                                         'dtype' => 'float32',
+                                                         'synthunit' => 'udiv',
+                                                         'cat' => 'func-arg',
+                                                         'oper1form' => 'local',
+                                                         'numOffsetStreams' => 0,
+                                                         'maxNegOffset' => 0,
+                                                         'resource' => {
+                                                                         'propDelay' => 11,
+                                                                         'regs' => 32,
+                                                                         'dsps' => 0,
+                                                                         'bram' => 0,
+                                                                         'aluts' => 1131
+                                                                       },
+                                                         'synthDtype' => 'float32',
+                                                         'oper2val' => '1.000987',
+                                                         'performance' => {
+                                                                            'lat' => 13,
+                                                                            'afi' => 1,
+                                                                            'fpo' => 1,
+                                                                            'efi' => 1,
+                                                                            'lfi' => 1,
+                                                                            'sd' => 11
+                                                                          }
+                                                       },
+                                              '%add' => {
+                                                          'funcunit' => 'add',
+                                                          'dfgnode' => '%add',
+                                                          'consumes' => [
+                                                                          '%mul',
+                                                                          '%mul1'
+                                                                        ],
+                                                          'oper2form' => 'local',
+                                                          'produces' => [
+                                                                          '%add'
+                                                                        ],
+                                                          'resource' => {
+                                                                          'regs' => 64,
+                                                                          'propDelay' => 3,
+                                                                          'dsps' => 0,
+                                                                          'bram' => 0,
+                                                                          'aluts' => 421
+                                                                        },
+                                                          'dtype' => 'float32',
+                                                          'cat' => 'impscal',
+                                                          'synthunit' => 'add',
+                                                          'synthDtype' => 'float32',
+                                                          'performance' => {
+                                                                             'lat' => 8,
+                                                                             'afi' => 1,
+                                                                             'fpo' => 1,
+                                                                             'efi' => 1,
+                                                                             'lfi' => 1,
+                                                                             'sd' => 3
+                                                                           },
+                                                          'oper1form' => 'local'
+                                                        },
+                                              '%mul' => {
+                                                          'funcunit' => 'mul',
+                                                          'dfgnode' => '%mul',
+                                                          'consumes' => [
+                                                                          '%u'
+                                                                        ],
+                                                          'oper2form' => 'constant',
+                                                          'produces' => [
+                                                                          '%mul'
+                                                                        ],
+                                                          'resource' => {
+                                                                          'regs' => 32,
+                                                                          'propDelay' => 3,
+                                                                          'dsps' => 2,
+                                                                          'bram' => 0,
+                                                                          'aluts' => 0
+                                                                        },
+                                                          'dtype' => 'float32',
+                                                          'cat' => 'impscal',
+                                                          'synthunit' => 'mul',
+                                                          'synthDtype' => 'float32',
+                                                          'performance' => {
+                                                                             'lat' => 3,
+                                                                             'afi' => 1,
+                                                                             'fpo' => 1,
+                                                                             'efi' => 1,
+                                                                             'lfi' => 1,
+                                                                             'sd' => 0
+                                                                           },
+                                                          'oper2val' => '0.999013',
+                                                          'oper1form' => 'inPort'
+                                                        },
+                                              '%mul5' => {
+                                                           'funcunit' => 'mul',
+                                                           'dfgnode' => '%mul5',
+                                                           'consumes' => [
+                                                                           '%u'
+                                                                         ],
+                                                           'oper2form' => 'constant',
+                                                           'produces' => [
+                                                                           '%mul5'
+                                                                         ],
+                                                           'resource' => {
+                                                                           'regs' => 32,
+                                                                           'propDelay' => 3,
+                                                                           'dsps' => 2,
+                                                                           'bram' => 0,
+                                                                           'aluts' => 0
+                                                                         },
+                                                           'dtype' => 'float32',
+                                                           'cat' => 'impscal',
+                                                           'synthunit' => 'mul',
+                                                           'synthDtype' => 'float32',
+                                                           'performance' => {
+                                                                              'lat' => 3,
+                                                                              'afi' => 1,
+                                                                              'fpo' => 1,
+                                                                              'efi' => 1,
+                                                                              'lfi' => 1,
+                                                                              'sd' => 0
+                                                                            },
+                                                           'oper2val' => '-0.062832',
+                                                           'oper1form' => 'inPort'
+                                                         },
+                                              '%v' => {
+                                                        'dfgnode' => '%v',
+                                                        'maxNegOffset' => 0,
+                                                        'maxPosOffset' => 0,
+                                                        'consumes' => [],
+                                                        'produces' => [
+                                                                        '%v'
+                                                                      ],
+                                                        'dir' => 'input',
+                                                        'resource' => {
+                                                                        'propDelay' => 0,
+                                                                        'regs' => 0,
+                                                                        'dsps' => 0,
+                                                                        'bram' => 0,
+                                                                        'aluts' => 0
+                                                                      },
+                                                        'dtype' => 'float32',
+                                                        'cat' => 'arg',
+                                                        'performance' => {
+                                                                           'lat' => 0,
+                                                                           'afi' => 1,
+                                                                           'fpo' => 1,
+                                                                           'efi' => 1,
+                                                                           'lfi' => 1,
+                                                                           'sd' => 0
+                                                                         },
+                                                        'numOffsetStreams' => 0
+                                                      },
+                                              '%mul4' => {
+                                                           'funcunit' => 'mul',
+                                                           'dfgnode' => '%mul4',
+                                                           'consumes' => [
+                                                                           '%v'
+                                                                         ],
+                                                           'oper2form' => 'constant',
+                                                           'produces' => [
+                                                                           '%mul4'
+                                                                         ],
+                                                           'resource' => {
+                                                                           'regs' => 32,
+                                                                           'propDelay' => 3,
+                                                                           'dsps' => 2,
+                                                                           'bram' => 0,
+                                                                           'aluts' => 0
+                                                                         },
+                                                           'dtype' => 'float32',
+                                                           'cat' => 'impscal',
+                                                           'synthunit' => 'mul',
+                                                           'synthDtype' => 'float32',
+                                                           'performance' => {
+                                                                              'lat' => 3,
+                                                                              'afi' => 1,
+                                                                              'fpo' => 1,
+                                                                              'efi' => 1,
+                                                                              'lfi' => 1,
+                                                                              'sd' => 0
+                                                                            },
+                                                           'oper2val' => '0.999013',
+                                                           'oper1form' => 'inPort'
+                                                         },
+                                              '%u' => {
+                                                        'dfgnode' => '%u',
+                                                        'maxNegOffset' => 0,
+                                                        'maxPosOffset' => 0,
+                                                        'consumes' => [],
+                                                        'produces' => [
+                                                                        '%u'
+                                                                      ],
+                                                        'dir' => 'input',
+                                                        'resource' => {
+                                                                        'propDelay' => 0,
+                                                                        'regs' => 0,
+                                                                        'dsps' => 0,
+                                                                        'bram' => 0,
+                                                                        'aluts' => 0
+                                                                      },
+                                                        'dtype' => 'float32',
+                                                        'cat' => 'arg',
+                                                        'performance' => {
+                                                                           'lat' => 0,
+                                                                           'afi' => 1,
+                                                                           'fpo' => 1,
+                                                                           'efi' => 1,
+                                                                           'lfi' => 1,
+                                                                           'sd' => 0
+                                                                         },
+                                                        'numOffsetStreams' => 0
+                                                      },
+                                              '%sub6' => {
+                                                           'funcunit' => 'sub',
+                                                           'dfgnode' => '%sub6',
+                                                           'consumes' => [
+                                                                           '%mul4',
+                                                                           '%mul5'
+                                                                         ],
+                                                           'oper2form' => 'local',
+                                                           'produces' => [
+                                                                           '%sub6'
+                                                                         ],
+                                                           'resource' => {
+                                                                           'regs' => 64,
+                                                                           'propDelay' => 3,
+                                                                           'dsps' => 0,
+                                                                           'bram' => 0,
+                                                                           'aluts' => 421
+                                                                         },
+                                                           'dtype' => 'float32',
+                                                           'cat' => 'impscal',
+                                                           'synthunit' => 'sub',
+                                                           'synthDtype' => 'float32',
+                                                           'performance' => {
+                                                                              'lat' => 8,
+                                                                              'afi' => 1,
+                                                                              'fpo' => 1,
+                                                                              'efi' => 1,
+                                                                              'lfi' => 1,
+                                                                              'sd' => 3
+                                                                            },
+                                                           'oper1form' => 'local'
+                                                         }
+                                            },
+                               'func_type' => 'pipe',
+                               'ninputs' => 2,
+                               'synthDtype' => 'float32',
+                               'funcName' => 'coriolis_ker0',
+                               'performance' => {
+                                                  'lat' => 24,
+                                                  'afi' => -1,
+                                                  'fpo' => 1,
+                                                  'efi' => -1,
+                                                  'lfi' => 1,
+                                                  'sd' => -1
+                                                }
+                             },
+          'coriolis_ker1_subker0' => {
+                                       'insCntrFcall' => 0,
+                                       'noutputs' => 1,
+                                       'args' => {
+                                                   '1' => {
+                                                            'dtype' => 'float32',
+                                                            'name' => '%un',
+                                                            'isOffsetStream' => 0,
+                                                            'dir' => 'input'
+                                                          },
+                                                   '0' => {
+                                                            'dtype' => 'float32',
+                                                            'name' => '%x',
+                                                            'isOffsetStream' => 0,
+                                                            'dir' => 'input'
+                                                          },
+                                                   '2' => {
+                                                            'dtype' => 'float32',
+                                                            'name' => '%xn',
+                                                            'isOffsetStream' => 0,
+                                                            'dir' => 'output'
+                                                          }
+                                                 },
+                                       'depth' => 'flat',
+                                       'instrCount' => 0,
+                                       'resource' => {
+                                                       'propDelay' => 11,
+                                                       'regs' => 640,
+                                                       'dsps' => 2,
+                                                       'bram' => 0,
+                                                       'aluts' => 1552
+                                                     },
+                                       'symbols' => {
+                                                      '%un' => {
+                                                                 'dfgnode' => '%un',
+                                                                 'maxNegOffset' => 0,
+                                                                 'maxPosOffset' => 0,
+                                                                 'consumes' => [],
+                                                                 'produces' => [
+                                                                                 '%un'
+                                                                               ],
+                                                                 'dir' => 'input',
+                                                                 'resource' => {
+                                                                                 'propDelay' => 0,
+                                                                                 'regs' => 0,
+                                                                                 'dsps' => 0,
+                                                                                 'bram' => 0,
+                                                                                 'aluts' => 0
+                                                                               },
+                                                                 'dtype' => 'float32',
+                                                                 'cat' => 'arg',
+                                                                 'performance' => {
+                                                                                    'lat' => 0,
+                                                                                    'afi' => 1,
+                                                                                    'fpo' => 1,
+                                                                                    'efi' => 1,
+                                                                                    'lfi' => 1,
+                                                                                    'sd' => 0
+                                                                                  },
+                                                                 'numOffsetStreams' => 0
+                                                               },
+                                                      '%xn' => {
+                                                                 'funcunit' => 'add',
+                                                                 'dfgnode' => '%xn',
+                                                                 'oper2form' => 'local',
+                                                                 'maxPosOffset' => 0,
+                                                                 'consumes' => [
+                                                                                 '%x_b_15',
+                                                                                 '%div'
+                                                                               ],
+                                                                 'produces' => [
+                                                                                 '%xn'
+                                                                               ],
+                                                                 'dir' => 'output',
+                                                                 'dtype' => 'float32',
+                                                                 'synthunit' => 'add',
+                                                                 'cat' => 'func-arg',
+                                                                 'oper1form' => 'inPort',
+                                                                 'numOffsetStreams' => 0,
+                                                                 'maxNegOffset' => 0,
+                                                                 'resource' => {
+                                                                                 'propDelay' => 3,
+                                                                                 'regs' => 64,
+                                                                                 'dsps' => 0,
+                                                                                 'bram' => 0,
+                                                                                 'aluts' => 421
+                                                                               },
+                                                                 'synthDtype' => 'float32',
+                                                                 'performance' => {
+                                                                                    'lat' => 8,
+                                                                                    'afi' => 1,
+                                                                                    'fpo' => 1,
+                                                                                    'efi' => 1,
+                                                                                    'lfi' => 1,
+                                                                                    'sd' => 16
+                                                                                  }
+                                                               },
+                                                      'x_xn_b' => {
+                                                                    'funcunit' => 'fifobuf',
+                                                                    'dfgnode' => 'x_xn_b',
+                                                                    'bufferSizeBits' => 512,
+                                                                    'bufferSizeWords' => 16,
+                                                                    'produces' => [
+                                                                                    '%x_b_15'
+                                                                                  ],
+                                                                    'consumes' => [
+                                                                                    '%x'
+                                                                                  ],
+                                                                    'resource' => {
+                                                                                    'propDelay' => 1,
+                                                                                    'regs' => 512,
+                                                                                    'dsps' => 0,
+                                                                                    'bram' => 0,
+                                                                                    'aluts' => 0
+                                                                                  },
+                                                                    'dtype' => 'float32',
+                                                                    'cat' => 'fifobuffer',
+                                                                    'synthunit' => 'fifobuf',
+                                                                    'synthDtype' => 'float32',
+                                                                    'performance' => {
+                                                                                       'lat' => 16,
+                                                                                       'afi' => 1,
+                                                                                       'fpo' => 1,
+                                                                                       'efi' => 1,
+                                                                                       'lfi' => 1,
+                                                                                       'sd' => 0
+                                                                                     },
+                                                                    'tapsAtDelays' => [
+                                                                                        16
+                                                                                      ]
+                                                                  },
+                                                      '%x' => {
+                                                                'dfgnode' => '%x',
+                                                                'maxNegOffset' => 0,
+                                                                'maxPosOffset' => 0,
+                                                                'consumes' => [],
+                                                                'produces' => [
+                                                                                '%x'
+                                                                              ],
+                                                                'dir' => 'input',
+                                                                'resource' => {
+                                                                                'propDelay' => 0,
+                                                                                'regs' => 0,
+                                                                                'dsps' => 0,
+                                                                                'bram' => 0,
+                                                                                'aluts' => 0
+                                                                              },
+                                                                'dtype' => 'float32',
+                                                                'cat' => 'arg',
+                                                                'performance' => {
+                                                                                   'lat' => 0,
+                                                                                   'afi' => 1,
+                                                                                   'fpo' => 1,
+                                                                                   'efi' => 1,
+                                                                                   'lfi' => 1,
+                                                                                   'sd' => 0
+                                                                                 },
+                                                                'numOffsetStreams' => 0
+                                                              },
+                                                      '%div' => {
+                                                                  'funcunit' => 'udiv',
+                                                                  'dfgnode' => '%div',
+                                                                  'consumes' => [
+                                                                                  '%mul'
+                                                                                ],
+                                                                  'oper2form' => 'constant',
+                                                                  'produces' => [
+                                                                                  '%div'
+                                                                                ],
+                                                                  'resource' => {
+                                                                                  'regs' => 32,
+                                                                                  'propDelay' => 11,
+                                                                                  'dsps' => 0,
+                                                                                  'bram' => 0,
+                                                                                  'aluts' => 1131
+                                                                                },
+                                                                  'dtype' => 'float32',
+                                                                  'cat' => 'impscal',
+                                                                  'synthunit' => 'udiv',
+                                                                  'synthDtype' => 'float32',
+                                                                  'performance' => {
+                                                                                     'lat' => 13,
+                                                                                     'afi' => 1,
+                                                                                     'fpo' => 1,
+                                                                                     'efi' => 1,
+                                                                                     'lfi' => 1,
+                                                                                     'sd' => 3
+                                                                                   },
+                                                                  'oper2val' => '1000.0',
+                                                                  'oper1form' => 'local'
+                                                                },
+                                                      '%mul' => {
+                                                                  'funcunit' => 'mul',
+                                                                  'dfgnode' => '%mul',
+                                                                  'consumes' => [
+                                                                                  '%un'
+                                                                                ],
+                                                                  'oper2form' => 'constant',
+                                                                  'produces' => [
+                                                                                  '%mul'
+                                                                                ],
+                                                                  'resource' => {
+                                                                                  'regs' => 32,
+                                                                                  'propDelay' => 3,
+                                                                                  'dsps' => 2,
+                                                                                  'bram' => 0,
+                                                                                  'aluts' => 0
+                                                                                },
+                                                                  'dtype' => 'float32',
+                                                                  'cat' => 'impscal',
+                                                                  'synthunit' => 'mul',
+                                                                  'synthDtype' => 'float32',
+                                                                  'performance' => {
+                                                                                     'lat' => 3,
+                                                                                     'afi' => 1,
+                                                                                     'fpo' => 1,
+                                                                                     'efi' => 1,
+                                                                                     'lfi' => 1,
+                                                                                     'sd' => 0
+                                                                                   },
+                                                                  'oper2val' => '432.000000',
+                                                                  'oper1form' => 'inPort'
+                                                                }
+                                                    },
+                                       'func_type' => 'pipe',
+                                       'ninputs' => 2,
+                                       'synthDtype' => 'float32',
+                                       'funcName' => 'coriolis_ker1_subker0',
+                                       'performance' => {
+                                                          'lat' => 24,
+                                                          'afi' => -1,
+                                                          'fpo' => 1,
+                                                          'efi' => -1,
+                                                          'lfi' => 1,
+                                                          'sd' => -1
+                                                        }
+                                     },
+          'kernel_top_0' => {
+                              'resource' => {
+                                              'regs' => 4736,
+                                              'propDelay' => 11,
+                                              'dsps' => 12,
+                                              'bram' => 0,
+                                              'aluts' => 6272
+                                            },
+                              'performance' => {
+                                                 'lat' => 48,
+                                                 'afi' => 1,
+                                                 'fpo' => 1,
+                                                 'efi' => 1,
+                                                 'lfi' => 1,
+                                                 'sd' => 0
+                                               }
+                            }
+        };

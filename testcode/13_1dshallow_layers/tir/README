@@ -1,0 +1,14 @@
+WN, Glasgow, 2019.06.26
+=======================
+
+/* ver1 */
++ two kernels
++ DYN is stub
++ First one has iterative SIN/COS
+ 
+
+ /* ver2 */
++ two kernels
++ DYN is stub
++ First one has iterative POW
+

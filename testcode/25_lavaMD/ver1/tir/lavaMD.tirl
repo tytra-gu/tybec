@@ -1,0 +1,393 @@
+;-- =============================================================================
+;-- Company      : Unversity of Glasgow, Comuting Science
+;-- Author:        Syed Waqar Nabi
+;-- 
+;-- Create Date  : 2020.01.28
+;-- Project Name : TyTra
+;--
+;-- Dependencies : 
+;--
+;-- Revision     : 
+;-- Revision 0.01. File Created
+;-- 
+;-- Conventions  : 
+;-- =============================================================================
+;--
+;-- =============================================================================
+;-- General Description
+;-- -----------------------------------------------------------------------------
+;-- Tytra-IR BACKEND file for lavaMD kernel from Rodinia
+;-- Integer version
+;--
+;-- Only looking at loop for number of particle  the CURRENT (i.e. only one) neghbouring box
+;-- the while(wtx<NUMBER_PAR_PER_BOX) loop and then
+;-- the loop over 26 neighbouring boxes and then
+;-- loop over all home boxes is 
+;--  of no  concern and presumed handled at host
+;-- *The original openCL kernel code (from relevant loop only)
+;-- ------------------------------------------------------
+;--        // loop for the number of particles in the current nei box
+;--        for (j=0; j<NUMBER_PAR_PER_BOX; j++){
+;--
+;--          // (disable the section below only if wanting to use shared memory)
+;--          // r2 = d_rv_gpu[first_i+wtx].v + d_rv_gpu[first_j+j].v - DOT(d_rv_gpu[first_i+wtx],d_rv_gpu[first_j+j]); 
+;--          // u2 = a2*r2;
+;--          // vij= exp(-u2);
+;--          // fs = 2*vij;
+;--          // d.x = d_rv_gpu[first_i+wtx].x  - d_rv_gpu[first_j+j].x;
+;--          // fxij=fs*d.x;
+;--          // d.y = d_rv_gpu[first_i+wtx].y  - d_rv_gpu[first_j+j].y;
+;--          // fyij=fs*d.y;
+;--          // d.z = d_rv_gpu[first_i+wtx].z  - d_rv_gpu[first_j+j].z;
+;--          // fzij=fs*d.z;
+;--          // d_fv_gpu[first_i+wtx].v +=  d_qv_gpu[first_j+j]*vij;
+;--          // d_fv_gpu[first_i+wtx].x +=  d_qv_gpu[first_j+j]*fxij;
+;--          // d_fv_gpu[first_i+wtx].y +=  d_qv_gpu[first_j+j]*fyij;
+;--          // d_fv_gpu[first_i+wtx].z +=  d_qv_gpu[first_j+j]*fzij;
+;--
+;--          // (enable the section below only if wanting to use shared memory)
+;--          r2 = rA_shared[wtx].v + rB_shared[j].v - DOT(rA_shared[wtx],rB_shared[j]); 
+;--          u2 = a2*r2;
+;--          vij= exp(-u2); //This instruction is converted to a random division, as floats and exp not currently supported
+;--          fs = 2*vij;
+;--          d.x = rA_shared[wtx].x  - rB_shared[j].x;
+;--          fxij=fs*d.x;
+;--          d.y = rA_shared[wtx].y  - rB_shared[j].y;
+;--          fyij=fs*d.y;
+;--          d.z = rA_shared[wtx].z  - rB_shared[j].z;
+;--          fzij=fs*d.z;
+;--          d_fv_gpu[first_i+wtx].v +=  qB_shared[j]*vij;
+;--          d_fv_gpu[first_i+wtx].x +=  qB_shared[j]*fxij;
+;--          d_fv_gpu[first_i+wtx].y +=  qB_shared[j]*fyij;
+;--          d_fv_gpu[first_i+wtx].z +=  qB_shared[j]*fzij;
+;-- =============================================================================
+
+
+#define ROWS     16
+#define COLS     ROWS
+#define SIZE     (ROWS*COLS)
+
+#define data_t ui32
+
+;-- constants used in the design; assign randomly
+#define a2 23
+
+; -----------------------------------------------------------------------------
+; ** Main execution pipeline function
+; -----------------------------------------------------------------------------
+define void @lavaNeiLoop(
+    data_t %rA_shared_v
+  , data_t %rA_shared_x
+  , data_t %rA_shared_y
+  , data_t %rA_shared_z
+  , data_t %rB_shared_v
+  , data_t %rB_shared_x
+  , data_t %rB_shared_y
+  , data_t %rB_shared_z
+  , data_t %qB_shared
+  , data_t %d_fv_gpu_v 
+  , data_t %d_fv_gpu_x 
+  , data_t %d_fv_gpu_y 
+  , data_t %d_fv_gpu_z 
+  ) pipe
+{
+ 
+  data_t %s1   = mul data_t %rA_shared_x,  %rB_shared_x
+  data_t %s2   = mul data_t %rA_shared_y,  %rB_shared_y
+  data_t %s3   = mul data_t %rA_shared_z,  %rB_shared_z
+  data_t %s4   = add data_t %s1,           %s2
+  data_t %dot  = add data_t %s4,           %s3
+  data_t %s5   = add data_t %rA_shared_v,  %rB_shared_v
+  data_t %r2   = sub data_t %s5,           %dot 
+
+  data_t %u2  = mul data_t %r2,           a2
+
+  data_t %vij = mul data_t %u2,           3
+
+  data_t %fs  = mul data_t %vij,          2
+
+  data_t %dx  = sub data_t %rA_shared_x,  %rB_shared_x   
+  data_t %fxij= mul data_t %fs,           %dx
+
+  data_t %dy  = sub data_t %rA_shared_y,  %rB_shared_y    
+  data_t %fyij= mul data_t %fs,           %dy
+
+  data_t %dz  = sub data_t %rA_shared_z,  %rB_shared_z    
+  data_t %fzij= mul data_t %fs,           %dz
+  
+  ;--this _should_ be a reduction, but TIR can't deal with 4 reductions in
+  ;-- a single function, it can only have one terminal reduction instruction
+  ;-- so chaning these to a map (and updating C code accordingly)
+  data_t %d_fv_gpu_v = mul data_t %qB_shared,    %vij
+  data_t %d_fv_gpu_x = mul data_t %qB_shared,    %fxij
+  data_t %d_fv_gpu_y = mul data_t %qB_shared,    %fyij
+  data_t %d_fv_gpu_z = mul data_t %qB_shared,    %fzij
+}
+
+; ----------------------------------------------------------
+; -- top
+; ---------------------------------------------------------
+define void @kernelTop(
+    data_t %rA_shared_v
+  , data_t %rA_shared_x
+  , data_t %rA_shared_y
+  , data_t %rA_shared_z
+  , data_t %rB_shared_v
+  , data_t %rB_shared_x
+  , data_t %rB_shared_y
+  , data_t %rB_shared_z
+  , data_t %qB_shared
+  , data_t %d_fv_gpu_v 
+  , data_t %d_fv_gpu_x 
+  , data_t %d_fv_gpu_y 
+  , data_t %d_fv_gpu_z 
+  ) pipe
+{
+  
+call @lavaNeiLoop(
+    data_t %rA_shared_v
+  , data_t %rA_shared_x
+  , data_t %rA_shared_y
+  , data_t %rA_shared_z  
+  , data_t %rB_shared_v
+  , data_t %rB_shared_x
+  , data_t %rB_shared_y
+  , data_t %rB_shared_z
+  , data_t %qB_shared
+  , data_t %d_fv_gpu_v 
+  , data_t %d_fv_gpu_x 
+  , data_t %d_fv_gpu_y 
+  , data_t %d_fv_gpu_z 
+  ) 
+  
+  ret void
+}
+
+; ----------------------------------------------------------
+; -- ** MAIN
+; ----------------------------------------------------------
+define void @main () {
+
+  ;--input arrays
+  %rA_shared_v = alloca [SIZE x data_t], addrspace(1) 
+  %rA_shared_x = alloca [SIZE x data_t], addrspace(1) 
+  %rA_shared_y = alloca [SIZE x data_t], addrspace(1) 
+  %rA_shared_z = alloca [SIZE x data_t], addrspace(1) 
+  %rB_shared_v = alloca [SIZE x data_t], addrspace(1) 
+  %rB_shared_x = alloca [SIZE x data_t], addrspace(1) 
+  %rB_shared_y = alloca [SIZE x data_t], addrspace(1) 
+  %rB_shared_z = alloca [SIZE x data_t], addrspace(1) 
+  %qB_shared   = alloca [SIZE x data_t], addrspace(1) 
+
+  ;--output arrays
+  %d_fv_gpu_v = alloca [SIZE x data_t], addrspace(1) 
+  %d_fv_gpu_x = alloca [SIZE x data_t], addrspace(1) 
+  %d_fv_gpu_y = alloca [SIZE x data_t], addrspace(1) 
+  %d_fv_gpu_z = alloca [SIZE x data_t], addrspace(1) 
+
+  ;-- streams
+  %stream_rA_shared_v = streamread data_t, data_t*  %rA_shared_v  , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_rA_shared_x = streamread data_t, data_t*  %rA_shared_x  , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_rA_shared_y = streamread data_t, data_t*  %rA_shared_y  , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_rA_shared_z = streamread data_t, data_t*  %rA_shared_z  , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_rB_shared_v = streamread data_t, data_t*  %rB_shared_v  , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_rB_shared_x = streamread data_t, data_t*  %rB_shared_x  , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_rB_shared_y = streamread data_t, data_t*  %rB_shared_y  , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_rB_shared_z = streamread data_t, data_t*  %rB_shared_z  , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_qB_shared   = streamread data_t, data_t*  %qB_shared    , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  
+  streamwrite data_t %stream_d_fv_gpu_v  , data_t* %d_fv_gpu_v  , !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+  streamwrite data_t %stream_d_fv_gpu_x  , data_t* %d_fv_gpu_x  , !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+  streamwrite data_t %stream_d_fv_gpu_y  , data_t* %d_fv_gpu_y  , !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+  streamwrite data_t %stream_d_fv_gpu_z  , data_t* %d_fv_gpu_z  , !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+
+  call @kernelTop (
+      data_t %stream_rA_shared_v
+    , data_t %stream_rA_shared_x
+    , data_t %stream_rA_shared_y
+    , data_t %stream_rA_shared_z
+    , data_t %stream_rB_shared_v
+    , data_t %stream_rB_shared_x
+    , data_t %stream_rB_shared_y
+    , data_t %stream_rB_shared_z
+    , data_t %stream_qB_shared
+    , data_t %stream_d_fv_gpu_v 
+    , data_t %stream_d_fv_gpu_x 
+    , data_t %stream_d_fv_gpu_y 
+    , data_t %stream_d_fv_gpu_z 
+  )
+  ret void
+}
+
+#if 0
+;--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+;--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+;--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+;--
+;-- *****************************************************************************
+;--                        *** MANAGE-IR ***  
+;-- *****************************************************************************
+
+;-- Following parameters have been taken from the Rodinia source code
+;-- C-style macros 
+#define NUMBER_PAR_PER_BOX  100
+  ;-- not needed for TIR since we have a "single block"
+#define NLinear             100
+#define NLanes              1
+#define NLinearPL           NLinear
+#define NKIter              100
+  ;-- numner of Kernel Iterations
+
+;-- constants used in the design; assign randomly
+#define a2 23
+
+; =============================================================================
+; ** Launchpad
+; =============================================================================
+
+define void launch()
+{
+  ;-- ---------------------------------------------------------------------------
+  ;-- ** Memory Objects
+  ;-- ---------------------------------------------------------------------------
+  @mem_rB_shared_v  = addrSpace(1) <NLinear x ui32>,!"hmap" , !"NULL", !"readPorts"  , !1 ,!"writePorts" , !1
+  @mem_rB_shared_x  = addrSpace(1) <NLinear x ui32>,!"hmap" , !"NULL", !"readPorts"  , !1 ,!"writePorts" , !1
+  @mem_rB_shared_y  = addrSpace(1) <NLinear x ui32>,!"hmap" , !"NULL", !"readPorts"  , !1 ,!"writePorts" , !1
+  @mem_rB_shared_z  = addrSpace(1) <NLinear x ui32>,!"hmap" , !"NULL", !"readPorts"  , !1 ,!"writePorts" , !1
+  @mem_d_fv_gpu_v   = addrSpace(1) <NLinear x ui32>,!"hmap" , !"NULL", !"readPorts"  , !1 ,!"writePorts" , !1
+  @mem_d_fv_gpu_x   = addrSpace(1) <NLinear x ui32>,!"hmap" , !"NULL", !"readPorts"  , !1 ,!"writePorts" , !1
+  @mem_d_fv_gpu_y   = addrSpace(1) <NLinear x ui32>,!"hmap" , !"NULL", !"readPorts"  , !1 ,!"writePorts" , !1
+  @mem_d_fv_gpu_z   = addrSpace(1) <NLinear x ui32>,!"hmap" , !"NULL", !"readPorts"  , !1 ,!"writePorts" , !1
+
+  ;-- ---------------------------------------------------------------------------
+  ;-- ** Streaming Objects
+  ;-- ---------------------------------------------------------------------------
+  ;-- NOTE: the extended semantic that allows added context 
+  @strobj_rB_shared_v   = addrSpace(10),!"dir", !"in", !"memConn", !"@mem_rB_shared_v", !"length", !NLinear, !"start" ,!0, !"signal" , !"yes", !"stride" , !1
+  @strobj_rB_shared_x   = addrSpace(10),!"dir", !"in", !"memConn", !"@mem_rB_shared_x", !"length", !NLinear, !"start" ,!0, !"signal" , !"yes", !"stride" , !1
+  @strobj_rB_shared_y   = addrSpace(10),!"dir", !"in", !"memConn", !"@mem_rB_shared_y", !"length", !NLinear, !"start" ,!0, !"signal" , !"yes", !"stride" , !1
+  @strobj_rB_shared_z   = addrSpace(10),!"dir", !"in", !"memConn", !"@mem_rB_shared_z", !"length", !NLinear, !"start" ,!0, !"signal" , !"yes", !"stride" , !1
+  @strobj_d_fv_gpu_v    = addrSpace(10),!"dir", !"out",!"memConn", !"@mem_d_fv_gpu_v ", !"length", !NLinear, !"start" ,!0, !"signal" , !"yes", !"stride" , !1
+  @strobj_d_fv_gpu_x    = addrSpace(10),!"dir", !"out",!"memConn", !"@mem_d_fv_gpu_x ", !"length", !NLinear, !"start" ,!0, !"signal" , !"yes", !"stride" , !1
+  @strobj_d_fv_gpu_y    = addrSpace(10),!"dir", !"out",!"memConn", !"@mem_d_fv_gpu_y ", !"length", !NLinear, !"start" ,!0, !"signal" , !"yes", !"stride" , !1
+  @strobj_d_fv_gpu_z    = addrSpace(10),!"dir", !"out",!"memConn", !"@mem_d_fv_gpu_z ", !"length", !NLinear, !"start" ,!0, !"signal" , !"yes", !"stride" , !1
+
+
+  ;-- ---------------------------------------------------------------------------
+  ;-- ** Scalar Objects
+  ;-- ---------------------------------------------------------------------------
+  ;-- I can assume these are passed as registers/arguments to the opencl kernel
+  ;-- so I declare them as scalars, but in terms of costing, they are 
+  ;-- part of the opencl overhead, which I am not considering at the moment
+  @sclobj_rA_shared_x = addrSpace(11) ui32, !"ival", !12, !"hmap", !"NULL"
+  @sclobj_rA_shared_y = addrSpace(11) ui32, !"ival", !13, !"hmap", !"NULL"
+  @sclobj_rA_shared_z = addrSpace(11) ui32, !"ival", !18, !"hmap", !"NULL"
+  @sclobj_rA_shared_v = addrSpace(11) ui32, !"ival", !23, !"hmap", !"NULL"
+
+  ;-- ---------------------------------------------------------------------------
+  ;-- ** Launching kernels
+  ;-- ---------------------------------------------------------------------------  
+  call @main()
+}
+
+; *****************************************************************************
+;                        *** COMPUTE-IR ***
+; *****************************************************************************
+; ModuleID = 'top'
+  ; top level module for LLVM
+
+; =============================================================================
+; ** GLOBAL VARIABLES (PORTS)
+; =============================================================================
+@main.rB_shared_v  = addrSpace(12) ui32, !"istream", !"CONT", !0, !"strobj_rB_shared_v" 
+@main.rB_shared_x  = addrSpace(12) ui32, !"istream", !"CONT", !0, !"strobj_rB_shared_x" 
+@main.rB_shared_y  = addrSpace(12) ui32, !"istream", !"CONT", !0, !"strobj_rB_shared_y" 
+@main.rB_shared_z  = addrSpace(12) ui32, !"istream", !"CONT", !0, !"strobj_rB_shared_z" 
+@main.rA_shared_v  = addrSpace(12) ui32, !"iscalar", !"CONT", !0, !"sclobj_rA_shared_v" 
+@main.rA_shared_x  = addrSpace(12) ui32, !"iscalar", !"CONT", !0, !"sclobj_rA_shared_x" 
+@main.rA_shared_y  = addrSpace(12) ui32, !"iscalar", !"CONT", !0, !"sclobj_rA_shared_y" 
+@main.rA_shared_z  = addrSpace(12) ui32, !"iscalar", !"CONT", !0, !"sclobj_rA_shared_z" 
+@main.d_fv_gpu_v  = addrSpace(12) ui32, !"ostream", !"CONT", !0, !"strobj_d_fv_gpu_v" 
+@main.d_fv_gpu_x  = addrSpace(12) ui32, !"ostream", !"CONT", !0, !"strobj_d_fv_gpu_x" 
+@main.d_fv_gpu_y  = addrSpace(12) ui32, !"ostream", !"CONT", !0, !"strobj_d_fv_gpu_y" 
+@main.d_fv_gpu_z  = addrSpace(12) ui32, !"ostream", !"CONT", !0, !"strobj_d_fv_gpu_z" 
+
+; =============================================================================
+; ** DATAFLOW
+; =============================================================================
+  
+; -----------------------------------------------------------------------------
+; ** Main execution pipeline function
+; -----------------------------------------------------------------------------
+define void @lavaNeiLoop(
+    ui32 %rB_shared_v
+  , ui32 %rB_shared_x
+  , ui32 %rB_shared_y
+  , ui32 %rB_shared_z
+  , ui32 %d_fv_gpu_v 
+  , ui32 %d_fv_gpu_x 
+  , ui32 %d_fv_gpu_y 
+  , ui32 %d_fv_gpu_z 
+  , ui32 %rA_shared_v
+  , ui32 %rA_shared_x
+  , ui32 %rA_shared_y
+  , ui32 %rA_shared_z
+  ) pipe
+{
+ 
+  ui32 %1   = mul ui32 %rA_shared_x,  %rB_shared_x
+  ui32 %2   = mul ui32 %rA_shared_y,  %rB_shared_y
+  ui32 %3   = mul ui32 %rA_shared_z,  %rB_shared_z
+  ui32 %4   = add ui32 %1,            %2
+  ui32 %dot = add ui32 %4,            %3
+  ui32 %5   = add ui32 %rA_shared_v,  %rB_shared_v
+  ui32 %r2  = sub ui32 %5,            %dot 
+
+  ui32 %u2  = mul ui32 %r2,           a2
+
+  ui32 %vij = mul ui32 %u2,           3
+
+  ui32 %fs  = mul ui32 %vij,          2
+
+  ui32 %dx  = sub ui32 %rA_shared_x,  %rB_shared_x   
+  ui32 %fxij= mul ui32 %fs,           %dx
+
+  ui32 %dy  = sub ui32 %rA_shared_y,  %rB_shared_y    
+  ui32 %fyij= mul ui32 %fs,           %dy
+
+  ui32 %dz  = sub ui32 %rA_shared_z,  %rB_shared_z    
+  ui32 %fzij= mul ui32 %fs,           %dz
+
+  ui32 %6   = mul ui32 %qB_shared,    %vij
+  ui32 %7   = mul ui32 %qB_shared,    %fxij
+  ui32 %8   = mul ui32 %qB_shared,    %fyij
+  ui32 %9   = mul ui32 %qB_shared,    %fzij
+  
+  ui32 @d_fv_gpu_v = add ui32 %6,     @d_fv_gpu_v
+  ui32 @d_fv_gpu_x = add ui32 %7,     @d_fv_gpu_x
+  ui32 @d_fv_gpu_y = add ui32 %8,     @d_fv_gpu_y
+  ui32 @d_fv_gpu_z = add ui32 %9,     @d_fv_gpu_z
+}
+
+; -----------------------------------------------------------------------------
+; main 
+; -----------------------------------------------------------------------------
+define void @main ()
+{
+  call @lavaNeiLoop( 
+    ui32 %rB_shared_v
+  , ui32 %rB_shared_x
+  , ui32 %rB_shared_y
+  , ui32 %rB_shared_z
+  , ui32 %d_fv_gpu_v 
+  , ui32 %d_fv_gpu_x 
+  , ui32 %d_fv_gpu_y 
+  , ui32 %d_fv_gpu_z 
+  , ui32 %rA_shared_v
+  , ui32 %rA_shared_x
+  , ui32 %rA_shared_y
+  , ui32 %rA_shared_z    
+  ) pipe  
+  ret void
+}
+#endif

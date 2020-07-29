@@ -1,0 +1,171 @@
+TyBEC: Found macro NLinear = 1048576
+
+=====================================
+       Running TyBEC Parser          
+=====================================
+Found FUNCT_DECLR kernel_A
+TyBEC: Found function definition of kernel_A 
+[33mkernel_A :: outNode = %ka_vout, inNode = %ka_vin1 
+[0mFound FUNCTION
+Found FUNCT_DECLR kernel_B
+TyBEC: Found function definition of kernel_B 
+[33mkernel_B :: outNode = %kb_vout, inNode = %kb_vin 
+[0mFound FUNCTION
+Found FUNCT_DECLR kernel_C
+TyBEC: Found function definition of kernel_C 
+[33mkernel_C :: outNode = %kc_vout, inNode = %kc_vin 
+[0mFound FUNCTION
+Found FUNCT_DECLR kernel_D
+TyBEC: Found function definition of kernel_D 
+[33mkernel_D :: outNode = %kd_vout, inNode = %kd_vin 
+[0mFound FUNCTION
+Found FUNCT_DECLR kernelTop
+TyBEC: kernel_A called by kernelTop
+TyBEC: kernel_B called by kernelTop
+TyBEC: kernel_C called by kernelTop
+TyBEC: kernel_D called by kernelTop
+TyBEC: Found function definition of kernelTop 
+[33mkernelTop :: outNode = %kt_vout, inNode = %kt_vin1 
+[0mFound FUNCTION
+TyBEC: Found allocated memory: %vin0, i32 , 1048576 words , addressspace = 1 
+TyBEC: Found allocated memory: %vin1, i32 , 1048576 words , addressspace = 1 
+TyBEC: Found allocated memory: %vout, i32 , 1048576 words , addressspace = 1 
+TyBEC: Found STREAMREAD: %vin0_stream_load, connected to  %vin0
+TyBEC: Found STREAMREAD: %vin1_stream_load, connected to  %vin1
+TyBEC: Found STREAMWRITE: %vout_stream_store, connected to  %vout
+TyBEC: kernelTop called by main
+The top kernel called from Main is  = kernelTop
+TyBEC: Found function definition of main.
+
+[33mmain :: outNode = %vout, inNode = %vin0 
+[0m============================================================================
+ Running the Cost Model (Performance and Resource Estimates)       
+============================================================================
+
+Target node is   : awsf12x
+Target board is  : awsf1Board
+Target device is : ultrascale
+
+
+----------------------------------------------------------------------------
+ BANDWIDTH ESTIMATES 
+----------------------------------------------------------------------------
+TyBEC: f  = 333.3 MHz 333300000 Hz
+TyBEC: host peak_Mbps  = 63000 Mbps
+TyBEC: host sust Mbps  = 63000 Mbps
+TyBEC: mem  peak Mbps  = 83200 Mbps
+TyBEC: mem  sust Mbps  = 47424 Mbps
+
+----------------------------------------------------------------------------
+ RESOURCE ESTIMATES (Kernel & Shell) 
+----------------------------------------------------------------------------
+
+::KERNEL::
+TyBEC: aluts = 128 (0.05 %)
+TyBEC: regs  = 320  (0.08 %)
+TyBEC: bram  = 1  (0.08 %)
+TyBEC: dsp   = 1   (0.09 %)
+
+::SHELL::
+TyBEC: aluts = 42272 (12.29 %)
+TyBEC: regs  = 61312  (8.93 %)
+TyBEC: bram  = 1719504  (4.34 %)
+TyBEC: dsp   = 0   (0.05 %)
+
+::TOTAL::
+TyBEC: aluts = 42400 (12.37 %)
+TyBEC: regs  = 61632  (9.02 %)
+TyBEC: bram  = 1719505  (4.39 %)
+TyBEC: dsp   = 1   (0.13 %)
+
+----------------------------------------------------------------------------
+ ROOFLINE ANALYSIS                                                           
+----------------------------------------------------------------------------
+TYBEC: Size of 1 input array (n_gs)              = 1048576
+TYBEC: Firing interval/II (n_to)                 = 1
+TYBEC: Total word operations per kernel (n_wops) = 5
+TYBEC: Words per tuple (from GMEM)      (w_pt)   = 3
+TYBEC: Size of problem (array size, words)       = 1048576
+TYBEC: Word size in bits (w_s_bits)              = 32
+TYBEC: Bytes per word (b_pw)                     = 4
+TYBEC: Kernel Pipeline  Latency (k_pd)           = 5
+
+TyBEC: CP of one PE              = 6.7 GBops/sec
+TyBEC: CP of one PE (Asymptotic) = 6.7 GBops/sec
+
+TyBEC: Theoretical maximum PE scaling         = 845.2
+
+TyBEC: Computational Intensity = 1.7 Byte-op/Byte-trasfer
+
+TyBEC: Sustained Memory Bandwidth (this variant)         = 5.9 GB/sec
+TyBEC: Theoretical Peak Memory Bandwidth (chosen target) = 10.4 GB/sec
+
+
+TyBEC: Computation-Bound, CP_PE  x SCALE  = 6.7	GBops/sec
+TyBEC: Bandwidth-Bound,   CI x BW         = 10.1	GBops/sec
+
+[33mTyBEC: Estimated Performance from Roofline Analysis	= ***6.7 GBop/sec***
+[0m
+TyBEC: Generating TEX file to plot performance on roofline graph
+TyBEC: Generated custom ROOFLINE plot TEX file 
+----------------------------------------------------------------------------
+
+=================================================
+ Verilog HDL Code Generation   					
+=================================================
+TyBEC: Generated module kernel_B_kb_vout
+TyBEC: Generated module kernel_D_kd_vout
+TyBEC: Generated module kernel_A_local1
+TyBEC: Generated module kernel_A_ka_vout
+[31mitem = kernel_A.%local1; consumer = kernel_A.%ka_vout
+[0mTyBEC: Generated module kernelTop_kernel_A
+TyBEC: Generated module kernelTop_kernel_B
+TyBEC: Generated module kernelTop_kernel_C
+TyBEC: Generated module kernelTop_kernel_D
+[31mitem = main.kernelTop.0; consumer = main.%vout
+[0m[31mitem = main.kernelTop.0; consumer = main.%vout
+[0mTyBEC: Generated module main
+[31mitem = kernelTop.kernel_A.0; consumer = kernelTop.kernel_B.1
+[0m[31mitem = kernelTop.kernel_B.1; consumer = kernelTop.kernel_C.2
+[0m[31mitem = kernelTop.kernel_C.2; consumer = kernelTop.kernel_D.3
+[0m[31mitem = kernelTop.kernel_D.3; consumer = kernelTop.%kt_vout
+[0mTyBEC: Generated module main_kernelTop
+[31mitem = main.kernelTop.0; consumer = main.%vout
+[0m[31mitem = main.kernelTop.0; consumer = main.%vout
+[0mTyBEC: Generated module main
+[31mitem = main.kernelTop.0; consumer = main.%vout
+[0m[31mitem = main.kernelTop.0; consumer = main.%vout
+[0mTyBEC: Generated module main
+[31mitem = main.kernelTop.0; consumer = main.%vout
+[0m[31mitem = main.kernelTop.0; consumer = main.%vout
+[0mTyBEC: Generated module main
+TyBEC: Generated module kernel_C_kc_vout
+TyBEC: Generated module func_hdl_top
+TyBEC: Generated module krnl_vadd_rtl
+nameInHash = %vin1_stream_load
+nameInHash = %vout_stream_store
+nameInHash = %vin0_stream_load
+TyBEC: Generated module testbench
+
+=================================================
+ OCL Wrapper Code Generation   					
+=================================================
+TyBEC: Generated host.cpp
+=================================================
+Build took 0.66 seconds
+The graph is: 
+ kernelTop.%kt_vin0-kernelTop.kernel_A.0
+kernelTop.%kt_vin1-kernelTop.kernel_A.0
+kernelTop.kernel_A.0-kernelTop.kernel_B.1
+kernelTop.kernel_B.1-kernelTop.kernel_C.2
+kernelTop.kernel_C.2-kernelTop.kernel_D.3
+kernelTop.kernel_D.3-kernelTop.%kt_vout
+kernel_A.%ka_vin0-kernel_A.%local1
+kernel_A.%ka_vin1-kernel_A.%local1
+kernel_A.%local1-kernel_A.%ka_vout
+kernel_B.%kb_vin-kernel_B.%kb_vout
+kernel_C.%kc_vin-kernel_C.%kc_vout
+kernel_D.%kd_vin-kernel_D.%kd_vout
+main.%vin0-main.kernelTop.0
+main.%vin1-main.kernelTop.0
+main.kernelTop.0-main.%vout

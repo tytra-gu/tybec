@@ -1,0 +1,138 @@
+define void @kernelTop (
+			float32 %dt_0
+			float32 %du_j_k_0
+			float32 %du_j_k_1
+			float32 %duu_0
+			float32 %dv_j_k_0
+			float32 %dv_j_k_1
+			float32 %dx_0
+			float32 %dy_0
+			float32 %eps_0
+			float32 %eta_j_k_0
+			float32 %eta_j_k_1
+			float32 %etan_avg_0
+			float32 %etan_j_k_0
+			float32 %etan_j_k_1
+			float32 %g_0
+			float32 %h_j_k_0
+			float32 %h_j_k_1
+			float32 %hmin_0
+			float32 %hzero_j_k_0
+			float32 %u_j_k_0
+			float32 %u_j_k_1
+			float32 %un_j_k_0
+			float32 %un_j_k_1
+			float32 %v_j_k_0
+			float32 %v_j_k_1
+			float32 %vn_j_k_0
+			float32 %vn_j_k_1
+			i32 %wet_j_k_0
+			i32 %wet_j_k_1
+                       ) pipe
+{
+	
+	call @shapiro_reduce_19 (
+				float32 %etan_j_k_0
+				float32 %etan_avg_0
+		)
+	
+	; Offset streams for i32 %wet_j_k_0
+	i32 %wet_j_kp1_s_0 = offstream i32 %wet_j_k_0, !tir.stream.offset !+502
+	i32 %wet_j_km1_s_0 = offstream i32 %wet_j_k_0, !tir.stream.offset !-502
+	i32 %wet_jp1_k_s_0 = offstream i32 %wet_j_k_0, !tir.stream.offset !+1
+	i32 %wet_jm1_k_s_0 = offstream i32 %wet_j_k_0, !tir.stream.offset !-1
+	i32 %wet_j_k_s_0 = offstream i32 %wet_j_k_0, !tir.stream.offset !0
+	
+	; Offset streams for float32 %etan_j_k_0
+	float32 %etan_j_k_s_0 = offstream float32 %etan_j_k_0, !tir.stream.offset !0
+	float32 %etan_jp1_k_s_0 = offstream float32 %etan_j_k_0, !tir.stream.offset !+1
+	float32 %etan_jm1_k_s_0 = offstream float32 %etan_j_k_0, !tir.stream.offset !-1
+	float32 %etan_j_km1_s_0 = offstream float32 %etan_j_k_0, !tir.stream.offset !-502
+	float32 %etan_j_kp1_s_0 = offstream float32 %etan_j_k_0, !tir.stream.offset !+502
+	
+	
+	call @shapiro_map_24 (
+				i32 %wet_jp1_k_s_0
+				i32 %wet_j_k_s_0
+				i32 %wet_j_kp1_s_0
+				i32 %wet_j_km1_s_0
+				i32 %wet_jm1_k_s_0
+				float32 %eps_0
+				float32 %etan_jp1_k_s_0
+				float32 %etan_j_k_s_0
+				float32 %etan_j_kp1_s_0
+				float32 %etan_j_km1_s_0
+				float32 %etan_jm1_k_s_0
+				float32 %eta_j_k_0
+				float32 %etan_avg_1
+		)
+	
+	; Offset streams for float32 %vn_j_k_0
+	float32 %vn_j_k_s_0 = offstream float32 %vn_j_k_0, !tir.stream.offset !0
+	float32 %vn_jm1_k_s_0 = offstream float32 %vn_j_k_0, !tir.stream.offset !-1
+	
+	; Offset streams for float32 %un_j_k_0
+	float32 %un_j_k_s_0 = offstream float32 %un_j_k_0, !tir.stream.offset !0
+	float32 %un_j_km1_s_0 = offstream float32 %un_j_k_0, !tir.stream.offset !-502
+	
+	; Offset streams for i32 %wet_j_k_0
+	i32 %wet_j_kp1_s_1 = offstream i32 %wet_j_k_0, !tir.stream.offset !+502
+	i32 %wet_jp1_k_s_1 = offstream i32 %wet_j_k_0, !tir.stream.offset !+1
+	i32 %wet_j_k_s_1 = offstream i32 %wet_j_k_0, !tir.stream.offset !0
+	
+	; Offset streams for %eta_j_k_1
+	float32 %eta_j_kp1_s_0 = offstream %eta_j_k_1, !tir.stream.offset !+502
+	float32 %eta_jp1_k_s_0 = offstream %eta_j_k_1, !tir.stream.offset !+1
+	float32 %eta_j_k_s_0 = offstream %eta_j_k_1, !tir.stream.offset !0
+	
+	; Offset streams for float32 %h_j_k_0
+	float32 %h_j_k_s_0 = offstream float32 %h_j_k_0, !tir.stream.offset !0
+	float32 %h_jm1_k_s_0 = offstream float32 %h_j_k_0, !tir.stream.offset !-1
+	float32 %h_j_kp1_s_0 = offstream float32 %h_j_k_0, !tir.stream.offset !+502
+	float32 %h_j_km1_s_0 = offstream float32 %h_j_k_0, !tir.stream.offset !-502
+	float32 %h_jp1_k_s_0 = offstream float32 %h_j_k_0, !tir.stream.offset !+1
+	
+	
+	call @dyn_map_39 (
+				float32 %dt_0
+				float32 %g_0
+				float32 %eta_jp1_k_s_0
+				float32 %eta_j_k_s_0
+				float32 %eta_j_kp1_s_0
+				float32 %dx_0
+				float32 %dy_0
+				float32 %u_j_k_0
+				float32 %du_j_k_0
+				i32 %wet_jp1_k_s_1
+				i32 %wet_j_k_s_1
+				i32 %wet_j_kp1_s_1
+				float32 %duu_0
+				float32 %v_j_k_0
+				float32 %dv_j_k_0
+				float32 %un_j_k_s_0
+				float32 %un_j_km1_s_0
+				float32 %h_jp1_k_s_0
+				float32 %h_j_k_s_0
+				float32 %h_j_kp1_s_0
+				float32 %h_j_km1_s_0
+				float32 %h_jm1_k_s_0
+				float32 %vn_j_k_s_0
+				float32 %vn_jm1_k_s_0
+				float32 %etan_j_k_s_1
+		)
+	
+	
+	call @update_map_24 (
+				float32 %hzero_j_k_0
+				float32 %eta_j_k_s_0
+				float32 %h_j_k_s_0
+				float32 %hmin_0
+				float32 %un_j_k_s_0
+				float32 %vn_j_k_s_0
+				i32 %wet_j_k_s_1
+				float32 %u_j_k_1
+				float32 %v_j_k_1
+		)
+	
+	ret void
+}

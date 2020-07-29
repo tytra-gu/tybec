@@ -1,0 +1,779 @@
+// =============================================================================
+// Company              : Unversity of Glasgow, Comuting Science
+// Template Author      : S Waqar Nabi
+// Template origin date : 2019.07.29
+//
+// Project Name         : TyTra
+//
+// Target Devices       : Xilinx Ultrascale (AWS)
+//
+// Generated Design Name: untitled
+// Generated Module Name: main.c
+// Generator Version    : R17.0
+// Generator TimeStamp  : Wed Jul 31 14:08:34 2019
+// 
+// Dependencies         : <dependencies>
+//
+// =============================================================================
+// General Description
+// -----------------------------------------------------------------------------
+// template for func_hdl_top.sv, required for SDx integration
+// with TyBEC generated HDL
+//
+// This module is a light-weight wrapper that translates the packed AXI signals to
+// unpacked signals for use by TyBEC generated modules, which have AXI-type
+// signals but not with same names
+// The top level function in TyTra-IR is ALWAYS "main", so this module will
+// ALWYAS instantitate just one, MAIN module
+//
+// Based on template provided by Xilinx
+//  /*******************************************************************************
+//  Vendor: Xilinx
+//  Associated Filename: main.c
+//  #Purpose: This example shows a basic vector add +1 (constant) by manipulating
+//  #         memory inplace.
+//  *******************************************************************************/
+
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <unistd.h>
+#include <assert.h>
+#include <stdbool.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <CL/opencl.h>
+#include <CL/cl_ext.h>
+#include <time.h>
+
+////////////////////////////////////////////////////////////////////////////////
+
+#define NUM_WORKGROUPS (1)
+#define WORKGROUP_SIZE (256)
+//#define MAX_LENGTH 8192
+
+#if defined(SDX_PLATFORM) && !defined(TARGET_DEVICE)
+#define STR_VALUE(arg)      #arg
+#define GET_STRING(name) STR_VALUE(name)
+#define TARGET_DEVICE GET_STRING(SDX_PLATFORM)
+#endif
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+int load_file_to_memory(const char *filename, char **result)
+{
+    uint size = 0;
+    FILE *f = fopen(filename, "rb");
+    if (f == NULL) {
+        *result = NULL;
+        return -1; // -1 means file opening fail
+    }
+    fseek(f, 0, SEEK_END);
+    size = ftell(f);
+    fseek(f, 0, SEEK_SET);
+    *result = (char *)malloc(size+1);
+    if (size != fread(*result, sizeof(char), size, f)) {
+        free(*result);
+        return -2; // -2 means file reading fail
+    }
+    fclose(f);
+    (*result)[size] = 0;
+    return size;
+}
+
+//============================================================================
+// Problem-specific
+//============================================================================
+  //#define VERBOSE
+  #define TY_GVECT 1  
+  #define NTOT  1
+  #define DATA_SIZE 1024
+    //SDx read master/write master require 4kB aligned buffers
+    // e.g. 1024 (or 32x32 for 2D square grid) makes this automatic:
+      //32*32*4 = 4KB
+      //subsequent pointers will automatically be 4KB aligned
+  #define MAX_LENGTH DATA_SIZE
+  
+  #define data_t float
+  
+  #define NINPUTS   4
+  #define NOUTPUTS  NINPUTS 
+    //this template can only same number of outputs as inputs 
+    //(to make coalesced IO the same width, as they use the same interface)
+      
+  
+//============================================================================
+int main(int argc, char** argv)
+//============================================================================
+{
+  clock_t cstart, cend;
+  double cpu_time_used;
+  clock_t dstart, dend;
+  double dev_time_used;
+  
+  //note: size = DATA_SIZE = MAX_LENGTH = IM*JM
+    //MAX_SIZE could be different?
+  const int imax = (int)sqrt((double)DATA_SIZE);
+  const int jmax = (int)sqrt((double)DATA_SIZE); 
+  const int ntot = NTOT; //total number of time interation steps
+  const int vect = TY_GVECT; 
+//-----------------------------------------------------------------------------------
+// INIT DATA (Host and Device)
+// ----------------------------------------------------------------------------------
+
+
+  int size = DATA_SIZE;
+  //host arrays for host run
+  data_t* u = (data_t*) malloc((sizeof (data_t))*DATA_SIZE);
+  data_t* x = (data_t*) malloc((sizeof (data_t))*DATA_SIZE);
+  data_t* y = (data_t*) malloc((sizeof (data_t))*DATA_SIZE);
+  data_t* v = (data_t*) malloc((sizeof (data_t))*DATA_SIZE);
+  data_t* xn = (data_t*) malloc((sizeof (data_t))*DATA_SIZE);
+  data_t* vn = (data_t*) malloc((sizeof (data_t))*DATA_SIZE);
+  data_t* un = (data_t*) malloc((sizeof (data_t))*DATA_SIZE);
+  data_t* yn = (data_t*) malloc((sizeof (data_t))*DATA_SIZE);
+
+
+  //host memory for device run (coalesced inputs and outputs)
+  data_t* h_axi00_ptr0_input = (data_t*) malloc((sizeof (data_t))*MAX_LENGTH*NINPUTS); 
+  data_t* h_axi00_ptr0_output = (data_t*) malloc((sizeof (data_t))*MAX_LENGTH*NOUTPUTS); 
+
+  //init data
+  for (int i = 0; i < imax; i++) {
+    for (int j = 0; j < jmax; j=j+vect) { //vect _must_ be a factor of jmax
+      for (int w = 0; w < vect; w++) {
+      u[i*jmax + j+w] = (data_t) 3.14+(j+i*jmax)+1;
+      x[i*jmax + j+w] = (data_t) 3.14+(j+i*jmax)+1;
+      y[i*jmax + j+w] = (data_t) 3.14+(j+i*jmax)+1;
+      v[i*jmax + j+w] = (data_t) 3.14+(j+i*jmax)+1;
+
+      //interleave inputs into a single array for device
+      h_axi00_ptr0_input  [(j+i*jmax)*NINPUTS + (0*vect) + w]= (data_t) u[i*jmax + j+w];
+      h_axi00_ptr0_input  [(j+i*jmax)*NINPUTS + (1*vect) + w]= (data_t) x[i*jmax + j+w];
+      h_axi00_ptr0_input  [(j+i*jmax)*NINPUTS + (2*vect) + w]= (data_t) y[i*jmax + j+w];
+      h_axi00_ptr0_input  [(j+i*jmax)*NINPUTS + (3*vect) + w]= (data_t) v[i*jmax + j+w];
+
+      h_axi00_ptr0_output  [(j+i*jmax)*NOUTPUTS + (0*vect) + w]= (data_t) 0; //xn
+      h_axi00_ptr0_output  [(j+i*jmax)*NOUTPUTS + (1*vect) + w]= (data_t) 0; //vn
+      h_axi00_ptr0_output  [(j+i*jmax)*NOUTPUTS + (2*vect) + w]= (data_t) 0; //un
+      h_axi00_ptr0_output  [(j+i*jmax)*NOUTPUTS + (3*vect) + w]= (data_t) 0; //yn
+
+      }
+    }
+  }
+  
+//-----------------------------------------------------------------------------------
+// HOST RUN (Golden results)
+// ----------------------------------------------------------------------------------
+  cstart = clock();
+    float dt,freq,f,pi,alpha,beta;
+  
+  // Coriolis specific constants //
+  //global constants
+  pi    = 4.0*atan(1.0)       ;// this calculates Pi  
+  freq  = -2.*pi/(24.*3600.)  ;//
+  f     = 2*freq              ;// Coriolis parameter
+  dt    = 24.*3600./200.      ;// time step
+  
+  // parameters for semi-implicit scheme
+  alpha = f*dt            ;//
+  beta = 0.25*alpha*alpha ;//
+
+  //print constant values for use in TIR/HDL
+  printf("alpha = %f\n" , alpha);
+  printf("beta = %f\n"  , beta);
+  printf("dt = %f\n"    , dt);
+  //\Coriolis specific constants //
+   
+  printf("TY:Starting Host run timer\n");
+  
+  //<----------TIMER START
+  //!**** start of iteration loop ****
+  for (int n =0; n < ntot; n++) {
+  //!*********************************
+    //time = n*dt;
+    //space loop
+    for (int i = 0; i < imax; i++) {
+      for (int j = 0; j < jmax; j++) {
+        //! velocity predictor
+        //if (mode == 1) {
+          un[i*jmax + j] = (u[i*jmax + j]*(1-beta)+alpha*v[i*jmax + j])/(1+beta);
+          vn[i*jmax + j] = (v[i*jmax + j]*(1-beta)-alpha*u[i*jmax + j])/(1+beta);
+        //}
+        //else {
+        //  un[i][j] = cos(alpha)*u[i][j]+sin(alpha)*v[i][j];
+        //  vn[i][j] = cos(alpha)*v[i][j]-sin(alpha)*u[i][j];
+        //}
+        
+        //! predictor of new location
+        xn[i*jmax + j] = x[i*jmax + j] + dt*un[i*jmax + j]/1000;
+        yn[i*jmax + j] = y[i*jmax + j] + dt*vn[i*jmax + j]/1000;
+        
+        //! updates for next time step 
+        u[i*jmax + j] = un[i*jmax + j];
+        v[i*jmax + j] = vn[i*jmax + j];
+        x[i*jmax + j] = xn[i*jmax + j];
+        y[i*jmax + j] = yn[i*jmax + j];
+      }//for j         
+    }//for i    
+  }//for n 
+  //<----------TIMER END   
+  cend = clock();
+  cpu_time_used = ((double) (cend - cstart)) / CLOCKS_PER_SEC;
+
+      
+//-----------------------------------------------------------------------------------
+// DEV RUN 
+// ----------------------------------------------------------------------------------
+    int err;                            // error code returned from api calls
+    int check_status = 0;
+    const uint number_of_words = DATA_SIZE; // 
+
+
+    cl_platform_id platform_id;         // platform id
+    cl_device_id device_id;             // compute device id
+    cl_context context;                 // compute context
+    cl_command_queue commands;          // compute command queue
+    cl_program program;                 // compute programs
+    cl_kernel kernel;                   // compute kernel
+
+    char cl_platform_vendor[1001];
+    char target_device_name[1001] = TARGET_DEVICE;
+
+    cl_mem d_axi00_ptr0_input;  // device memory used for a vector (coalesced) input
+    cl_mem d_axi00_ptr0_output; // device memory used for a vector (coalesced) output
+
+    if (argc != 2) {
+        printf("Usage: %s xclbin\n", argv[0]);
+        return EXIT_FAILURE;
+    }
+
+   // Get all platforms and then select Xilinx platform
+    cl_platform_id platforms[16];       // platform id
+    cl_uint platform_count;
+    int platform_found = 0;
+    err = clGetPlatformIDs(16, platforms, &platform_count);
+    if (err != CL_SUCCESS) {
+        printf("Error: Failed to find an OpenCL platform!\n");
+        printf("Test failed\n");
+        return EXIT_FAILURE;
+    }
+    printf("INFO: Found %d platforms\n", platform_count);
+
+    // Find Xilinx Plaftorm
+    for (unsigned int iplat=0; iplat<platform_count; iplat++) {
+        err = clGetPlatformInfo(platforms[iplat], CL_PLATFORM_VENDOR, 1000, (void *)cl_platform_vendor,NULL);
+        if (err != CL_SUCCESS) {
+            printf("Error: clGetPlatformInfo(CL_PLATFORM_VENDOR) failed!\n");
+            printf("Test failed\n");
+            return EXIT_FAILURE;
+        }
+        if (strcmp(cl_platform_vendor, "Xilinx") == 0) {
+            printf("INFO: Selected platform %d from %s\n", iplat, cl_platform_vendor);
+            platform_id = platforms[iplat];
+            platform_found = 1;
+        }
+    }
+    if (!platform_found) {
+        printf("ERROR: Platform Xilinx not found. Exit.\n");
+        return EXIT_FAILURE;
+    }
+
+   // Get Accelerator compute device
+    cl_uint num_devices;
+    unsigned int device_found = 0;
+    cl_device_id devices[16];  // compute device id
+    char cl_device_name[1001];
+    err = clGetDeviceIDs(platform_id, CL_DEVICE_TYPE_ACCELERATOR, 16, devices, &num_devices);
+    printf("INFO: Found %d devices\n", num_devices);
+    if (err != CL_SUCCESS) {
+        printf("ERROR: Failed to create a device group!\n");
+        printf("ERROR: Test failed\n");
+        return -1;
+    }
+
+    //iterate all devices to select the target device.
+    for (uint i=0; i<num_devices; i++) {
+        err = clGetDeviceInfo(devices[i], CL_DEVICE_NAME, 1024, cl_device_name, 0);
+        if (err != CL_SUCCESS) {
+            printf("Error: Failed to get device name for device %d!\n", i);
+            printf("Test failed\n");
+            return EXIT_FAILURE;
+        }
+        printf("CL_DEVICE_NAME %s\n", cl_device_name);
+        if(strcmp(cl_device_name, target_device_name) == 0) {
+            device_id = devices[i];
+            device_found = 1;
+            printf("Selected %s as the target device\n", cl_device_name);
+       }
+    }
+
+    if (!device_found) {
+        printf("Target device %s not found. Exit.\n", target_device_name);
+        return EXIT_FAILURE;
+    }
+
+    // Create a compute context
+    //
+    context = clCreateContext(0, 1, &device_id, NULL, NULL, &err);
+    if (!context) {
+        printf("Error: Failed to create a compute context!\n");
+        printf("Test failed\n");
+        return EXIT_FAILURE;
+    }
+
+    // Create a command commands
+    commands = clCreateCommandQueue(context, device_id, 0, &err);
+    if (!commands) {
+        printf("Error: Failed to create a command commands!\n");
+        printf("Error: code %i\n",err);
+        printf("Test failed\n");
+        return EXIT_FAILURE;
+    }
+
+    int status;
+
+    // Create Program Objects
+    // Load binary from disk
+    unsigned char *kernelbinary;
+    char *xclbin = argv[1];
+
+    //------------------------------------------------------------------------------
+    // xclbin
+    //------------------------------------------------------------------------------
+    printf("INFO: loading xclbin %s\n", xclbin);
+    int n_i0 = load_file_to_memory(xclbin, (char **) &kernelbinary);
+    if (n_i0 < 0) {
+        printf("failed to load kernel from xclbin: %s\n", xclbin);
+        printf("Test failed\n");
+        return EXIT_FAILURE;
+    }
+
+    size_t n0 = n_i0;
+
+    // Create the compute program from offline
+    program = clCreateProgramWithBinary(context, 1, &device_id, &n0,
+                                        (const unsigned char **) &kernelbinary, &status, &err);
+
+    if ((!program) || (err!=CL_SUCCESS)) {
+        printf("Error: Failed to create compute program from binary %d!\n", err);
+        printf("Test failed\n");
+        return EXIT_FAILURE;
+    }
+
+    // Build the program executable
+    //
+    err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
+    if (err != CL_SUCCESS) {
+        size_t len;
+        char buffer[2048];
+
+        printf("Error: Failed to build program executable!\n");
+        clGetProgramBuildInfo(program, device_id, CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
+        printf("%s\n", buffer);
+        printf("Test failed\n");
+        return EXIT_FAILURE;
+    }
+
+    // Create the compute kernel in the program we wish to run
+    //
+     kernel = clCreateKernel(program, "krnl_vadd_rtl", &err);
+    if (!kernel || err != CL_SUCCESS) {
+        printf("Error: Failed to create compute kernel!\n");
+        printf("Test failed\n");
+        return EXIT_FAILURE;
+    }
+
+    // Create structs to define memory bank mapping
+    cl_mem_ext_ptr_t d_bank_ext[4];
+
+    d_bank_ext[0].flags = XCL_MEM_DDR_BANK0;
+    d_bank_ext[0].obj = NULL;
+    d_bank_ext[0].param = 0;
+
+    d_bank_ext[1].flags = XCL_MEM_DDR_BANK1;
+    d_bank_ext[1].obj = NULL;
+    d_bank_ext[1].param = 0;
+
+    d_bank_ext[2].flags = XCL_MEM_DDR_BANK2;
+    d_bank_ext[2].obj = NULL;
+    d_bank_ext[2].param = 0;
+
+    d_bank_ext[3].flags = XCL_MEM_DDR_BANK3;
+    d_bank_ext[3].obj = NULL;
+    d_bank_ext[3].param = 0;
+    // Create the input and output arrays in device memory for our calculation
+
+
+
+    d_axi00_ptr0_input  = clCreateBuffer(context,  CL_MEM_READ_WRITE | CL_MEM_EXT_PTR_XILINX,  sizeof(data_t) * number_of_words*NINPUTS, &d_bank_ext[0], NULL);
+    d_axi00_ptr0_output = clCreateBuffer(context,  CL_MEM_READ_WRITE | CL_MEM_EXT_PTR_XILINX,  sizeof(data_t) * number_of_words*NOUTPUTS, &d_bank_ext[0], NULL);
+
+
+    if (!(d_axi00_ptr0_input) || !(d_axi00_ptr0_output)) {
+        printf("Error: Failed to allocate device memory!\n");
+        printf("Test failed\n");
+        return EXIT_FAILURE;
+    }
+    // Write our data set into the input array in device memory
+    //
+
+
+    err = clEnqueueWriteBuffer(commands, d_axi00_ptr0_input, CL_TRUE, 0, sizeof(int) * number_of_words * NINPUTS, h_axi00_ptr0_input, 0, NULL, NULL);
+    if (err != CL_SUCCESS) {
+        printf("Error: Failed to write to source array h_axi00_ptr0_input!\n");
+        printf("Test failed\n");
+        return EXIT_FAILURE;
+    }
+
+
+    // Set the arguments to our compute kernel
+    // int vector_length = MAX_LENGTH;
+    err = 0;
+    err |= clSetKernelArg(kernel, 0, sizeof(cl_mem), &d_axi00_ptr0_input); 
+    err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &d_axi00_ptr0_output);
+    //krnl_vadd.setArg(2,size/TY_GVECT); 
+    int num_vect_words_2_transfer = size/TY_GVECT;
+    err |= clSetKernelArg(kernel, 2, sizeof(int), &num_vect_words_2_transfer); //WN: added
+      //the size argument is size (not size*NINPUTS) as NINPUTS is already taken into account in the wider word size on device
+      //however, it is scaled down by the vectorization factor
+      
+    if (err != CL_SUCCESS) {
+        printf("Error: Failed to set kernel arguments! %d\n", err);
+        printf("Test failed\n");
+        return EXIT_FAILURE;
+    }
+
+    // -------------------------------------------------------------------
+    // KERNEL EXEC
+    // -------------------------------------------------------------------
+    
+    // Execute the kernel over the entire range of our 1d input data set
+    // using the maximum number of work group items for this device
+    dstart = clock();
+    //!**** start of iteration loop ****
+    for (int n =0; n < ntot; n++) {
+    //!*********************************
+      err = clEnqueueTask(commands, kernel, 0, NULL, NULL);
+      if (err) {
+              printf("Error: Failed to execute kernel! %d\n", err);
+              printf("Test failed\n");
+              return EXIT_FAILURE;
+          }
+  
+      // Read back the results from the device to verify the output
+      //
+      clFinish(commands);
+    }
+    dend = clock();
+    dev_time_used = ((double) (dend - dstart)) / CLOCKS_PER_SEC;
+
+    cl_event readevent;
+    err = 0;
+    err |= clEnqueueReadBuffer( commands, d_axi00_ptr0_output, CL_TRUE, 0, sizeof(int) * number_of_words * NOUTPUTS, h_axi00_ptr0_output, 0, NULL, &readevent );
+
+
+    if (err != CL_SUCCESS) {
+            printf("Error: Failed to read output array! %d\n", err);
+            printf("Test failed\n");
+            return EXIT_FAILURE;
+        }
+    clWaitForEvents(1, &readevent);
+
+    //------------------------------------------------------------------------------
+    // Check Results
+    //------------------------------------------------------------------------------
+    
+    //const int how_many_words_to_compare = number_of_words; //mak
+    const int how_many_words_to_compare = 16; //for quick verification and less clutter, check few initial results
+    for (uint i = 0; i < how_many_words_to_compare; i=i+vect) {
+      for (uint w = 0; w < vect; w++) {
+        int r = i/jmax;
+        int c = i%jmax;
+        
+      if (
+         (h_axi00_ptr0_output[i*NOUTPUTS + (0*vect) + w]!= xn[r*jmax + c+w]) ||
+         (h_axi00_ptr0_output[i*NOUTPUTS + (1*vect) + w]!= vn[r*jmax + c+w]) ||
+         (h_axi00_ptr0_output[i*NOUTPUTS + (2*vect) + w]!= un[r*jmax + c+w]) ||
+         (h_axi00_ptr0_output[i*NOUTPUTS + (3*vect) + w]!= yn[r*jmax + c+w]) 
+         ){
+        printf("ERROR,i=%d:: xn(e,a)=(%f,%f); vn(e,a)=(%f,%f); un(e,a)=(%f,%f); yn(e,a)=(%f,%f); \n"
+          , i+w
+        , xn[r*jmax + c+w], h_axi00_ptr0_output[i*NOUTPUTS + (0*vect) + w]
+        , vn[r*jmax + c+w], h_axi00_ptr0_output[i*NOUTPUTS + (1*vect) + w]
+        , un[r*jmax + c+w], h_axi00_ptr0_output[i*NOUTPUTS + (2*vect) + w]
+        , yn[r*jmax + c+w], h_axi00_ptr0_output[i*NOUTPUTS + (3*vect) + w]
+          );
+        check_status = 1;
+      }
+    }
+  }
+  
+  //-----------------------------
+  //Compare times (if applicable)
+  //-----------------------------
+   printf("\n");
+   printf ("*CPU* kernel computation function took %g seconds\n"   , cpu_time_used );
+   printf ("*DEVICE* Kernel computation function took %g seconds\n", dev_time_used );
+   printf("\n");
+
+    //--------------------------------------------------------------------------
+    // Shutdown and cleanup
+    //-------------------------------------------------------------------------- 
+    clReleaseMemObject(d_axi00_ptr0_input);
+    clReleaseMemObject(d_axi00_ptr0_output);
+
+    clReleaseProgram(program);
+    clReleaseKernel(kernel);
+    clReleaseCommandQueue(commands);
+    clReleaseContext(context);
+
+    if (check_status) {
+        printf("INFO: Test failed\n");
+        return EXIT_FAILURE;
+    } else {
+        printf("INFO: Test completed successfully.\n");
+        return EXIT_SUCCESS;
+    }
+} // end of main
+
+
+
+
+#if 0
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//=============================================================================
+//Company              : Unversity of Glasgow, Comuting Science                
+//Template Author      :        Syed Waqar Nabi                                
+//                                                                             
+//Project Name         : TyTra                                                 
+//                                                                             
+//Target Devices       : Stratix V                                             
+//                                                                             
+//Generated Design Name: untitled                                         
+//Generated Module Name: <module_name>                                         
+//Generator Version    : R17.0                                             
+//Generator TimeStamp  : Thu Jul 18 21:20:31 2019                                           
+//                                                                             
+//Dependencies         : <dependencies>                                        
+//                                                                             
+//                                                                             
+//=============================================================================
+//                                                                             
+//=============================================================================
+//General Description                                                          
+//-----------------------------------------------------------------------------
+//A template main.cpp file for TyBEC Sdx OCL host code generation
+//Based on Xilinx's provided examples (see following copyright notice)              
+//============================================================================= 
+/**********
+Copyright (c) 2018, Xilinx, Inc.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation
+and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors
+may be used to endorse or promote products derived from this software
+without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+**********/
+//============================================================================= 
+
+
+#include "xcl2.hpp"
+#include <vector>
+
+#include <chrono>
+#include <utility>
+#include <math.h>
+
+//#define VERBOSE
+
+#define data_t float
+
+//============================================================================
+// Problem-specific
+//============================================================================
+  //#define VERBOSE
+  #define TY_GVECT 1  
+  #define NTOT  1
+  #define DATA_SIZE 1024 //must be a square number
+    //SDx read master/write master require 4kB aligned buffers
+    // e.g. 1024 (or 32x32 for 2D square grid) makes this automatic:
+      //32*32*4 = 4KB
+      //subsequent pointers will automatically be 4KB aligned
+  #define MAX_LENGTH DATA_SIZE
+  
+  #define data_t float
+  
+  #define NINPUTS   4
+  #define NOUTPUTS  NINPUTS 
+    //this template can only same number of outputs as inputs 
+    //(to make coalesced IO the same width, as they use the same interface)
+
+//----------------------------------------------------------------------------
+// lazy globals for Coriolis
+//----------------------------------------------------------------------------
+
+  float dt,freq,f,pi,alpha,beta;
+  const int imax = (int)sqrt((double)DATA_SIZE);
+  const int jmax = (int)sqrt((double)DATA_SIZE);
+  const int ntot = NTOT; //total number of time interation steps
+
+
+int main(int argc, char** argv)
+{
+    // Coriolis specific constants //
+    //global constants
+    pi    = 4.0*atan(1.0)       ;// this calculates Pi  
+    freq  = -2.*pi/(24.*3600.)  ;//
+    f     = 2*freq              ;// Coriolis parameter
+    dt    = 24.*3600./200.      ;// time step
+    
+    // parameters for semi-implicit scheme
+    alpha = f*dt            ;//
+    beta = 0.25*alpha*alpha ;//
+  
+    //print constant values for use in TIR/HDL
+    printf("alpha = %f\n" , alpha);
+    printf("beta = %f\n"  , beta);
+    printf("dt = %f\n"    , dt);
+    //\Coriolis specific constants //
+
+  
+    int size = DATA_SIZE;
+    //Allocate Memory in Host Memory
+    size_t vector_size_bytes = sizeof(int) * size;
+    std::vector<data_t,aligned_allocator<data_t>> source_input1_u    (size);
+    std::vector<data_t,aligned_allocator<data_t>> source_input2_v    (size);
+    std::vector<data_t,aligned_allocator<data_t>> source_input3_x    (size);
+    std::vector<data_t,aligned_allocator<data_t>> source_input4_y    (size);
+    std::vector<data_t,aligned_allocator<data_t>> source_input_all   (size*NINPUTS);
+    std::vector<data_t,aligned_allocator<data_t>> source_hw_results  (size*NOUTPUTS);
+    std::vector<data_t,aligned_allocator<data_t>> source_sw_results  (size);
+
+    // Create the test data and Software Result 
+    for(int i = 0 ; i < size ; i++){
+        source_input1_u[i]  = 3.14+i+1;
+        source_input2_v[i]  = 3.14+i+1;
+        source_input3_x[i]  = 3.14+i+1;
+        source_input4_y[i]  = 3.14+i+1;
+        
+        //create coalesced input data
+        source_input_all[i*4+0] = source_input1_u[i];
+        source_input_all[i*4+1] = source_input2_v[i];
+        source_input_all[i*4+2] = source_input3_x[i];
+        source_input_all[i*4+3] = source_input4_y[i];
+        
+        //source_sw_results[i] = source_input1[i] + source_input2[i];
+        //wn: the barebones tytra example
+        //invalid, manually check results for now
+        source_sw_results[i] = 0;
+        //(source_input1[i] + source_input2[i])*(source_input1[i] + source_input2[i])*32; 
+        //source_hw_results[i] = 0;
+    }
+
+//OPENCL HOST CODE AREA START
+    //Create Program and Kernel
+    std::vector<cl::Device> devices = xcl::get_xil_devices();
+    cl::Device device = devices[0];
+
+    cl::Context context(device);
+    cl::CommandQueue q(context, device, CL_QUEUE_PROFILING_ENABLE);
+    std::string device_name = device.getInfo<CL_DEVICE_NAME>(); 
+
+    std::string binaryFile = xcl::find_binary_file(device_name,"vadd");
+    cl::Program::Binaries bins = xcl::import_binary_file(binaryFile);
+    devices.resize(1);
+    cl::Program program(context, devices, bins);
+    cl::Kernel krnl_vadd(program,"krnl_vadd_rtl");
+
+    //Allocate Buffer in Global Memory
+    std::vector<cl::Memory> inBufVec, outBufVec;
+    cl::Buffer buffer_r1(context,CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, 
+            vector_size_bytes*NINPUTS, source_input_all.data());
+    //cl::Buffer buffer_r2(context,CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, 
+    //        vector_size_bytes, source_input2_v.data());
+    //cl::Buffer buffer_r3(context,CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, 
+    //        vector_size_bytes, source_input3_x.data());
+    //cl::Buffer buffer_r4(context,CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, 
+    //        vector_size_bytes, source_input4_y.data());
+    cl::Buffer buffer_w (context,CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, 
+            vector_size_bytes*NOUTPUTS, source_hw_results.data());
+
+    inBufVec.push_back(buffer_r1);
+    outBufVec.push_back(buffer_w);
+
+    auto start = std::chrono::high_resolution_clock::now();          //<----------TIMER START
+
+    //Copy input data to device global memory
+    q.enqueueMigrateMemObjects(inBufVec,0/* 0 means from host*/);
+
+    //Set the Kernel Arguments
+    krnl_vadd.setArg(0,buffer_r1);
+    //krnl_vadd.setArg(1,buffer_r2);
+    krnl_vadd.setArg(1,buffer_w);
+    krnl_vadd.setArg(2,size/TY_GVECT); //the size argument is size (not size*NINPUTS) as NINPUTS is already taken into account in the wider word size on device
+
+    //Launch the Kernel
+    q.enqueueTask(krnl_vadd);
+
+    //Copy Result from Device Global Memory to Host Local Memory
+    q.enqueueMigrateMemObjects(outBufVec,CL_MIGRATE_MEM_OBJECT_HOST);
+    q.finish();
+
+    auto finish = std::chrono::high_resolution_clock::now();          //<----------TIMER END
+    std::chrono::duration<double> elapsed = finish - start;
+    std::cout << "TY:Kernel execution took:: " << elapsed.count() << " sec" << std::endl;
+    
+    
+//OPENCL HOST CODE AREA END
+    
+    // Compare the results of the Device to the simulation
+    int match = 0;
+    for (int i = 0 ; i < size ; i++){
+      //wn: added --> always show result, right or wrong
+      std::cout << "i = " << i << " Software result = " << source_sw_results[i]
+      << " Device result = " << source_hw_results[i] << std::endl;
+        if (source_hw_results[i] != source_sw_results[i]){
+            std::cout << "Error: Result mismatch" << std::endl;
+            std::cout << "i = " << i << " Software result = " << source_sw_results[i]
+                << " Device result = " << source_hw_results[i] << std::endl;
+            match = 1;
+            //break;
+        }
+    }
+
+    std::cout << "TEST " << (match ? "FAILED" : "PASSED") << std::endl; 
+    
+    std::cout << "TY:Kernel execution took:: " << elapsed.count() << " sec" << std::endl;
+
+    return (match ? EXIT_FAILURE :  EXIT_SUCCESS);
+}
+#endif

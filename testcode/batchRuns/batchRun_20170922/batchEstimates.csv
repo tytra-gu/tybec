@@ -1,0 +1,32 @@
+                                          ,         ,barebones_ver1.tirl     ,barebones_ver2.tirl     ,barebones_ver4.tirl     ,barebones_ver5.tirl     ,illustration_ver1.tirl     ,illustration_ver4.tirl     
+PARAMETER                                 ,UNITS    ,VALUE              ,VALUE              ,VALUE              ,VALUE              ,VALUE              ,VALUE              
+Performance                               ,GBop/sec ,10.6           ,5.2           ,5.3           ,6.3           ,9.9           ,10.6           
+Frequency                                 ,MHz      ,333.3             ,333.3             ,333.3             ,333.3             ,333.3             ,333.3             
+alutsTotal                                ,         ,42496        ,42885        ,42496        ,42496        ,42689        ,42978        
+regsTotal                                 ,         ,61888         ,62016         ,61856         ,61984         ,129349         ,132202         
+bramTotal                                 ,         ,1719505         ,1719505         ,1719505         ,1719505         ,1719505         ,1817809         
+dspTotal                                  ,         ,1          ,1          ,1          ,1          ,1          ,1          
+Host sust' BW                             ,Mbps     ,63000         ,63000         ,63000         ,63000         ,63000         ,63000         
+Gl-Mem sust' BW                           ,Mbps     ,121551.36         ,121551.36         ,121551.36         ,121551.36         ,121551.36         ,121551.36         
+Size of 1 input array (n_gs)              ,         ,2048              ,16              ,2048              ,16              ,2048              ,2048              
+Firing interval/II (n_to)                 ,         ,1              ,1              ,1              ,1              ,1              ,1              
+Total word operations per kernel (n_wops) ,         ,8            ,8            ,8            ,8            ,15            ,16            
+Words per tuple (from GMEM)      (w_pt)   ,         ,3              ,3              ,3              ,3              ,3              ,4              
+Size of problem (array size in words)     ,         ,2048              ,16              ,2048              ,16              ,2048              ,2048              
+Word size in bits (w_s_bits)              ,         ,32          ,32          ,32          ,32          ,32          ,32          
+Bytes per word (b_pw)                     ,         ,4              ,4              ,4              ,4              ,4              ,4              
+Kernel Pipeline  Latency (k_pd)           ,         ,13              ,17              ,2060              ,11              ,2073              ,2078              
+CP of one PE                              ,GBops/sec,10.6       ,5.2       ,5.3       ,6.3       ,9.9       ,10.6       
+CP of one PE (Asymptotic)                 ,GBops/sec,10.7,10.7,10.7,10.7,20,21.3
+Theoretical maximum PE scaling            ,         ,585.2        ,330.5        ,633.9        ,543.4        ,7.7        ,7.4        
+Computation-Bound: CP_PE  x SCALE         ,GBops/sec,10.6     ,5.2     ,5.3     ,6.3     ,9.9     ,10.6     
+Bandwidth-Bound:   CI x BW                ,GBops/sec,41           ,41           ,41           ,41           ,76           ,60.8           
+Computational Intensity                   ,ByOP/ByTR,2.7                ,2.7                ,2.7                ,2.7                ,5                ,4                
+alutsKernel                               ,         ,224       ,613       ,224       ,224       ,417       ,706       
+regsKernel                                ,         ,576        ,704        ,544        ,672        ,68037        ,70890        
+bramKernel                                ,         ,1        ,1        ,1        ,1        ,1        ,1        
+dspKernel                                 ,         ,1         ,1         ,1         ,1         ,1         ,1         
+alutsBasePlat                             ,         ,42272     ,42272     ,42272     ,42272     ,42272     ,42272     
+regsBasePlat                              ,         ,61312      ,61312      ,61312      ,61312      ,61312      ,61312      
+bramBasePlat                              ,         ,1719504      ,1719504      ,1719504      ,1719504      ,1719504      ,1817808      
+dspBasePlat                               ,         ,0       ,0       ,0       ,0       ,0       ,0       

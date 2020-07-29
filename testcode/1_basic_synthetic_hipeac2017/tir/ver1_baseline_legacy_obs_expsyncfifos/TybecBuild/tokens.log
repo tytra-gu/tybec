@@ -1,0 +1,2247 @@
+$VAR1 = {
+          'kernelTop' => {
+                           'cost' => {},
+                           'insCntrFcall' => 5,
+                           'instructions' => {
+                                               'kernel_map_f2.2' => {
+                                                                      'cost' => {
+                                                                                  'Latency' => undef,
+                                                                                  'M20Kbits' => undef,
+                                                                                  'CPI' => undef,
+                                                                                  'REGS' => undef,
+                                                                                  'PropDelay' => undef,
+                                                                                  'MLABbits' => undef,
+                                                                                  'ALMS' => undef,
+                                                                                  'ALUTS' => undef,
+                                                                                  'DSPs' => undef
+                                                                                },
+                                                                      'instrType' => 'funcCall',
+                                                                      'args2child' => {
+                                                                                        '1' => {
+                                                                                                 'nameChildPort' => '%vconn100_stream_store',
+                                                                                                 'name' => '%vconn100_stream_store',
+                                                                                                 'type' => undef,
+                                                                                                 'dir' => 'output'
+                                                                                               },
+                                                                                        '0' => {
+                                                                                                 'nameChildPort' => '%vconn10_stream_load',
+                                                                                                 'name' => '%vconn10_stream_load',
+                                                                                                 'type' => undef,
+                                                                                                 'dir' => 'input'
+                                                                                               }
+                                                                                      },
+                                                                      'funcRepeatCounter' => 2,
+                                                                      'funcType' => undef,
+                                                                      'instrSequence' => 2,
+                                                                      'funcName' => 'kernel_map_f2'
+                                                                    },
+                                               'kernel_map_f1.0' => {
+                                                                      'cost' => {
+                                                                                  'Latency' => undef,
+                                                                                  'M20Kbits' => undef,
+                                                                                  'CPI' => undef,
+                                                                                  'REGS' => undef,
+                                                                                  'PropDelay' => undef,
+                                                                                  'MLABbits' => undef,
+                                                                                  'ALMS' => undef,
+                                                                                  'ALUTS' => undef,
+                                                                                  'DSPs' => undef
+                                                                                },
+                                                                      'instrType' => 'funcCall',
+                                                                      'args2child' => {
+                                                                                        '6' => {
+                                                                                                 'nameChildPort' => '%vconn1_stream_store',
+                                                                                                 'name' => '%vconn1_stream_store',
+                                                                                                 'type' => undef,
+                                                                                                 'dir' => 'output'
+                                                                                               },
+                                                                                        '4' => {
+                                                                                                 'nameChildPort' => '%vin1_stream_load',
+                                                                                                 'name' => '%ix',
+                                                                                                 'type' => undef,
+                                                                                                 'dir' => 'input'
+                                                                                               },
+                                                                                        '1' => {
+                                                                                                 'nameChildPort' => '%vin0_stream_load_i_p1',
+                                                                                                 'name' => '%vin0_stream_load_i_p1',
+                                                                                                 'type' => undef,
+                                                                                                 'dir' => 'input'
+                                                                                               },
+                                                                                        '3' => {
+                                                                                                 'nameChildPort' => '%ix',
+                                                                                                 'name' => '%vin1_stream_load',
+                                                                                                 'type' => undef,
+                                                                                                 'dir' => 'input'
+                                                                                               },
+                                                                                        '0' => {
+                                                                                                 'nameChildPort' => '%vin0_stream_load',
+                                                                                                 'name' => '%vin0_stream_load',
+                                                                                                 'type' => undef,
+                                                                                                 'dir' => 'input'
+                                                                                               },
+                                                                                        '2' => {
+                                                                                                 'nameChildPort' => '%vin0_stream_load_i_n1',
+                                                                                                 'name' => '%vin0_stream_load_i_n1',
+                                                                                                 'type' => undef,
+                                                                                                 'dir' => 'input'
+                                                                                               },
+                                                                                        '5' => {
+                                                                                                 'nameChildPort' => '%vconn0_stream_store',
+                                                                                                 'name' => '%vconn0_stream_store',
+                                                                                                 'type' => undef,
+                                                                                                 'dir' => 'output'
+                                                                                               }
+                                                                                      },
+                                                                      'funcRepeatCounter' => 0,
+                                                                      'funcType' => undef,
+                                                                      'instrSequence' => 0,
+                                                                      'funcName' => 'kernel_map_f1'
+                                                                    },
+                                               'kernel_unzipt_A.1' => {
+                                                                        'cost' => {
+                                                                                    'Latency' => undef,
+                                                                                    'M20Kbits' => undef,
+                                                                                    'CPI' => undef,
+                                                                                    'REGS' => undef,
+                                                                                    'PropDelay' => undef,
+                                                                                    'MLABbits' => undef,
+                                                                                    'ALMS' => undef,
+                                                                                    'ALUTS' => undef,
+                                                                                    'DSPs' => undef
+                                                                                  },
+                                                                        'instrType' => 'funcCall',
+                                                                        'args2child' => {
+                                                                                          '1' => {
+                                                                                                   'nameChildPort' => '%vconn1_stream_load',
+                                                                                                   'name' => '%vconn1_stream_load',
+                                                                                                   'type' => undef,
+                                                                                                   'dir' => 'input'
+                                                                                                 },
+                                                                                          '3' => {
+                                                                                                   'nameChildPort' => '%vconn10_stream_store',
+                                                                                                   'name' => '%vconn10_stream_store',
+                                                                                                   'type' => undef,
+                                                                                                   'dir' => 'output'
+                                                                                                 },
+                                                                                          '0' => {
+                                                                                                   'nameChildPort' => '%vconn0_stream_load',
+                                                                                                   'name' => '%vconn0_stream_load',
+                                                                                                   'type' => undef,
+                                                                                                   'dir' => 'input'
+                                                                                                 },
+                                                                                          '2' => {
+                                                                                                   'nameChildPort' => '%vconn00_stream_store',
+                                                                                                   'name' => '%vconn00_stream_store',
+                                                                                                   'type' => undef,
+                                                                                                   'dir' => 'output'
+                                                                                                 }
+                                                                                        },
+                                                                        'funcRepeatCounter' => 1,
+                                                                        'funcType' => undef,
+                                                                        'instrSequence' => 1,
+                                                                        'funcName' => 'kernel_unzipt_A'
+                                                                      },
+                                               'kernel_map_f3.4' => {
+                                                                      'cost' => {
+                                                                                  'Latency' => undef,
+                                                                                  'M20Kbits' => undef,
+                                                                                  'CPI' => undef,
+                                                                                  'REGS' => undef,
+                                                                                  'PropDelay' => undef,
+                                                                                  'MLABbits' => undef,
+                                                                                  'ALMS' => undef,
+                                                                                  'ALUTS' => undef,
+                                                                                  'DSPs' => undef
+                                                                                },
+                                                                      'instrType' => 'funcCall',
+                                                                      'args2child' => {
+                                                                                        '1' => {
+                                                                                                 'nameChildPort' => '%vconn000_stream_load',
+                                                                                                 'name' => '%vconn000_stream_load',
+                                                                                                 'type' => undef,
+                                                                                                 'dir' => 'input'
+                                                                                               },
+                                                                                        '0' => {
+                                                                                                 'nameChildPort' => '%vconn100_stream_load',
+                                                                                                 'name' => '%vconn100_stream_load',
+                                                                                                 'type' => undef,
+                                                                                                 'dir' => 'input'
+                                                                                               },
+                                                                                        '2' => {
+                                                                                                 'nameChildPort' => '%vout_stream_store',
+                                                                                                 'name' => '%vout_stream_store',
+                                                                                                 'type' => undef,
+                                                                                                 'dir' => 'output'
+                                                                                               }
+                                                                                      },
+                                                                      'funcRepeatCounter' => 4,
+                                                                      'funcType' => undef,
+                                                                      'instrSequence' => 4,
+                                                                      'funcName' => 'kernel_map_f3'
+                                                                    },
+                                               'kernel_fold_f2.3' => {
+                                                                       'cost' => {
+                                                                                   'Latency' => undef,
+                                                                                   'M20Kbits' => undef,
+                                                                                   'CPI' => undef,
+                                                                                   'REGS' => undef,
+                                                                                   'PropDelay' => undef,
+                                                                                   'MLABbits' => undef,
+                                                                                   'ALMS' => undef,
+                                                                                   'ALUTS' => undef,
+                                                                                   'DSPs' => undef
+                                                                                 },
+                                                                       'instrType' => 'funcCall',
+                                                                       'args2child' => {
+                                                                                         '1' => {
+                                                                                                  'nameChildPort' => '%vconn000_stream_store',
+                                                                                                  'name' => '%vconn000_stream_store',
+                                                                                                  'type' => undef,
+                                                                                                  'dir' => 'output'
+                                                                                                },
+                                                                                         '0' => {
+                                                                                                  'nameChildPort' => '%vconn00_stream_load',
+                                                                                                  'name' => '%vconn00_stream_load',
+                                                                                                  'type' => undef,
+                                                                                                  'dir' => 'input'
+                                                                                                },
+                                                                                         '2' => {
+                                                                                                  'nameChildPort' => '%s0',
+                                                                                                  'name' => '%s0',
+                                                                                                  'type' => undef,
+                                                                                                  'dir' => 'null'
+                                                                                                }
+                                                                                       },
+                                                                       'funcRepeatCounter' => 3,
+                                                                       'funcType' => undef,
+                                                                       'instrSequence' => 3,
+                                                                       'funcName' => 'kernel_fold_f2'
+                                                                     }
+                                             },
+                           'args' => {
+                                       '1' => {
+                                                'dtype' => 'i32',
+                                                'name' => '%vin1_stream_load',
+                                                'isOffsetStream' => 0,
+                                                'dir' => 'input'
+                                              },
+                                       '3' => {
+                                                'dtype' => 'i32',
+                                                'name' => '%vout_stream_store',
+                                                'isOffsetStream' => 0,
+                                                'dir' => 'output'
+                                              },
+                                       '0' => {
+                                                'dtype' => 'i32',
+                                                'name' => '%vin0_stream_load',
+                                                'isOffsetStream' => 0,
+                                                'dir' => 'input'
+                                              },
+                                       '2' => {
+                                                'dtype' => 'i32',
+                                                'name' => '%s0',
+                                                'isOffsetStream' => 0,
+                                                'dir' => 'null'
+                                              }
+                                     },
+                           'autoindex' => {
+                                            '%ix' => {
+                                                       'dtype' => 'i32',
+                                                       'type' => '1d',
+                                                       'end' => 4095,
+                                                       'start' => 0
+                                                     }
+                                          },
+                           'instrCount' => 5,
+                           'symbols' => {
+                                          '%vconn0' => {
+                                                         'dtype' => 'i32.auto',
+                                                         'dfgnode' => '%vconn0',
+                                                         'cat' => 'alloca',
+                                                         'consumes' => [],
+                                                         'produces' => [
+                                                                         '%vconn0'
+                                                                       ]
+                                                       },
+                                          'kernel_unzipt_A.1' => {
+                                                                   'dfgnode' => 'kernel_unzipt_A.1',
+                                                                   'cat' => 'funcall',
+                                                                   'produces' => [
+                                                                                   '%vconn10_stream_store',
+                                                                                   '%vconn00_stream_store'
+                                                                                 ],
+                                                                   'consumes' => [
+                                                                                   '%vconn1_stream_load',
+                                                                                   '%vconn0_stream_load'
+                                                                                 ]
+                                                                 },
+                                          '%vconn100_stream_load' => {
+                                                                       'dtype' => 'i32',
+                                                                       'dfgnode' => '%vconn100',
+                                                                       'cat' => 'streamread',
+                                                                       'consumes' => [
+                                                                                       '%vconn100'
+                                                                                     ],
+                                                                       'produces' => [
+                                                                                       '%vconn100_stream_load'
+                                                                                     ]
+                                                                     },
+                                          '%vconn0_stream_load' => {
+                                                                     'dtype' => 'i32',
+                                                                     'dfgnode' => '%vconn0',
+                                                                     'cat' => 'streamread',
+                                                                     'consumes' => [
+                                                                                     '%vconn0'
+                                                                                   ],
+                                                                     'produces' => [
+                                                                                     '%vconn0_stream_load'
+                                                                                   ]
+                                                                   },
+                                          '%vout_stream_store' => {
+                                                                    'dtype' => 'i32',
+                                                                    'dfgnode' => '%vout_stream_store',
+                                                                    'cat' => 'arg',
+                                                                    'consumes' => [
+                                                                                    '%vout_stream_store'
+                                                                                  ],
+                                                                    'produces' => [
+                                                                                    '%vout_stream_store'
+                                                                                  ]
+                                                                  },
+                                          '%vconn1' => {
+                                                         'dtype' => 'i32.auto',
+                                                         'dfgnode' => '%vconn1',
+                                                         'cat' => 'alloca',
+                                                         'consumes' => [],
+                                                         'produces' => [
+                                                                         '%vconn1'
+                                                                       ]
+                                                       },
+                                          'kernel_map_f1.0' => {
+                                                                 'dfgnode' => 'kernel_map_f1.0',
+                                                                 'cat' => 'funcall',
+                                                                 'consumes' => [
+                                                                                 '%ix',
+                                                                                 '%vin0_stream_load_i_p1',
+                                                                                 '%vin1_stream_load',
+                                                                                 '%vin0_stream_load',
+                                                                                 '%vin0_stream_load_i_n1'
+                                                                               ],
+                                                                 'produces' => [
+                                                                                 '%vconn1_stream_store',
+                                                                                 '%vconn0_stream_store'
+                                                                               ]
+                                                               },
+                                          '%s0' => {
+                                                     'dtype' => 'i32',
+                                                     'dfgnode' => '%s0',
+                                                     'cat' => 'arg',
+                                                     'consumes' => [
+                                                                     '%s0'
+                                                                   ],
+                                                     'produces' => [
+                                                                     '%s0'
+                                                                   ]
+                                                   },
+                                          '%vconn0_stream_store' => {
+                                                                      'dtype' => 'i32',
+                                                                      'dfgnode' => '%vconn0',
+                                                                      'cat' => 'streamwrite',
+                                                                      'produces' => [
+                                                                                      '%vconn0'
+                                                                                    ],
+                                                                      'consumes' => [
+                                                                                      '%vconn0_stream_store'
+                                                                                    ]
+                                                                    },
+                                          '%vin0_stream_load_i_p1' => {
+                                                                        'dtype' => 'i32',
+                                                                        'dfgnode' => '%vin0_stream_load_i_p1',
+                                                                        'cat' => 'offstream',
+                                                                        'consumes' => [
+                                                                                        '%vin0_stream_load_i_p1.pre'
+                                                                                      ],
+                                                                        'produces' => [
+                                                                                        '%vin0_stream_load_i_p1'
+                                                                                      ]
+                                                                      },
+                                          '%vconn100' => {
+                                                           'dtype' => 'i32.auto',
+                                                           'dfgnode' => '%vconn100',
+                                                           'cat' => 'alloca',
+                                                           'consumes' => [],
+                                                           'produces' => [
+                                                                           '%vconn100'
+                                                                         ]
+                                                         },
+                                          '%vconn000_stream_load' => {
+                                                                       'dtype' => 'i32',
+                                                                       'dfgnode' => '%vconn000',
+                                                                       'cat' => 'streamread',
+                                                                       'consumes' => [
+                                                                                       '%vconn000'
+                                                                                     ],
+                                                                       'produces' => [
+                                                                                       '%vconn000_stream_load'
+                                                                                     ]
+                                                                     },
+                                          'kernel_map_f2.2' => {
+                                                                 'dfgnode' => 'kernel_map_f2.2',
+                                                                 'cat' => 'funcall',
+                                                                 'consumes' => [
+                                                                                 '%vconn10_stream_load'
+                                                                               ],
+                                                                 'produces' => [
+                                                                                 '%vconn100_stream_store'
+                                                                               ]
+                                                               },
+                                          '%vin0_stream_load.smache' => {
+                                                                          'dtype' => 'i32',
+                                                                          'dfgnode' => '%vin0_stream_load.smache',
+                                                                          'cat' => 'smache',
+                                                                          'produces' => [
+                                                                                          '%vin0_stream_load_i_p1.pre',
+                                                                                          '%vin0_stream_load_i_n1.pre'
+                                                                                        ],
+                                                                          'consumes' => [
+                                                                                          '%vin0_stream_load'
+                                                                                        ]
+                                                                        },
+                                          '%vconn1_stream_store' => {
+                                                                      'dtype' => 'i32',
+                                                                      'dfgnode' => '%vconn1',
+                                                                      'cat' => 'streamwrite',
+                                                                      'produces' => [
+                                                                                      '%vconn1'
+                                                                                    ],
+                                                                      'consumes' => [
+                                                                                      '%vconn1_stream_store'
+                                                                                    ]
+                                                                    },
+                                          '%vconn00' => {
+                                                          'dtype' => 'i32.auto',
+                                                          'dfgnode' => '%vconn00',
+                                                          'cat' => 'alloca',
+                                                          'consumes' => [],
+                                                          'produces' => [
+                                                                          '%vconn00'
+                                                                        ]
+                                                        },
+                                          '%vconn100_stream_store' => {
+                                                                        'dtype' => 'i32',
+                                                                        'dfgnode' => '%vconn100',
+                                                                        'cat' => 'streamwrite',
+                                                                        'produces' => [
+                                                                                        '%vconn100'
+                                                                                      ],
+                                                                        'consumes' => [
+                                                                                        '%vconn100_stream_store'
+                                                                                      ]
+                                                                      },
+                                          '%vconn00_stream_store' => {
+                                                                       'dtype' => 'i32',
+                                                                       'dfgnode' => '%vconn00',
+                                                                       'cat' => 'streamwrite',
+                                                                       'produces' => [
+                                                                                       '%vconn00'
+                                                                                     ],
+                                                                       'consumes' => [
+                                                                                       '%vconn00_stream_store'
+                                                                                     ]
+                                                                     },
+                                          '%vin1_stream_load' => {
+                                                                   'dtype' => 'i32',
+                                                                   'dfgnode' => '%vin1_stream_load',
+                                                                   'cat' => 'arg',
+                                                                   'consumes' => [],
+                                                                   'produces' => [
+                                                                                   '%vin1_stream_load',
+                                                                                   '%vin1_stream_load'
+                                                                                 ]
+                                                                 },
+                                          '%vconn10_stream_load' => {
+                                                                      'dtype' => 'i32',
+                                                                      'dfgnode' => '%vconn10',
+                                                                      'cat' => 'streamread',
+                                                                      'consumes' => [
+                                                                                      '%vconn10'
+                                                                                    ],
+                                                                      'produces' => [
+                                                                                      '%vconn10_stream_load'
+                                                                                    ]
+                                                                    },
+                                          'kernel_map_f3.4' => {
+                                                                 'dfgnode' => 'kernel_map_f3.4',
+                                                                 'cat' => 'funcall',
+                                                                 'produces' => [
+                                                                                 '%vout_stream_store'
+                                                                               ],
+                                                                 'consumes' => [
+                                                                                 '%vconn000_stream_load',
+                                                                                 '%vconn100_stream_load'
+                                                                               ]
+                                                               },
+                                          '%vin0_stream_load' => {
+                                                                   'dtype' => 'i32',
+                                                                   'dfgnode' => '%vin0_stream_load',
+                                                                   'cat' => 'arg',
+                                                                   'consumes' => [],
+                                                                   'produces' => [
+                                                                                   '%vin0_stream_load',
+                                                                                   '%vin0_stream_load'
+                                                                                 ]
+                                                                 },
+                                          '%vconn10' => {
+                                                          'dtype' => 'i32.auto',
+                                                          'dfgnode' => '%vconn10',
+                                                          'cat' => 'alloca',
+                                                          'consumes' => [],
+                                                          'produces' => [
+                                                                          '%vconn10'
+                                                                        ]
+                                                        },
+                                          '%vconn000' => {
+                                                           'dtype' => 'i32.auto',
+                                                           'dfgnode' => '%vconn000',
+                                                           'cat' => 'alloca',
+                                                           'consumes' => [],
+                                                           'produces' => [
+                                                                           '%vconn000'
+                                                                         ]
+                                                         },
+                                          '%vconn1_stream_load' => {
+                                                                     'dtype' => 'i32',
+                                                                     'dfgnode' => '%vconn1',
+                                                                     'cat' => 'streamread',
+                                                                     'consumes' => [
+                                                                                     '%vconn1'
+                                                                                   ],
+                                                                     'produces' => [
+                                                                                     '%vconn1_stream_load'
+                                                                                   ]
+                                                                   },
+                                          '%vconn00_stream_load' => {
+                                                                      'dtype' => 'i32',
+                                                                      'dfgnode' => '%vconn00',
+                                                                      'cat' => 'streamread',
+                                                                      'consumes' => [
+                                                                                      '%vconn00'
+                                                                                    ],
+                                                                      'produces' => [
+                                                                                      '%vconn00_stream_load'
+                                                                                    ]
+                                                                    },
+                                          '%vconn10_stream_store' => {
+                                                                       'dtype' => 'i32',
+                                                                       'dfgnode' => '%vconn10',
+                                                                       'cat' => 'streamwrite',
+                                                                       'produces' => [
+                                                                                       '%vconn10'
+                                                                                     ],
+                                                                       'consumes' => [
+                                                                                       '%vconn10_stream_store'
+                                                                                     ]
+                                                                     },
+                                          '%vconn000_stream_store' => {
+                                                                        'dtype' => 'i32',
+                                                                        'dfgnode' => '%vconn000',
+                                                                        'cat' => 'streamwrite',
+                                                                        'produces' => [
+                                                                                        '%vconn000'
+                                                                                      ],
+                                                                        'consumes' => [
+                                                                                        '%vconn000_stream_store'
+                                                                                      ]
+                                                                      },
+                                          'kernel_fold_f2.3' => {
+                                                                  'dfgnode' => 'kernel_fold_f2.3',
+                                                                  'cat' => 'funcall',
+                                                                  'consumes' => [
+                                                                                  '%vconn00_stream_load'
+                                                                                ],
+                                                                  'produces' => [
+                                                                                  '%vconn000_stream_store',
+                                                                                  '%s0'
+                                                                                ]
+                                                                },
+                                          '%ix' => {
+                                                     'dtype' => 'i32',
+                                                     'dfgnode' => '%ix',
+                                                     'cat' => 'autoindex',
+                                                     'consumes' => [],
+                                                     'produces' => [
+                                                                     '%ix'
+                                                                   ]
+                                                   },
+                                          '%vin0_stream_load_i_n1' => {
+                                                                        'dtype' => 'i32',
+                                                                        'dfgnode' => '%vin0_stream_load_i_n1',
+                                                                        'cat' => 'offstream',
+                                                                        'consumes' => [
+                                                                                        '%vin0_stream_load_i_n1.pre'
+                                                                                      ],
+                                                                        'produces' => [
+                                                                                        '%vin0_stream_load_i_n1'
+                                                                                      ]
+                                                                      }
+                                        },
+                           'streams' => {
+                                          '%vconn100_stream_load' => {
+                                                                       'dtype' => 'i32',
+                                                                       'maxNegOffset' => 0,
+                                                                       'memConnAddrSpace' => '0',
+                                                                       'maxPosOffset' => 0,
+                                                                       'type' => 'streamfifo',
+                                                                       'numOffsetStreams' => 0,
+                                                                       'dir' => 'read'
+                                                                     },
+                                          '%vconn0_stream_load' => {
+                                                                     'dtype' => 'i32',
+                                                                     'maxNegOffset' => 0,
+                                                                     'memConnAddrSpace' => '0',
+                                                                     'maxPosOffset' => 0,
+                                                                     'type' => 'streamfifo',
+                                                                     'numOffsetStreams' => 0,
+                                                                     'dir' => 'read'
+                                                                   },
+                                          '%vout_stream_store' => {
+                                                                    'dtype' => 'i32',
+                                                                    'memconn' => 'arg',
+                                                                    'maxNegOffset' => 0,
+                                                                    'maxPosOffset' => 0,
+                                                                    'type' => 'streamfifo',
+                                                                    'numOffsetStreams' => 0,
+                                                                    'dir' => 'null'
+                                                                  },
+                                          '%s0' => {
+                                                     'dtype' => 'i32',
+                                                     'memconn' => 'arg',
+                                                     'maxNegOffset' => 0,
+                                                     'maxPosOffset' => 0,
+                                                     'type' => 'streamfifo',
+                                                     'numOffsetStreams' => 0,
+                                                     'dir' => 'null'
+                                                   },
+                                          '%vconn0_stream_store' => {
+                                                                      'maxNegOffset' => 0,
+                                                                      'memConnAddrSpace' => '0',
+                                                                      'maxPosOffset' => 0,
+                                                                      'dir' => 'write',
+                                                                      'dtype' => 'i32',
+                                                                      'memconn' => '%vconn0',
+                                                                      'type' => 'streamfifo',
+                                                                      'numOffsetStreams' => 0
+                                                                    },
+                                          '%vconn000_stream_load' => {
+                                                                       'dtype' => 'i32',
+                                                                       'maxNegOffset' => 0,
+                                                                       'memConnAddrSpace' => '0',
+                                                                       'maxPosOffset' => 0,
+                                                                       'type' => 'streamfifo',
+                                                                       'numOffsetStreams' => 0,
+                                                                       'dir' => 'read'
+                                                                     },
+                                          '%vconn1_stream_store' => {
+                                                                      'maxNegOffset' => 0,
+                                                                      'memConnAddrSpace' => '0',
+                                                                      'maxPosOffset' => 0,
+                                                                      'dir' => 'write',
+                                                                      'dtype' => 'i32',
+                                                                      'memconn' => '%vconn1',
+                                                                      'type' => 'streamfifo',
+                                                                      'numOffsetStreams' => 0
+                                                                    },
+                                          '%vin1_stream_load' => {
+                                                                   'dtype' => 'i32',
+                                                                   'memconn' => 'arg',
+                                                                   'maxNegOffset' => 0,
+                                                                   'maxPosOffset' => 0,
+                                                                   'type' => 'streamfifo',
+                                                                   'numOffsetStreams' => 0,
+                                                                   'dir' => 'null'
+                                                                 },
+                                          '%vconn00_stream_store' => {
+                                                                       'maxNegOffset' => 0,
+                                                                       'memConnAddrSpace' => '0',
+                                                                       'maxPosOffset' => 0,
+                                                                       'dir' => 'write',
+                                                                       'dtype' => 'i32',
+                                                                       'memconn' => '%vconn00',
+                                                                       'type' => 'streamfifo',
+                                                                       'numOffsetStreams' => 0
+                                                                     },
+                                          '%vconn100_stream_store' => {
+                                                                        'maxNegOffset' => 0,
+                                                                        'memConnAddrSpace' => '0',
+                                                                        'maxPosOffset' => 0,
+                                                                        'dir' => 'write',
+                                                                        'dtype' => 'i32',
+                                                                        'memconn' => '%vconn100',
+                                                                        'type' => 'streamfifo',
+                                                                        'numOffsetStreams' => 0
+                                                                      },
+                                          '%vconn10_stream_load' => {
+                                                                      'dtype' => 'i32',
+                                                                      'maxNegOffset' => 0,
+                                                                      'memConnAddrSpace' => '0',
+                                                                      'maxPosOffset' => 0,
+                                                                      'type' => 'streamfifo',
+                                                                      'numOffsetStreams' => 0,
+                                                                      'dir' => 'read'
+                                                                    },
+                                          '%vin0_stream_load' => {
+                                                                   'maxNegOffset' => 1,
+                                                                   'maxPosOffset' => 1,
+                                                                   'dir' => 'null',
+                                                                   'dtype' => 'i32',
+                                                                   'memconn' => 'arg',
+                                                                   'offstreams' => {
+                                                                                     '%vin0_stream_load_i_p1' => {
+                                                                                                                   'dtype' => 'i32',
+                                                                                                                   'dist' => 1,
+                                                                                                                   'dir' => '+'
+                                                                                                                 },
+                                                                                     '%vin0_stream_load_i_n1' => {
+                                                                                                                   'dtype' => 'i32',
+                                                                                                                   'dist' => 1,
+                                                                                                                   'dir' => '-'
+                                                                                                                 }
+                                                                                   },
+                                                                   'type' => 'streamfifo',
+                                                                   'numOffsetStreams' => 2
+                                                                 },
+                                          '%vconn1_stream_load' => {
+                                                                     'dtype' => 'i32',
+                                                                     'maxNegOffset' => 0,
+                                                                     'memConnAddrSpace' => '0',
+                                                                     'maxPosOffset' => 0,
+                                                                     'type' => 'streamfifo',
+                                                                     'numOffsetStreams' => 0,
+                                                                     'dir' => 'read'
+                                                                   },
+                                          '%vconn00_stream_load' => {
+                                                                      'dtype' => 'i32',
+                                                                      'maxNegOffset' => 0,
+                                                                      'memConnAddrSpace' => '0',
+                                                                      'maxPosOffset' => 0,
+                                                                      'type' => 'streamfifo',
+                                                                      'numOffsetStreams' => 0,
+                                                                      'dir' => 'read'
+                                                                    },
+                                          '%vconn000_stream_store' => {
+                                                                        'maxNegOffset' => 0,
+                                                                        'memConnAddrSpace' => '0',
+                                                                        'maxPosOffset' => 0,
+                                                                        'dir' => 'write',
+                                                                        'dtype' => 'i32',
+                                                                        'memconn' => '%vconn000',
+                                                                        'type' => 'streamfifo',
+                                                                        'numOffsetStreams' => 0
+                                                                      },
+                                          '%vconn10_stream_store' => {
+                                                                       'maxNegOffset' => 0,
+                                                                       'memConnAddrSpace' => '0',
+                                                                       'maxPosOffset' => 0,
+                                                                       'dir' => 'write',
+                                                                       'dtype' => 'i32',
+                                                                       'memconn' => '%vconn10',
+                                                                       'type' => 'streamfifo',
+                                                                       'numOffsetStreams' => 0
+                                                                     }
+                                        },
+                           'func_type' => 'pipe',
+                           'funcName' => 'kernelTop',
+                           'memories' => {
+                                           '%vconn10' => {
+                                                           'dtype' => 'i32',
+                                                           'connInStreamCount' => 1,
+                                                           'connStreamCount' => 2,
+                                                           'streamConn' => {
+                                                                             '1' => {
+                                                                                      'name' => '%vconn10_stream_store',
+                                                                                      'dir' => 'write'
+                                                                                    },
+                                                                             '0' => {
+                                                                                      'name' => '%vconn10_stream_load',
+                                                                                      'dir' => 'read'
+                                                                                    }
+                                                                           },
+                                                           'connOutStreamCount' => 1,
+                                                           'size' => 'auto',
+                                                           'addrspace' => '0'
+                                                         },
+                                           '%vconn000' => {
+                                                            'dtype' => 'i32',
+                                                            'connInStreamCount' => 1,
+                                                            'connStreamCount' => 2,
+                                                            'streamConn' => {
+                                                                              '1' => {
+                                                                                       'name' => '%vconn000_stream_store',
+                                                                                       'dir' => 'write'
+                                                                                     },
+                                                                              '0' => {
+                                                                                       'name' => '%vconn000_stream_load',
+                                                                                       'dir' => 'read'
+                                                                                     }
+                                                                            },
+                                                            'connOutStreamCount' => 1,
+                                                            'size' => 'auto',
+                                                            'addrspace' => '0'
+                                                          },
+                                           '%vconn1' => {
+                                                          'dtype' => 'i32',
+                                                          'connInStreamCount' => 1,
+                                                          'connStreamCount' => 2,
+                                                          'streamConn' => {
+                                                                            '1' => {
+                                                                                     'name' => '%vconn1_stream_store',
+                                                                                     'dir' => 'write'
+                                                                                   },
+                                                                            '0' => {
+                                                                                     'name' => '%vconn1_stream_load',
+                                                                                     'dir' => 'read'
+                                                                                   }
+                                                                          },
+                                                          'connOutStreamCount' => 1,
+                                                          'size' => 'auto',
+                                                          'addrspace' => '0'
+                                                        },
+                                           '%vconn00' => {
+                                                           'dtype' => 'i32',
+                                                           'connInStreamCount' => 1,
+                                                           'connStreamCount' => 2,
+                                                           'streamConn' => {
+                                                                             '1' => {
+                                                                                      'name' => '%vconn00_stream_store',
+                                                                                      'dir' => 'write'
+                                                                                    },
+                                                                             '0' => {
+                                                                                      'name' => '%vconn00_stream_load',
+                                                                                      'dir' => 'read'
+                                                                                    }
+                                                                           },
+                                                           'connOutStreamCount' => 1,
+                                                           'size' => 'auto',
+                                                           'addrspace' => '0'
+                                                         },
+                                           '%vconn0' => {
+                                                          'dtype' => 'i32',
+                                                          'connInStreamCount' => 1,
+                                                          'connStreamCount' => 2,
+                                                          'streamConn' => {
+                                                                            '1' => {
+                                                                                     'name' => '%vconn0_stream_store',
+                                                                                     'dir' => 'write'
+                                                                                   },
+                                                                            '0' => {
+                                                                                     'name' => '%vconn0_stream_load',
+                                                                                     'dir' => 'read'
+                                                                                   }
+                                                                          },
+                                                          'connOutStreamCount' => 1,
+                                                          'size' => 'auto',
+                                                          'addrspace' => '0'
+                                                        },
+                                           '%vconn100' => {
+                                                            'dtype' => 'i32',
+                                                            'connInStreamCount' => 1,
+                                                            'connStreamCount' => 2,
+                                                            'streamConn' => {
+                                                                              '1' => {
+                                                                                       'name' => '%vconn100_stream_store',
+                                                                                       'dir' => 'write'
+                                                                                     },
+                                                                              '0' => {
+                                                                                       'name' => '%vconn100_stream_load',
+                                                                                       'dir' => 'read'
+                                                                                     }
+                                                                            },
+                                                            'connOutStreamCount' => 1,
+                                                            'size' => 'auto',
+                                                            'addrspace' => '0'
+                                                          }
+                                         }
+                         },
+          'kernel_map_f2' => {
+                               'cost' => {},
+                               'insCntrFcall' => 0,
+                               'instructions' => {
+                                                   '%vconn100_stream_store' => {
+                                                                                 'cost' => {
+                                                                                             'Latency' => 1,
+                                                                                             'M20Kbits' => 0,
+                                                                                             'CPI' => 1,
+                                                                                             'REGS' => 64,
+                                                                                             'PropDelay' => 3,
+                                                                                             'MLABbits' => 0,
+                                                                                             'ALMS' => 'null',
+                                                                                             'ALUTS' => 32,
+                                                                                             'DSPs' => 0
+                                                                                           },
+                                                                                 'instrType' => 'compute',
+                                                                                 'oper1' => '%vconn10_stream_load',
+                                                                                 'instrSequence' => 0,
+                                                                                 'oper2form' => 'inPort',
+                                                                                 'oper2' => '%vconn10_stream_load',
+                                                                                 'destType' => 'i32',
+                                                                                 'operD' => '%vconn100_stream_store',
+                                                                                 'oper1form' => 'inPort',
+                                                                                 'op' => 'add',
+                                                                                 'opType' => 'i32'
+                                                                               }
+                                                 },
+                               'args' => {
+                                           '1' => {
+                                                    'dtype' => 'i32',
+                                                    'name' => '%vconn100_stream_store',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'output'
+                                                  },
+                                           '0' => {
+                                                    'dtype' => 'i32',
+                                                    'name' => '%vconn10_stream_load',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'input'
+                                                  }
+                                         },
+                               'instrCount' => 1,
+                               'parExecInstWise' => {
+                                                      '%vconn100_stream_store' => 0
+                                                    },
+                               'symbols' => {
+                                              '%vconn100_stream_store' => {
+                                                                            'dtype' => 'i32',
+                                                                            'dfgnode' => '%vconn100_stream_store',
+                                                                            'cat' => 'arg',
+                                                                            'consumes' => [
+                                                                                            '%vconn10_stream_load',
+                                                                                            '%vconn10_stream_load'
+                                                                                          ],
+                                                                            'produces' => [
+                                                                                            '%vconn100_stream_store'
+                                                                                          ]
+                                                                          },
+                                              '%vconn10_stream_load' => {
+                                                                          'dtype' => 'i32',
+                                                                          'dfgnode' => '%vconn10_stream_load',
+                                                                          'cat' => 'arg',
+                                                                          'consumes' => [],
+                                                                          'produces' => [
+                                                                                          '%vconn10_stream_load'
+                                                                                        ]
+                                                                        }
+                                            },
+                               'streams' => {
+                                              '%vconn100_stream_store' => {
+                                                                            'dtype' => 'i32',
+                                                                            'memconn' => 'arg',
+                                                                            'maxNegOffset' => 0,
+                                                                            'maxPosOffset' => 0,
+                                                                            'type' => 'streamfifo',
+                                                                            'numOffsetStreams' => 0,
+                                                                            'dir' => 'null'
+                                                                          },
+                                              '%vconn10_stream_load' => {
+                                                                          'dtype' => 'i32',
+                                                                          'memconn' => 'arg',
+                                                                          'maxNegOffset' => 0,
+                                                                          'maxPosOffset' => 0,
+                                                                          'type' => 'streamfifo',
+                                                                          'numOffsetStreams' => 0,
+                                                                          'dir' => 'null'
+                                                                        }
+                                            },
+                               'func_type' => 'pipe',
+                               'funcName' => 'kernel_map_f2'
+                             },
+          'kernel_fold_f2' => {
+                                'cost' => {},
+                                'insCntrFcall' => 0,
+                                'instructions' => {
+                                                    '%vconn000_stream_local' => {
+                                                                                  'cost' => {
+                                                                                              'Latency' => 1,
+                                                                                              'M20Kbits' => 0,
+                                                                                              'CPI' => 1,
+                                                                                              'REGS' => 64,
+                                                                                              'PropDelay' => 3,
+                                                                                              'MLABbits' => 0,
+                                                                                              'ALMS' => 'null',
+                                                                                              'ALUTS' => 32,
+                                                                                              'DSPs' => 0
+                                                                                            },
+                                                                                  'instrType' => 'compute',
+                                                                                  'oper1' => '%interm',
+                                                                                  'instrSequence' => 2,
+                                                                                  'oper2form' => 'local',
+                                                                                  'oper2' => '%vconn000_stream_local',
+                                                                                  'destType' => 'ui32',
+                                                                                  'operD' => '%vconn000_stream_local',
+                                                                                  'oper1form' => 'local',
+                                                                                  'op' => 'add',
+                                                                                  'opType' => 'ui32'
+                                                                                },
+                                                    '%vconn000_stream_store' => {
+                                                                                  'cost' => {
+                                                                                              'Latency' => 1,
+                                                                                              'M20Kbits' => 0,
+                                                                                              'CPI' => 1,
+                                                                                              'REGS' => '32',
+                                                                                              'PropDelay' => 3,
+                                                                                              'MLABbits' => 0,
+                                                                                              'ALMS' => 'null',
+                                                                                              'ALUTS' => '32',
+                                                                                              'DSPs' => 0
+                                                                                            },
+                                                                                  'instrType' => 'compute',
+                                                                                  'oper1' => '%vconn000_stream_local',
+                                                                                  'instrSequence' => 0,
+                                                                                  'oper2form' => 'constant',
+                                                                                  'oper2' => 0,
+                                                                                  'destType' => 'ui32',
+                                                                                  'operD' => '%vconn000_stream_store',
+                                                                                  'oper1form' => 'local',
+                                                                                  'op' => 'add',
+                                                                                  'opType' => 'ui32'
+                                                                                },
+                                                    '%interm' => {
+                                                                   'cost' => {
+                                                                               'Latency' => 1,
+                                                                               'M20Kbits' => 0,
+                                                                               'CPI' => 1,
+                                                                               'REGS' => 64,
+                                                                               'PropDelay' => 3,
+                                                                               'MLABbits' => 0,
+                                                                               'ALMS' => 'null',
+                                                                               'ALUTS' => 32,
+                                                                               'DSPs' => 0
+                                                                             },
+                                                                   'instrType' => 'compute',
+                                                                   'oper1' => '%vconn00_stream_load',
+                                                                   'instrSequence' => 1,
+                                                                   'oper2form' => 'inPort',
+                                                                   'oper2' => '%vconn00_stream_load',
+                                                                   'destType' => 'ui32',
+                                                                   'operD' => '%interm',
+                                                                   'oper1form' => 'inPort',
+                                                                   'op' => 'add',
+                                                                   'opType' => 'ui32'
+                                                                 }
+                                                  },
+                                'args' => {
+                                            '1' => {
+                                                     'dtype' => 'i32',
+                                                     'name' => '%vconn000_stream_store',
+                                                     'isOffsetStream' => 0,
+                                                     'dir' => 'output'
+                                                   },
+                                            '0' => {
+                                                     'dtype' => 'i32',
+                                                     'name' => '%vconn00_stream_load',
+                                                     'isOffsetStream' => 0,
+                                                     'dir' => 'input'
+                                                   },
+                                            '2' => {
+                                                     'dtype' => 'i32',
+                                                     'name' => '%s0',
+                                                     'isOffsetStream' => 0,
+                                                     'dir' => 'null'
+                                                   }
+                                          },
+                                'instrCount' => 3,
+                                'parExecInstWise' => {
+                                                       '%vconn000_stream_local' => 1,
+                                                       '%vconn000_stream_store' => 0,
+                                                       '%interm' => 0
+                                                     },
+                                'symbols' => {
+                                               '%vconn000_stream_local' => {
+                                                                             'dtype' => 'i32',
+                                                                             'dfgnode' => '%sconn000',
+                                                                             'cat' => 'streamread',
+                                                                             'consumes' => [
+                                                                                             '%interm',
+                                                                                             '%vconn000_stream_local'
+                                                                                           ],
+                                                                             'produces' => [
+                                                                                             '%vconn000_stream_local'
+                                                                                           ]
+                                                                           },
+                                               '%vconn00_stream_load' => {
+                                                                           'dtype' => 'i32',
+                                                                           'dfgnode' => '%vconn00_stream_load',
+                                                                           'cat' => 'arg',
+                                                                           'consumes' => [],
+                                                                           'produces' => [
+                                                                                           '%vconn00_stream_load'
+                                                                                         ]
+                                                                         },
+                                               '%s0' => {
+                                                          'dtype' => 'i32',
+                                                          'dfgnode' => '%s0',
+                                                          'cat' => 'arg',
+                                                          'consumes' => [],
+                                                          'produces' => [
+                                                                          '%s0'
+                                                                        ]
+                                                        },
+                                               '%vconn000_stream_store' => {
+                                                                             'dtype' => 'i32',
+                                                                             'dfgnode' => '%vconn000_stream_store',
+                                                                             'cat' => 'arg',
+                                                                             'consumes' => [
+                                                                                             '%vconn000_stream_local',
+                                                                                             0
+                                                                                           ],
+                                                                             'produces' => [
+                                                                                             '%vconn000_stream_store'
+                                                                                           ]
+                                                                           },
+                                               '%interm' => {
+                                                              'dtype' => 'ui32',
+                                                              'dfgnode' => '%interm',
+                                                              'cat' => 'impscal',
+                                                              'consumes' => [
+                                                                              '%vconn00_stream_load',
+                                                                              '%vconn00_stream_load'
+                                                                            ],
+                                                              'produces' => [
+                                                                              '%interm'
+                                                                            ]
+                                                            },
+                                               '%sconn000' => {
+                                                                'dtype' => 'i32',
+                                                                'dfgnode' => '%sconn000',
+                                                                'cat' => 'alloca',
+                                                                'consumes' => [],
+                                                                'produces' => [
+                                                                                '%sconn000'
+                                                                              ]
+                                                              }
+                                             },
+                                'streams' => {
+                                               '%vconn000_stream_local' => {
+                                                                             'dtype' => 'i32',
+                                                                             'maxNegOffset' => 0,
+                                                                             'memConnAddrSpace' => 0,
+                                                                             'maxPosOffset' => 0,
+                                                                             'type' => 'streamfifo',
+                                                                             'numOffsetStreams' => 0,
+                                                                             'dir' => 'read'
+                                                                           },
+                                               '%vconn00_stream_load' => {
+                                                                           'dtype' => 'i32',
+                                                                           'memconn' => 'arg',
+                                                                           'maxNegOffset' => 0,
+                                                                           'maxPosOffset' => 0,
+                                                                           'type' => 'streamfifo',
+                                                                           'numOffsetStreams' => 0,
+                                                                           'dir' => 'null'
+                                                                         },
+                                               '%s0' => {
+                                                          'dtype' => 'i32',
+                                                          'memconn' => 'arg',
+                                                          'maxNegOffset' => 0,
+                                                          'maxPosOffset' => 0,
+                                                          'type' => 'streamfifo',
+                                                          'numOffsetStreams' => 0,
+                                                          'dir' => 'null'
+                                                        },
+                                               '%vconn000_stream_store' => {
+                                                                             'dtype' => 'i32',
+                                                                             'memconn' => 'arg',
+                                                                             'maxNegOffset' => 0,
+                                                                             'maxPosOffset' => 0,
+                                                                             'type' => 'streamfifo',
+                                                                             'numOffsetStreams' => 0,
+                                                                             'dir' => 'null'
+                                                                           }
+                                             },
+                                'func_type' => 'pipe',
+                                'funcName' => 'kernel_fold_f2',
+                                'memories' => {
+                                                '%sconn000' => {
+                                                                 'dtype' => 'i32',
+                                                                 'connInStreamCount' => 1,
+                                                                 'connStreamCount' => 1,
+                                                                 'streamConn' => {
+                                                                                   '0' => {
+                                                                                            'name' => '%vconn000_stream_local',
+                                                                                            'dir' => 'read'
+                                                                                          }
+                                                                                 },
+                                                                 'connOutStreamCount' => 0,
+                                                                 'size' => 1,
+                                                                 'addrspace' => 0
+                                                               }
+                                              }
+                              },
+          'kernel_map_f1' => {
+                               'cost' => {},
+                               'insCntrFcall' => 0,
+                               'instructions' => {
+                                                   '%vconn1_stream_store' => {
+                                                                               'cost' => {
+                                                                                           'Latency' => undef,
+                                                                                           'M20Kbits' => undef,
+                                                                                           'CPI' => undef,
+                                                                                           'REGS' => undef,
+                                                                                           'PropDelay' => undef,
+                                                                                           'MLABbits' => undef,
+                                                                                           'ALMS' => undef,
+                                                                                           'ALUTS' => undef,
+                                                                                           'DSPs' => undef
+                                                                                         },
+                                                                               'instrType' => 'select',
+                                                                               'operTrue' => '%vin1_stream_load',
+                                                                               'instrSequence' => 9,
+                                                                               'operFalse' => '%8',
+                                                                               'operPred' => '%3',
+                                                                               'destType' => 'i32',
+                                                                               'operD' => '%vconn1_stream_store',
+                                                                               'op' => 'select',
+                                                                               'opType' => 'i1'
+                                                                             },
+                                                   '%8' => {
+                                                             'cost' => {
+                                                                         'Latency' => 1,
+                                                                         'M20Kbits' => 0,
+                                                                         'CPI' => 1,
+                                                                         'REGS' => 64,
+                                                                         'PropDelay' => 3,
+                                                                         'MLABbits' => 0,
+                                                                         'ALMS' => 'null',
+                                                                         'ALUTS' => 0,
+                                                                         'DSPs' => 2
+                                                                       },
+                                                             'instrType' => 'compute',
+                                                             'oper1' => '%6',
+                                                             'instrSequence' => 7,
+                                                             'oper2form' => 'inPort',
+                                                             'oper2' => '%vin1_stream_load',
+                                                             'destType' => 'i32',
+                                                             'operD' => '%8',
+                                                             'oper1form' => 'local',
+                                                             'op' => 'mul',
+                                                             'opType' => 'i32'
+                                                           },
+                                                   '%1' => {
+                                                             'cost' => {
+                                                                         'Latency' => undef,
+                                                                         'M20Kbits' => undef,
+                                                                         'CPI' => undef,
+                                                                         'REGS' => undef,
+                                                                         'PropDelay' => undef,
+                                                                         'MLABbits' => undef,
+                                                                         'ALMS' => undef,
+                                                                         'ALUTS' => undef,
+                                                                         'DSPs' => undef
+                                                                       },
+                                                             'instrType' => 'compare',
+                                                             'oper1' => '%ix',
+                                                             'instrSequence' => 0,
+                                                             'oper2' => 0,
+                                                             'destType' => 'i1',
+                                                             'operD' => '%1',
+                                                             'op' => 'icmp',
+                                                             'opType' => 'i32'
+                                                           },
+                                                   '%7' => {
+                                                             'cost' => {
+                                                                         'Latency' => 1,
+                                                                         'M20Kbits' => 0,
+                                                                         'CPI' => 1,
+                                                                         'REGS' => 64,
+                                                                         'PropDelay' => 3,
+                                                                         'MLABbits' => 0,
+                                                                         'ALMS' => 'null',
+                                                                         'ALUTS' => 32,
+                                                                         'DSPs' => 0
+                                                                       },
+                                                             'instrType' => 'compute',
+                                                             'oper1' => '%6',
+                                                             'instrSequence' => 6,
+                                                             'oper2form' => 'inPort',
+                                                             'oper2' => '%vin1_stream_load',
+                                                             'destType' => 'i32',
+                                                             'operD' => '%7',
+                                                             'oper1form' => 'local',
+                                                             'op' => 'add',
+                                                             'opType' => 'i32'
+                                                           },
+                                                   '%3' => {
+                                                             'cost' => {
+                                                                         'Latency' => 1,
+                                                                         'M20Kbits' => 0,
+                                                                         'CPI' => 1,
+                                                                         'REGS' => 2,
+                                                                         'PropDelay' => 3,
+                                                                         'MLABbits' => 0,
+                                                                         'ALMS' => 'null',
+                                                                         'ALUTS' => 1,
+                                                                         'DSPs' => 0
+                                                                       },
+                                                             'instrType' => 'compute',
+                                                             'oper1' => '%1',
+                                                             'instrSequence' => 2,
+                                                             'oper2form' => 'local',
+                                                             'oper2' => '%2',
+                                                             'destType' => 'i1',
+                                                             'operD' => '%3',
+                                                             'oper1form' => 'local',
+                                                             'op' => 'or',
+                                                             'opType' => 'i1'
+                                                           },
+                                                   '%4' => {
+                                                             'cost' => {
+                                                                         'Latency' => 1,
+                                                                         'M20Kbits' => 0,
+                                                                         'CPI' => 1,
+                                                                         'REGS' => 64,
+                                                                         'PropDelay' => 3,
+                                                                         'MLABbits' => 0,
+                                                                         'ALMS' => 'null',
+                                                                         'ALUTS' => 32,
+                                                                         'DSPs' => 0
+                                                                       },
+                                                             'instrType' => 'compute',
+                                                             'oper1' => '%vin0_stream_load',
+                                                             'instrSequence' => 3,
+                                                             'oper2form' => 'inPort',
+                                                             'oper2' => '%vin1_stream_load',
+                                                             'destType' => 'i32',
+                                                             'operD' => '%4',
+                                                             'oper1form' => 'inPort',
+                                                             'op' => 'add',
+                                                             'opType' => 'i32'
+                                                           },
+                                                   '%5' => {
+                                                             'cost' => {
+                                                                         'Latency' => 1,
+                                                                         'M20Kbits' => 0,
+                                                                         'CPI' => 1,
+                                                                         'REGS' => 64,
+                                                                         'PropDelay' => 3,
+                                                                         'MLABbits' => 0,
+                                                                         'ALMS' => 'null',
+                                                                         'ALUTS' => 32,
+                                                                         'DSPs' => 0
+                                                                       },
+                                                             'instrType' => 'compute',
+                                                             'oper1' => '%4',
+                                                             'instrSequence' => 4,
+                                                             'oper2form' => 'inPort',
+                                                             'oper2' => '%vin0_stream_load_i_p1',
+                                                             'destType' => 'i32',
+                                                             'operD' => '%5',
+                                                             'oper1form' => 'local',
+                                                             'op' => 'add',
+                                                             'opType' => 'i32'
+                                                           },
+                                                   '%6' => {
+                                                             'cost' => {
+                                                                         'Latency' => 1,
+                                                                         'M20Kbits' => 0,
+                                                                         'CPI' => 1,
+                                                                         'REGS' => 64,
+                                                                         'PropDelay' => 3,
+                                                                         'MLABbits' => 0,
+                                                                         'ALMS' => 'null',
+                                                                         'ALUTS' => 32,
+                                                                         'DSPs' => 0
+                                                                       },
+                                                             'instrType' => 'compute',
+                                                             'oper1' => '%5',
+                                                             'instrSequence' => 5,
+                                                             'oper2form' => 'inPort',
+                                                             'oper2' => '%vin0_stream_load_i_n1',
+                                                             'destType' => 'i32',
+                                                             'operD' => '%6',
+                                                             'oper1form' => 'local',
+                                                             'op' => 'add',
+                                                             'opType' => 'i32'
+                                                           },
+                                                   '%vconn0_stream_store' => {
+                                                                               'cost' => {
+                                                                                           'Latency' => undef,
+                                                                                           'M20Kbits' => undef,
+                                                                                           'CPI' => undef,
+                                                                                           'REGS' => undef,
+                                                                                           'PropDelay' => undef,
+                                                                                           'MLABbits' => undef,
+                                                                                           'ALMS' => undef,
+                                                                                           'ALUTS' => undef,
+                                                                                           'DSPs' => undef
+                                                                                         },
+                                                                               'instrType' => 'select',
+                                                                               'operTrue' => '%vin0_stream_load',
+                                                                               'instrSequence' => 8,
+                                                                               'operFalse' => '%7',
+                                                                               'operPred' => '%3',
+                                                                               'destType' => 'i32',
+                                                                               'operD' => '%vconn0_stream_store',
+                                                                               'op' => 'select',
+                                                                               'opType' => 'i1'
+                                                                             },
+                                                   '%2' => {
+                                                             'cost' => {
+                                                                         'Latency' => undef,
+                                                                         'M20Kbits' => undef,
+                                                                         'CPI' => undef,
+                                                                         'REGS' => undef,
+                                                                         'PropDelay' => undef,
+                                                                         'MLABbits' => undef,
+                                                                         'ALMS' => undef,
+                                                                         'ALUTS' => undef,
+                                                                         'DSPs' => undef
+                                                                       },
+                                                             'instrType' => 'compare',
+                                                             'oper1' => '%ix',
+                                                             'instrSequence' => 1,
+                                                             'oper2' => 4095,
+                                                             'destType' => 'i1',
+                                                             'operD' => '%2',
+                                                             'op' => 'icmp',
+                                                             'opType' => 'i32'
+                                                           }
+                                                 },
+                               'args' => {
+                                           '6' => {
+                                                    'dtype' => 'i32',
+                                                    'name' => '%vconn1_stream_store',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'output'
+                                                  },
+                                           '4' => {
+                                                    'dtype' => 'i32',
+                                                    'name' => '%vin1_stream_load',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'input'
+                                                  },
+                                           '1' => {
+                                                    'dtype' => 'i32',
+                                                    'name' => '%vin0_stream_load_i_p1',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'input'
+                                                  },
+                                           '3' => {
+                                                    'dtype' => 'i32',
+                                                    'name' => '%ix',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'input'
+                                                  },
+                                           '0' => {
+                                                    'dtype' => 'i32',
+                                                    'name' => '%vin0_stream_load',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'input'
+                                                  },
+                                           '2' => {
+                                                    'dtype' => 'i32',
+                                                    'name' => '%vin0_stream_load_i_n1',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'input'
+                                                  },
+                                           '5' => {
+                                                    'dtype' => 'i32',
+                                                    'name' => '%vconn0_stream_store',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'output'
+                                                  }
+                                         },
+                               'autoindex' => {
+                                                '%ix' => {
+                                                           'dtype' => 'i32',
+                                                           'type' => '1d',
+                                                           'end' => 4095,
+                                                           'start' => 0
+                                                         }
+                                              },
+                               'instrCount' => 10,
+                               'parExecInstWise' => {
+                                                      '%vconn1_stream_store' => 4,
+                                                      '%8' => 3,
+                                                      '%1' => 0,
+                                                      '%7' => 3,
+                                                      '%3' => 1,
+                                                      '%4' => 0,
+                                                      '%5' => 1,
+                                                      '%6' => 2,
+                                                      '%vconn0_stream_store' => 4,
+                                                      '%2' => 0
+                                                    },
+                               'symbols' => {
+                                              '%vconn1_stream_store' => {
+                                                                          'dtype' => 'i32',
+                                                                          'dfgnode' => '%vconn1_stream_store',
+                                                                          'cat' => 'arg',
+                                                                          'consumes' => [
+                                                                                          '%3',
+                                                                                          '%vin1_stream_load',
+                                                                                          '%8'
+                                                                                        ],
+                                                                          'produces' => [
+                                                                                          '%vconn1_stream_store'
+                                                                                        ]
+                                                                        },
+                                              '%8' => {
+                                                        'dtype' => 'i32',
+                                                        'dfgnode' => '%8',
+                                                        'cat' => 'impscal',
+                                                        'consumes' => [
+                                                                        '%6',
+                                                                        '%vin1_stream_load'
+                                                                      ],
+                                                        'produces' => [
+                                                                        '%8'
+                                                                      ]
+                                                      },
+                                              '%vin1_stream_load' => {
+                                                                       'dtype' => 'i32',
+                                                                       'dfgnode' => '%vin1_stream_load',
+                                                                       'cat' => 'arg',
+                                                                       'consumes' => [],
+                                                                       'produces' => [
+                                                                                       '%vin1_stream_load'
+                                                                                     ]
+                                                                     },
+                                              '%1' => {
+                                                        'dtype' => 'i1',
+                                                        'dfgnode' => '%1',
+                                                        'cat' => 'impscal',
+                                                        'consumes' => [
+                                                                        '%ix',
+                                                                        0
+                                                                      ],
+                                                        'produces' => [
+                                                                        '%1'
+                                                                      ]
+                                                      },
+                                              '%7' => {
+                                                        'dtype' => 'i32',
+                                                        'dfgnode' => '%7',
+                                                        'cat' => 'impscal',
+                                                        'consumes' => [
+                                                                        '%6',
+                                                                        '%vin1_stream_load'
+                                                                      ],
+                                                        'produces' => [
+                                                                        '%7'
+                                                                      ]
+                                                      },
+                                              '%3' => {
+                                                        'dtype' => 'i1',
+                                                        'dfgnode' => '%3',
+                                                        'cat' => 'impscal',
+                                                        'consumes' => [
+                                                                        '%1',
+                                                                        '%2'
+                                                                      ],
+                                                        'produces' => [
+                                                                        '%3'
+                                                                      ]
+                                                      },
+                                              '%vin0_stream_load' => {
+                                                                       'dtype' => 'i32',
+                                                                       'dfgnode' => '%vin0_stream_load',
+                                                                       'cat' => 'arg',
+                                                                       'consumes' => [],
+                                                                       'produces' => [
+                                                                                       '%vin0_stream_load'
+                                                                                     ]
+                                                                     },
+                                              '%4' => {
+                                                        'dtype' => 'i32',
+                                                        'dfgnode' => '%4',
+                                                        'cat' => 'impscal',
+                                                        'consumes' => [
+                                                                        '%vin0_stream_load',
+                                                                        '%vin1_stream_load'
+                                                                      ],
+                                                        'produces' => [
+                                                                        '%4'
+                                                                      ]
+                                                      },
+                                              '%6' => {
+                                                        'dtype' => 'i32',
+                                                        'dfgnode' => '%6',
+                                                        'cat' => 'impscal',
+                                                        'consumes' => [
+                                                                        '%5',
+                                                                        '%vin0_stream_load_i_n1'
+                                                                      ],
+                                                        'produces' => [
+                                                                        '%6'
+                                                                      ]
+                                                      },
+                                              '%5' => {
+                                                        'dtype' => 'i32',
+                                                        'dfgnode' => '%5',
+                                                        'cat' => 'impscal',
+                                                        'consumes' => [
+                                                                        '%4',
+                                                                        '%vin0_stream_load_i_p1'
+                                                                      ],
+                                                        'produces' => [
+                                                                        '%5'
+                                                                      ]
+                                                      },
+                                              '%vconn0_stream_store' => {
+                                                                          'dtype' => 'i32',
+                                                                          'dfgnode' => '%vconn0_stream_store',
+                                                                          'cat' => 'arg',
+                                                                          'consumes' => [
+                                                                                          '%3',
+                                                                                          '%vin0_stream_load',
+                                                                                          '%7'
+                                                                                        ],
+                                                                          'produces' => [
+                                                                                          '%vconn0_stream_store'
+                                                                                        ]
+                                                                        },
+                                              '%vin0_stream_load_i_p1' => {
+                                                                            'dtype' => 'i32',
+                                                                            'dfgnode' => '%vin0_stream_load_i_p1',
+                                                                            'cat' => 'arg',
+                                                                            'consumes' => [],
+                                                                            'produces' => [
+                                                                                            '%vin0_stream_load_i_p1'
+                                                                                          ]
+                                                                          },
+                                              '%2' => {
+                                                        'dtype' => 'i1',
+                                                        'dfgnode' => '%2',
+                                                        'cat' => 'impscal',
+                                                        'consumes' => [
+                                                                        '%ix',
+                                                                        4095
+                                                                      ],
+                                                        'produces' => [
+                                                                        '%2'
+                                                                      ]
+                                                      },
+                                              '%vin0_stream_load_i_n1' => {
+                                                                            'dtype' => 'i32',
+                                                                            'dfgnode' => '%vin0_stream_load_i_n1',
+                                                                            'cat' => 'arg',
+                                                                            'consumes' => [],
+                                                                            'produces' => [
+                                                                                            '%vin0_stream_load_i_n1'
+                                                                                          ]
+                                                                          },
+                                              '%ix' => {
+                                                         'dtype' => 'i32',
+                                                         'dfgnode' => '%ix',
+                                                         'cat' => 'autoindex',
+                                                         'consumes' => [],
+                                                         'produces' => [
+                                                                         '%ix'
+                                                                       ]
+                                                       }
+                                            },
+                               'streams' => {
+                                              '%vconn1_stream_store' => {
+                                                                          'dtype' => 'i32',
+                                                                          'memconn' => 'arg',
+                                                                          'maxNegOffset' => 0,
+                                                                          'maxPosOffset' => 0,
+                                                                          'type' => 'streamfifo',
+                                                                          'numOffsetStreams' => 0,
+                                                                          'dir' => 'null'
+                                                                        },
+                                              '%vin1_stream_load' => {
+                                                                       'dtype' => 'i32',
+                                                                       'memconn' => 'arg',
+                                                                       'maxNegOffset' => 0,
+                                                                       'maxPosOffset' => 0,
+                                                                       'type' => 'streamfifo',
+                                                                       'numOffsetStreams' => 0,
+                                                                       'dir' => 'null'
+                                                                     },
+                                              '%vconn0_stream_store' => {
+                                                                          'dtype' => 'i32',
+                                                                          'memconn' => 'arg',
+                                                                          'maxNegOffset' => 0,
+                                                                          'maxPosOffset' => 0,
+                                                                          'type' => 'streamfifo',
+                                                                          'numOffsetStreams' => 0,
+                                                                          'dir' => 'null'
+                                                                        },
+                                              '%vin0_stream_load_i_p1' => {
+                                                                            'dtype' => 'i32',
+                                                                            'memconn' => 'arg',
+                                                                            'maxNegOffset' => 0,
+                                                                            'maxPosOffset' => 0,
+                                                                            'type' => 'streamfifo',
+                                                                            'numOffsetStreams' => 0,
+                                                                            'dir' => 'null'
+                                                                          },
+                                              '%ix' => {
+                                                         'dtype' => 'i32',
+                                                         'memconn' => 'arg',
+                                                         'maxNegOffset' => 0,
+                                                         'maxPosOffset' => 0,
+                                                         'type' => 'streamfifo',
+                                                         'numOffsetStreams' => 0,
+                                                         'dir' => 'null'
+                                                       },
+                                              '%vin0_stream_load_i_n1' => {
+                                                                            'dtype' => 'i32',
+                                                                            'memconn' => 'arg',
+                                                                            'maxNegOffset' => 0,
+                                                                            'maxPosOffset' => 0,
+                                                                            'type' => 'streamfifo',
+                                                                            'numOffsetStreams' => 0,
+                                                                            'dir' => 'null'
+                                                                          },
+                                              '%vin0_stream_load' => {
+                                                                       'dtype' => 'i32',
+                                                                       'memconn' => 'arg',
+                                                                       'maxNegOffset' => 0,
+                                                                       'maxPosOffset' => 0,
+                                                                       'type' => 'streamfifo',
+                                                                       'numOffsetStreams' => 0,
+                                                                       'dir' => 'null'
+                                                                     }
+                                            },
+                               'func_type' => 'pipe',
+                               'funcName' => 'kernel_map_f1'
+                             },
+          'launch' => {
+                        'wordsPerTuple' => 0
+                      },
+          'main' => {
+                      'instructions' => {
+                                          'kernelTop.0' => {
+                                                             'cost' => {
+                                                                         'Latency' => undef,
+                                                                         'M20Kbits' => undef,
+                                                                         'CPI' => undef,
+                                                                         'REGS' => undef,
+                                                                         'PropDelay' => undef,
+                                                                         'MLABbits' => undef,
+                                                                         'ALMS' => undef,
+                                                                         'ALUTS' => undef,
+                                                                         'DSPs' => undef
+                                                                       },
+                                                             'instrType' => 'funcCall',
+                                                             'args2child' => {
+                                                                               '1' => {
+                                                                                        'nameChildPort' => '%vin1_stream_load',
+                                                                                        'name' => '%vin1_stream_load',
+                                                                                        'type' => undef,
+                                                                                        'dir' => 'input'
+                                                                                      },
+                                                                               '3' => {
+                                                                                        'nameChildPort' => '%vout_stream_store',
+                                                                                        'name' => '%vout_stream_store',
+                                                                                        'type' => undef,
+                                                                                        'dir' => 'output'
+                                                                                      },
+                                                                               '0' => {
+                                                                                        'nameChildPort' => '%vin0_stream_load',
+                                                                                        'name' => '%vin0_stream_load',
+                                                                                        'type' => undef,
+                                                                                        'dir' => 'input'
+                                                                                      },
+                                                                               '2' => {
+                                                                                        'nameChildPort' => '%s0',
+                                                                                        'name' => '%s0',
+                                                                                        'type' => undef,
+                                                                                        'dir' => 'null'
+                                                                                      }
+                                                                             },
+                                                             'funcRepeatCounter' => 0,
+                                                             'funcType' => undef,
+                                                             'instrSequence' => 0,
+                                                             'funcName' => 'kernelTop'
+                                                           }
+                                        },
+                      'args' => {},
+                      'streams' => {
+                                     '%vout_stream_store' => {
+                                                               'maxNegOffset' => 0,
+                                                               'memConnAddrSpace' => '1',
+                                                               'maxPosOffset' => 0,
+                                                               'dir' => 'write',
+                                                               'size' => '4096',
+                                                               'stride' => '1',
+                                                               'dtype' => 'i32',
+                                                               'memconn' => '@vout',
+                                                               'type' => 'stream1d',
+                                                               'startAddr' => 0,
+                                                               'numOffsetStreams' => 0
+                                                             },
+                                     '%vin1_stream_load' => {
+                                                              'maxNegOffset' => 0,
+                                                              'memConnAddrSpace' => '1',
+                                                              'maxPosOffset' => 0,
+                                                              'dir' => 'read',
+                                                              'size' => '4096',
+                                                              'stride' => '1',
+                                                              'dtype' => 'i32',
+                                                              'type' => 'stream1d',
+                                                              'startAddr' => 0,
+                                                              'numOffsetStreams' => 0
+                                                            },
+                                     '%vin0_stream_load' => {
+                                                              'maxNegOffset' => 0,
+                                                              'memConnAddrSpace' => '1',
+                                                              'maxPosOffset' => 0,
+                                                              'dir' => 'read',
+                                                              'size' => '4096',
+                                                              'stride' => '1',
+                                                              'dtype' => 'i32',
+                                                              'type' => 'stream1d',
+                                                              'startAddr' => 0,
+                                                              'numOffsetStreams' => 0
+                                                            }
+                                   },
+                      'symbols' => {
+                                     '%vin1_stream_load' => {
+                                                              'dtype' => 'i32',
+                                                              'dfgnode' => '@vin1',
+                                                              'cat' => 'streamread',
+                                                              'consumes' => [
+                                                                              '@vin1'
+                                                                            ],
+                                                              'produces' => [
+                                                                              '%vin1_stream_load'
+                                                                            ]
+                                                            },
+                                     '%vin0_stream_load' => {
+                                                              'dtype' => 'i32',
+                                                              'dfgnode' => '@vin0',
+                                                              'cat' => 'streamread',
+                                                              'consumes' => [
+                                                                              '@vin0'
+                                                                            ],
+                                                              'produces' => [
+                                                                              '%vin0_stream_load'
+                                                                            ]
+                                                            },
+                                     '@vin1' => {
+                                                  'dtype' => 'i32.4096',
+                                                  'dfgnode' => '@vin1',
+                                                  'cat' => 'alloca',
+                                                  'consumes' => [],
+                                                  'produces' => [
+                                                                  '@vin1'
+                                                                ]
+                                                },
+                                     '%vout_stream_store' => {
+                                                               'dtype' => 'i32',
+                                                               'dfgnode' => '@vout',
+                                                               'cat' => 'streamwrite',
+                                                               'produces' => [
+                                                                               '@vout'
+                                                                             ],
+                                                               'consumes' => [
+                                                                               '%vout_stream_store'
+                                                                             ]
+                                                             },
+                                     '@vin0' => {
+                                                  'dtype' => 'i32.4096',
+                                                  'dfgnode' => '@vin0',
+                                                  'cat' => 'alloca',
+                                                  'consumes' => [],
+                                                  'produces' => [
+                                                                  '@vin0'
+                                                                ]
+                                                },
+                                     '%s0' => {
+                                                'dtype' => 'i32',
+                                                'dfgnode' => '%s0',
+                                                'cat' => 'alloca',
+                                                'consumes' => [],
+                                                'produces' => [
+                                                                '%s0'
+                                                              ]
+                                              },
+                                     '@vout' => {
+                                                  'dtype' => 'i32.4096',
+                                                  'dfgnode' => '@vout',
+                                                  'cat' => 'alloca',
+                                                  'consumes' => [],
+                                                  'produces' => [
+                                                                  '@vout'
+                                                                ]
+                                                },
+                                     'kernelTop.0' => {
+                                                        'dfgnode' => 'kernelTop.0',
+                                                        'cat' => 'funcall',
+                                                        'produces' => [
+                                                                        '%vout_stream_store',
+                                                                        '%s0'
+                                                                      ],
+                                                        'consumes' => [
+                                                                        '%vin1_stream_load',
+                                                                        '%vin0_stream_load'
+                                                                      ]
+                                                      }
+                                   },
+                      'offsetStreams' => {},
+                      'memories' => {
+                                      '@vin1' => {
+                                                   'dtype' => 'i32',
+                                                   'connInStreamCount' => 1,
+                                                   'connStreamCount' => 1,
+                                                   'streamConn' => {
+                                                                     '0' => {
+                                                                              'name' => '%vin1_stream_load',
+                                                                              'dir' => 'read'
+                                                                            }
+                                                                   },
+                                                   'connOutStreamCount' => 0,
+                                                   'size' => '4096',
+                                                   'addrspace' => '1'
+                                                 },
+                                      '@vin0' => {
+                                                   'dtype' => 'i32',
+                                                   'connInStreamCount' => 1,
+                                                   'connStreamCount' => 1,
+                                                   'streamConn' => {
+                                                                     '0' => {
+                                                                              'name' => '%vin0_stream_load',
+                                                                              'dir' => 'read'
+                                                                            }
+                                                                   },
+                                                   'connOutStreamCount' => 0,
+                                                   'size' => '4096',
+                                                   'addrspace' => '1'
+                                                 },
+                                      '%s0' => {
+                                                 'dtype' => 'i32',
+                                                 'connInStreamCount' => 0,
+                                                 'connStreamCount' => 0,
+                                                 'connOutStreamCount' => 0,
+                                                 'size' => 1,
+                                                 'addrspace' => 0
+                                               },
+                                      '@vout' => {
+                                                   'dtype' => 'i32',
+                                                   'connInStreamCount' => 0,
+                                                   'connStreamCount' => 1,
+                                                   'streamConn' => {
+                                                                     '0' => {
+                                                                              'name' => '%vout_stream_store',
+                                                                              'dir' => 'write'
+                                                                            }
+                                                                   },
+                                                   'connOutStreamCount' => 1,
+                                                   'size' => '4096',
+                                                   'addrspace' => '1'
+                                                 }
+                                    }
+                    },
+          'macros' => {
+                        'Ncols' => '4096',
+                        'NLinear' => '4096'
+                      },
+          'kernel_unzipt_A' => {
+                                 'cost' => {},
+                                 'insCntrFcall' => 0,
+                                 'instructions' => {
+                                                     '%vconn10_stream_store' => {
+                                                                                  'cost' => {
+                                                                                              'Latency' => 1,
+                                                                                              'M20Kbits' => 0,
+                                                                                              'CPI' => 1,
+                                                                                              'REGS' => '32',
+                                                                                              'PropDelay' => 3,
+                                                                                              'MLABbits' => 0,
+                                                                                              'ALMS' => 'null',
+                                                                                              'ALUTS' => '32',
+                                                                                              'DSPs' => 0
+                                                                                            },
+                                                                                  'instrType' => 'compute',
+                                                                                  'oper1' => '%vconn1_stream_load',
+                                                                                  'instrSequence' => 1,
+                                                                                  'oper2form' => 'constant',
+                                                                                  'oper2' => 0,
+                                                                                  'destType' => 'i32',
+                                                                                  'operD' => '%vconn10_stream_store',
+                                                                                  'oper1form' => 'inPort',
+                                                                                  'op' => 'add',
+                                                                                  'opType' => 'i32'
+                                                                                },
+                                                     '%vconn00_stream_store' => {
+                                                                                  'cost' => {
+                                                                                              'Latency' => 1,
+                                                                                              'M20Kbits' => 0,
+                                                                                              'CPI' => 1,
+                                                                                              'REGS' => '32',
+                                                                                              'PropDelay' => 3,
+                                                                                              'MLABbits' => 0,
+                                                                                              'ALMS' => 'null',
+                                                                                              'ALUTS' => '32',
+                                                                                              'DSPs' => 0
+                                                                                            },
+                                                                                  'instrType' => 'compute',
+                                                                                  'oper1' => '%vconn0_stream_load',
+                                                                                  'instrSequence' => 0,
+                                                                                  'oper2form' => 'constant',
+                                                                                  'oper2' => 0,
+                                                                                  'destType' => 'i32',
+                                                                                  'operD' => '%vconn00_stream_store',
+                                                                                  'oper1form' => 'inPort',
+                                                                                  'op' => 'add',
+                                                                                  'opType' => 'i32'
+                                                                                }
+                                                   },
+                                 'args' => {
+                                             '1' => {
+                                                      'dtype' => 'i32',
+                                                      'name' => '%vconn1_stream_load',
+                                                      'isOffsetStream' => 0,
+                                                      'dir' => 'input'
+                                                    },
+                                             '3' => {
+                                                      'dtype' => 'i32',
+                                                      'name' => '%vconn10_stream_store',
+                                                      'isOffsetStream' => 0,
+                                                      'dir' => 'output'
+                                                    },
+                                             '0' => {
+                                                      'dtype' => 'i32',
+                                                      'name' => '%vconn0_stream_load',
+                                                      'isOffsetStream' => 0,
+                                                      'dir' => 'input'
+                                                    },
+                                             '2' => {
+                                                      'dtype' => 'i32',
+                                                      'name' => '%vconn00_stream_store',
+                                                      'isOffsetStream' => 0,
+                                                      'dir' => 'output'
+                                                    }
+                                           },
+                                 'instrCount' => 2,
+                                 'parExecInstWise' => {
+                                                        '%vconn10_stream_store' => 0,
+                                                        '%vconn00_stream_store' => 0
+                                                      },
+                                 'symbols' => {
+                                                '%vconn1_stream_load' => {
+                                                                           'dtype' => 'i32',
+                                                                           'dfgnode' => '%vconn1_stream_load',
+                                                                           'cat' => 'arg',
+                                                                           'consumes' => [],
+                                                                           'produces' => [
+                                                                                           '%vconn1_stream_load'
+                                                                                         ]
+                                                                         },
+                                                '%vconn10_stream_store' => {
+                                                                             'dtype' => 'i32',
+                                                                             'dfgnode' => '%vconn10_stream_store',
+                                                                             'cat' => 'arg',
+                                                                             'consumes' => [
+                                                                                             '%vconn1_stream_load',
+                                                                                             0
+                                                                                           ],
+                                                                             'produces' => [
+                                                                                             '%vconn10_stream_store'
+                                                                                           ]
+                                                                           },
+                                                '%vconn00_stream_store' => {
+                                                                             'dtype' => 'i32',
+                                                                             'dfgnode' => '%vconn00_stream_store',
+                                                                             'cat' => 'arg',
+                                                                             'consumes' => [
+                                                                                             '%vconn0_stream_load',
+                                                                                             0
+                                                                                           ],
+                                                                             'produces' => [
+                                                                                             '%vconn00_stream_store'
+                                                                                           ]
+                                                                           },
+                                                '%vconn0_stream_load' => {
+                                                                           'dtype' => 'i32',
+                                                                           'dfgnode' => '%vconn0_stream_load',
+                                                                           'cat' => 'arg',
+                                                                           'consumes' => [],
+                                                                           'produces' => [
+                                                                                           '%vconn0_stream_load'
+                                                                                         ]
+                                                                         }
+                                              },
+                                 'streams' => {
+                                                '%vconn1_stream_load' => {
+                                                                           'dtype' => 'i32',
+                                                                           'memconn' => 'arg',
+                                                                           'maxNegOffset' => 0,
+                                                                           'maxPosOffset' => 0,
+                                                                           'type' => 'streamfifo',
+                                                                           'numOffsetStreams' => 0,
+                                                                           'dir' => 'null'
+                                                                         },
+                                                '%vconn10_stream_store' => {
+                                                                             'dtype' => 'i32',
+                                                                             'memconn' => 'arg',
+                                                                             'maxNegOffset' => 0,
+                                                                             'maxPosOffset' => 0,
+                                                                             'type' => 'streamfifo',
+                                                                             'numOffsetStreams' => 0,
+                                                                             'dir' => 'null'
+                                                                           },
+                                                '%vconn00_stream_store' => {
+                                                                             'dtype' => 'i32',
+                                                                             'memconn' => 'arg',
+                                                                             'maxNegOffset' => 0,
+                                                                             'maxPosOffset' => 0,
+                                                                             'type' => 'streamfifo',
+                                                                             'numOffsetStreams' => 0,
+                                                                             'dir' => 'null'
+                                                                           },
+                                                '%vconn0_stream_load' => {
+                                                                           'dtype' => 'i32',
+                                                                           'memconn' => 'arg',
+                                                                           'maxNegOffset' => 0,
+                                                                           'maxPosOffset' => 0,
+                                                                           'type' => 'streamfifo',
+                                                                           'numOffsetStreams' => 0,
+                                                                           'dir' => 'null'
+                                                                         }
+                                              },
+                                 'func_type' => 'pipe',
+                                 'funcName' => 'kernel_unzipt_A'
+                               },
+          'kernel_map_f3' => {
+                               'cost' => {},
+                               'insCntrFcall' => 0,
+                               'instructions' => {
+                                                   '%vout_stream_store' => {
+                                                                             'cost' => {
+                                                                                         'Latency' => 1,
+                                                                                         'M20Kbits' => 0,
+                                                                                         'CPI' => 1,
+                                                                                         'REGS' => 64,
+                                                                                         'PropDelay' => 3,
+                                                                                         'MLABbits' => 0,
+                                                                                         'ALMS' => 'null',
+                                                                                         'ALUTS' => 32,
+                                                                                         'DSPs' => 0
+                                                                                       },
+                                                                             'instrType' => 'compute',
+                                                                             'oper1' => '%vconn000_stream_load',
+                                                                             'instrSequence' => 0,
+                                                                             'oper2form' => 'inPort',
+                                                                             'oper2' => '%vconn100_stream_load',
+                                                                             'destType' => 'ui32',
+                                                                             'operD' => '%vout_stream_store',
+                                                                             'oper1form' => 'inPort',
+                                                                             'op' => 'add',
+                                                                             'opType' => 'ui32'
+                                                                           }
+                                                 },
+                               'args' => {
+                                           '1' => {
+                                                    'dtype' => 'i32',
+                                                    'name' => '%vconn000_stream_load',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'input'
+                                                  },
+                                           '0' => {
+                                                    'dtype' => 'i32',
+                                                    'name' => '%vconn100_stream_load',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'input'
+                                                  },
+                                           '2' => {
+                                                    'dtype' => 'i32',
+                                                    'name' => '%vout_stream_store',
+                                                    'isOffsetStream' => 0,
+                                                    'dir' => 'output'
+                                                  }
+                                         },
+                               'instrCount' => 1,
+                               'parExecInstWise' => {
+                                                      '%vout_stream_store' => 0
+                                                    },
+                               'symbols' => {
+                                              '%vconn000_stream_load' => {
+                                                                           'dtype' => 'i32',
+                                                                           'dfgnode' => '%vconn000_stream_load',
+                                                                           'cat' => 'arg',
+                                                                           'consumes' => [],
+                                                                           'produces' => [
+                                                                                           '%vconn000_stream_load'
+                                                                                         ]
+                                                                         },
+                                              '%vout_stream_store' => {
+                                                                        'dtype' => 'i32',
+                                                                        'dfgnode' => '%vout_stream_store',
+                                                                        'cat' => 'arg',
+                                                                        'consumes' => [
+                                                                                        '%vconn000_stream_load',
+                                                                                        '%vconn100_stream_load'
+                                                                                      ],
+                                                                        'produces' => [
+                                                                                        '%vout_stream_store'
+                                                                                      ]
+                                                                      },
+                                              '%vconn100_stream_load' => {
+                                                                           'dtype' => 'i32',
+                                                                           'dfgnode' => '%vconn100_stream_load',
+                                                                           'cat' => 'arg',
+                                                                           'consumes' => [],
+                                                                           'produces' => [
+                                                                                           '%vconn100_stream_load'
+                                                                                         ]
+                                                                         }
+                                            },
+                               'streams' => {
+                                              '%vconn000_stream_load' => {
+                                                                           'dtype' => 'i32',
+                                                                           'memconn' => 'arg',
+                                                                           'maxNegOffset' => 0,
+                                                                           'maxPosOffset' => 0,
+                                                                           'type' => 'streamfifo',
+                                                                           'numOffsetStreams' => 0,
+                                                                           'dir' => 'null'
+                                                                         },
+                                              '%vout_stream_store' => {
+                                                                        'dtype' => 'i32',
+                                                                        'memconn' => 'arg',
+                                                                        'maxNegOffset' => 0,
+                                                                        'maxPosOffset' => 0,
+                                                                        'type' => 'streamfifo',
+                                                                        'numOffsetStreams' => 0,
+                                                                        'dir' => 'null'
+                                                                      },
+                                              '%vconn100_stream_load' => {
+                                                                           'dtype' => 'i32',
+                                                                           'memconn' => 'arg',
+                                                                           'maxNegOffset' => 0,
+                                                                           'maxPosOffset' => 0,
+                                                                           'type' => 'streamfifo',
+                                                                           'numOffsetStreams' => 0,
+                                                                           'dir' => 'null'
+                                                                         }
+                                            },
+                               'func_type' => 'pipe',
+                               'funcName' => 'kernel_map_f3'
+                             },
+          'top' => {
+                     'gMemComm' => {
+                                     'to' => 0,
+                                     'from' => 0,
+                                     'toFrom' => 0
+                                   },
+                     'hostComm' => {
+                                     'to' => 0,
+                                     'from' => 0,
+                                     'toFrom' => 0
+                                   },
+                     'costExclusive' => {
+                                          'Latency' => 0,
+                                          'M20Kbits' => 0,
+                                          'CPI' => 0,
+                                          'REGS' => 0,
+                                          'PropDelay' => 0,
+                                          'MLABbits' => 0,
+                                          'ALMS' => 0,
+                                          'ALUTS' => 0,
+                                          'DSPs' => 0
+                                        }
+                   }
+        };

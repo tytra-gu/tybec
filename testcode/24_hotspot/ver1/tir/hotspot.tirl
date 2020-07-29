@@ -1,0 +1,284 @@
+;-- =============================================================================
+;-- Company      : Unversity of Glasgow, Comuting Science
+;-- Author:        Syed Waqar Nabi
+;-- 
+;-- Create Date  : 2020.01.28
+;-- Project Name : TyTra
+;--
+;-- Dependencies : 
+;--
+;-- Revision     : 
+;-- Revision 0.01. File Created
+;-- 
+;-- Conventions  : 
+;-- =============================================================================
+;--
+;-- =============================================================================
+;-- General Description
+;-- -----------------------------------------------------------------------------
+;-- Tytra-IR BACKEND file for hotspot kernel from Rodinia
+;-- Only looking at the key loop inside the kernel, without checking for 
+;-- boundaries etc...
+;-- =============================================================================
+
+
+;-- Following parameters have been taken from the Rodinia source code
+;-- C-style macros 
+;--#define BLOCK_SIZE          16
+;--  ;-- not needed for TIR since we have a "single block"
+;--#define gridCols            512   
+;--#define gridRows            512
+#define ROWS     16
+#define COLS     ROWS
+#define SIZE     (ROWS*COLS)
+;--#define NLanes              1
+;--#define SIZEPL           SIZE
+;--#define NKIter              60
+  ;-- numner of Kernel Iterations
+
+;-- Constants used in the design (randomly assigned just now)
+#define step_div_Cap  43
+#define Rx_1          12
+#define Ry_1          22 
+#define Rz_1          56
+#define amb_temp      65
+
+
+;-- data type
+#define data_t ui32
+
+
+; -----------------------------------------------------------------------------
+; tempIterate
+; -----------------------------------------------------------------------------
+define void @tempIterate(
+    data_t %temp_t_out
+  , data_t %temp_t_in_S
+  , data_t %temp_t_in_N
+  , data_t %temp_t_in_E
+  , data_t %temp_t_in_W
+  , data_t %temp_t_in 
+  , data_t %power 
+  ) pipe
+{
+
+;--      temp_t[ty][tx] =   
+;--          temp_on_cuda[ty][tx] 
+;--        + step_div_Cap 
+;--        * ( power_on_cuda[ty][tx] 
+;--          + (temp_on_cuda[S][tx] 
+;--            + temp_on_cuda[N][tx] 
+;--            - 2.0f * temp_on_cuda[ty][tx]
+;--            ) 
+;--            * Ry_1 
+;--          +  (temp_on_cuda[ty][E] 
+;--             + temp_on_cuda[ty][W] 
+;--             - 2.0f * temp_on_cuda[ty][tx]
+;--            ) 
+;--            * Rx_1 
+;--          + (amb_temp 
+;--            - temp_on_cuda[ty][tx]
+;--            )
+;--            * Rz_1
+;--          );
+
+  data_t %s1  = sub data_t %temp_t_in, amb_temp
+  data_t %s2  = mul data_t %s1, Rz_1
+
+  data_t %s3  = mul data_t %temp_t_in, 2
+  data_t %s4  = add data_t %temp_t_in_W, %temp_t_in_E
+  data_t %s5  = sub data_t %s4, %s3
+  data_t %s6  = mul data_t %s5, Rx_1
+
+  data_t %s7  = mul data_t %temp_t_in, 2
+  data_t %s8  = add data_t %temp_t_in_S, %temp_t_in_N
+  data_t %s9  = sub data_t %s8, %s7
+  data_t %s10 = mul data_t %s9, Ry_1
+
+  data_t %s11= add data_t %s2 ,%s6
+  data_t %s12= add data_t %s11,%s10
+  data_t %s13= add data_t %s12, %power
+
+  data_t %s14= mul data_t %s13, step_div_Cap
+
+  data_t %temp_t_out = add data_t %s14, %temp_t_in
+
+;--  data_t %temp_t_out = add data_t %temp_t_in, step_div_Cap
+  ret void
+}
+
+
+
+; ----------------------------------------------------------
+; -- top
+; ---------------------------------------------------------
+define void @kernelTop(
+    data_t %temp_t_out
+  , data_t %temp_t_in 
+  , data_t %power 
+  ) pipe
+{
+ data_t %temp_t_in_S = offstream %temp_t_in, !tir.stream.offset, !+COLS
+ data_t %temp_t_in_N = offstream %temp_t_in, !tir.stream.offset, !-COLS
+ data_t %temp_t_in_E = offstream %temp_t_in, !tir.stream.offset, !+1
+ data_t %temp_t_in_W = offstream %temp_t_in, !tir.stream.offset, !-1
+  
+call @tempIterate(
+    data_t %temp_t_out
+  , data_t %temp_t_in_S
+  , data_t %temp_t_in_N
+  , data_t %temp_t_in_E
+  , data_t %temp_t_in_W
+  , data_t %temp_t_in 
+  , data_t %power 
+)  
+  ret void
+}
+
+; ----------------------------------------------------------
+; -- ** MAIN
+; ----------------------------------------------------------
+define void @main () {
+
+  ;--input arrays
+  %temp_t_in  = alloca [SIZE x data_t], addrspace(1) 
+  %power      = alloca [SIZE x data_t], addrspace(1) 
+
+  ;--output arrays
+  %temp_t_out = alloca [SIZE x data_t], addrspace(1) 
+
+  ;-- streams
+  %stream_temp_t_in = streamread data_t, data_t*  %temp_t_in  , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_power     = streamread data_t, data_t*  %power      , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  
+  streamwrite data_t %stream_temp_t_out  , data_t* %temp_t_out  , !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+
+  call @kernelTop (
+      data_t %stream_temp_t_out
+    , data_t %stream_temp_t_in 
+    , data_t %stream_power 
+  )
+  
+  ret void
+}
+
+
+;--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+;--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+;--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+#if 0
+
+; =============================================================================
+; ** Launchpad
+; =============================================================================
+
+define void launch()
+{
+  ;-- ---------------------------------------------------------------------------
+  ;-- ** Memory Objects
+  ;-- ---------------------------------------------------------------------------
+  @mem_temp_t_in  = addrSpace(1) <SIZE x ui32>,!"hmap" , !"NULL", !"readPorts"  , !1 ,!"writePorts" , !1
+  @mem_power      = addrSpace(1) <SIZE x ui32>,!"hmap" , !"NULL", !"readPorts"  , !1 ,!"writePorts" , !1
+  @mem_temp_t_out = addrSpace(1) <SIZE x ui32>,!"hmap" , !"NULL", !"readPorts"  , !1 ,!"writePorts" , !1
+
+  ;-- ---------------------------------------------------------------------------
+  ;-- ** Streaming Objects
+  ;-- ---------------------------------------------------------------------------
+  ;-- NOTE: the extended semantic that allows added context 
+  @strobj_temp_t_in  = addrSpace(10),!"dir", !"in", !"memConn", !"@mem_temp_t_in ", !"length", !SIZE, !"start" ,!0, !"signal" , !"yes", !"stride" , !1
+  @strobj_power      = addrSpace(10),!"dir", !"in", !"memConn", !"@mem_power     ", !"length", !SIZE, !"start" ,!0, !"signal" , !"yes", !"stride" , !1
+  @strobj_temp_t_out = addrSpace(10),!"dir", !"out",!"memConn", !"@mem_temp_t_out", !"length", !SIZE, !"start" ,!0, !"signal" , !"yes", !"stride" , !1
+
+  ;-- ---------------------------------------------------------------------------
+  ;-- ** Launching kernels
+  ;-- ---------------------------------------------------------------------------  
+  call @main()
+}
+
+; *****************************************************************************
+;                        *** COMPUTE-IR ***
+; *****************************************************************************
+; ModuleID = 'top'
+  ; top level module for LLVM
+
+; =============================================================================
+; ** GLOBAL VARIABLES (PORTS)
+; =============================================================================
+@main.temp_t_in  = addrSpace(12) ui32, !"istream", !"CONT", !0, !"strobj_temp_t_in" 
+@main.power      = addrSpace(12) ui32, !"istream", !"CONT", !0, !"strobj_power"     
+@main.temp_t_out = addrSpace(12) ui32, !"ostream", !"CONT", !T, !"strobj_temp_t_out" 
+
+; =============================================================================
+; ** DATAFLOW
+; =============================================================================
+  
+; -----------------------------------------------------------------------------
+; ** Main execution pipeline function
+; -----------------------------------------------------------------------------
+define void @tempIterate(
+    ui32 %temp_t_out
+  , ui32 %temp_t_in 
+  , ui32 %power 
+  ) pipe
+{
+;--      temp_t[ty][tx] =   
+;--          temp_on_cuda[ty][tx] 
+;--        + step_div_Cap 
+;--        * ( power_on_cuda[ty][tx] 
+;--          + (temp_on_cuda[S][tx] 
+;--            + temp_on_cuda[N][tx] 
+;--            - 2.0f * temp_on_cuda[ty][tx]
+;--            ) 
+;--            * Ry_1 
+;--          +  (temp_on_cuda[ty][E] 
+;--             + temp_on_cuda[ty][W] 
+;--             - 2.0f * temp_on_cuda[ty][tx]
+;--            ) 
+;--            * Rx_1 
+;--          + (amb_temp 
+;--            - temp_on_cuda[ty][tx]
+;--            )
+;--            * Rz_1
+;--          );
+
+  ui32 %temp_t_in_S = ui32 %temp_t_in, !tir.stream.offset, !+ROWS
+  ui32 %temp_t_in_N = ui32 %temp_t_in, !tir.stream.offset, !-ROWS
+  ui32 %temp_t_in_E = ui32 %temp_t_in, !tir.stream.offset, !-1
+  ui32 %temp_t_in_W = ui32 %temp_t_in, !tir.stream.offset, !+1
+   
+  ui32 %1 = sub ui32 %temp_t_in, amb_temp
+  ui32 %2 = mul ui32 %1, Rz_1
+
+  ui32 %3 = mul ui32 %temp_t_in, 2
+  ui32 %4 = add ui32 %temp_t_in_W, %temp_t_in_E
+  ui32 %5 = sub ui32 %4, %3
+  ui32 %6 = mul ui32 %5, Rx_1
+
+  ui32 %7 = mul ui32 %temp_t_in, 2
+  ui32 %8 = add ui32 %temp_t_in_S, %temp_t_in_N
+  ui32 %9 = sub ui32 %8, %7
+  ui32 %10= mul ui32 %9, Ry_1
+
+  ui32 %11= add ui32 %2 , %6
+  ui32 %12= add ui32 %11, %10
+  ui32 %13= add ui32 %12, %power
+
+  ui32 %14= mul ui32 %13, step_div_Cap
+
+  ui32 %temp_t_out = add ui32 %14, %temp_t_in
+}
+
+; -----------------------------------------------------------------------------
+; main 
+; -----------------------------------------------------------------------------
+define void @main ()
+{
+  call @tempIterate 
+    ( ui32 %temp_t_out
+    , ui32 %temp_t_in 
+    , ui32 %power  
+    ) pipe  
+  ret void
+}
+
+#endif

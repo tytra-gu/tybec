@@ -1,0 +1,140 @@
+;-- =========================================================
+;-- Company      : Unversity of Glasgow, Comuting Science
+;-- Author:        Syed Waqar Nabi
+;-- 
+;-- Create Date  : 2017.06.19
+;-- Project Name : TyTra
+;--
+;-- Dependencies : 
+;--
+;-- Revision     : 
+;-- Revision 0.01. File Created
+;-- 
+;-- Conventions  : 
+;-- =========================================================
+;--
+;-- =========================================================
+;-- General Description
+;-- ---------------------------------------------------------
+;-- Tytra-IR BACKEND file for the "barebones" code 
+;-- 
+;-- This is TIR-17 version
+;-- ** Version 1 ** Simple CG pipeline, no splits/merges
+;-- =========================================================
+
+;-- **************************************************
+;--            *** MANAGE-IR ***  
+;-- **************************************************
+#define SIZE	        4
+  ;--size of full streams
+#define SIZE_REDUCED  1
+  ;--size of reduced "streams"
+
+; ----------------------------------------------------------
+; -- ** kernel_A
+; ----------------------------------------------------------
+define void @kernel_A ( i32 %ka_vin0 
+                      , i32 %ka_vin1
+                      , i32 %ka_vout
+                      ) pipe {
+  i32 %local1     = add i32 %ka_vin0, %ka_vin1
+  i32 %local2     = add i32 %ka_vin0, %ka_vin1
+  i32 %local3     = add i32 %local1, %local2
+  i32 %local4     = add i32 %local1, %local3
+  i32 %ka_vout    = add i32 %local1, %local4
+  ret void
+}
+; ----------------------------------------------------------
+; -- ** kernel_B
+; ----------------------------------------------------------
+define void @kernel_B ( i32 %kb_vin 
+                      , i32 %kb_vout
+                      ) pipe {
+  i32 %kb_vout = add i32 %kb_vin, %kb_vout,  !tir.reduction.size  !SIZE
+  
+  ret void
+}
+
+; ----------------------------------------------------------
+; -- ** kernel_C
+; ----------------------------------------------------------
+define void @kernel_C ( i32 %kc_vin 
+                      , i32 %kc_vout
+                      ) pipe {
+  i32 %kc_vout  = add i32 %kc_vin, %kc_vin
+  ret void
+}
+
+; ----------------------------------------------------------
+; -- ** kernel_D
+; ----------------------------------------------------------
+define void @kernel_D ( i32 %kd_vin 
+                      , i32 %kd_vout
+                      ) pipe {
+  i32 %kd_vout  = add i32 %kd_vin, %kd_vin
+  ret void
+}
+
+
+; ----------------------------------------------------------
+; -- ** kernelTop
+; ----------------------------------------------------------
+define void @kernelTop  ( i32 %kt_vin0
+                        , i32 %kt_vin1
+                        , i32 %kt_vout
+                        ) pipe
+{
+  call @kernel_A ( i32 %kt_vin0
+                 , i32 %kt_vin1
+                 , i32 %vconn_A_to_B
+                 ) 
+
+  call @kernel_B ( i32 %vconn_A_to_B
+                 , i32 %vconn_B_to_C
+                 ) 
+
+  call @kernel_C ( i32 %vconn_B_to_C
+                 , i32 %vconn_C_to_D
+                 ) 
+
+  call @kernel_D ( i32 %vconn_C_to_D
+                 , i32 %kt_vout
+                 ) 
+  ret void
+}
+
+; ----------------------------------------------------------
+; -- ** MAIN
+; ----------------------------------------------------------
+define void @main () {
+ %vin0  = alloca [SIZE x i32], addrspace(1) 
+ %vin1  = alloca [SIZE x i32], addrspace(1) 
+ %vout  = alloca [1    x i32], addrspace(1) ;--scalar (fold) output 
+ 
+ %vin0_stream = streamread i32, i32*  %vin0 
+                   , !tir.stream.type   !stream1d
+                   , !tir.stream.size   !SIZE
+                   , !tir.stream.saddr  !0
+                   , !tir.stream.stride !1
+
+  %vin1_stream = streamread i32, i32* %vin1
+                    , !tir.stream.type   !stream1d
+                    , !tir.stream.size   !SIZE
+                    , !tir.stream.saddr  !0
+                    , !tir.stream.stride !1
+  
+  streamwrite i32 %vout_stream, i32* %vout
+                  , !tir.stream.type   !streamscalar
+;--                  , !tir.stream.type   !stream1d
+                  , !tir.stream.saddr  !0
+                  , !tir.stream.size   !1
+                  , !tir.stream.stride !1
+
+  ;--call the top level kernel and pass it the streams and the constant
+  call @kernelTop ( i32 %vin0_stream
+                  , i32 %vin1_stream
+                  , i32 %vout_stream
+                  )
+ 
+  ret void
+}

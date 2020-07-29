@@ -1,0 +1,32 @@
+                                          ,barebones.tirl       ,           
+PARAMETER                                 ,VALUE                , UNITS     
+Performance                               ,6.6             , GBop/sec  
+Frequency                                 ,333.3               , MHz       
+alutsTotal                                ,42400          ,           
+regsTotal                                 ,61632           ,           
+bramTotal                                 ,1719505           ,           
+dspTotal                                  ,1            ,           
+Host sust' BW                             ,63000           , Mbps      
+Gl-Mem sust' BW                           ,47424           , Mbps      
+Size of 1 input array (n_gs)              ,1024                ,           
+Firing interval/II (n_to)                 ,1                ,           
+Total word operations per kernel (n_wops) ,5              ,           
+Words per tuple (from GMEM)      (w_pt)   ,3                ,           
+Size of problem (array size in words)     ,1024                ,           
+Word size in bits (w_s_bits)              ,32            ,           
+Bytes per word (b_pw)                     ,4                ,           
+Kernel Pipeline  Latency (k_pd)           ,5                ,           
+CP of one PE                              ,6.6         , GBops/sec 
+CP of one PE (Asymptotic)                 ,6.7  , GBops/sec 
+Theoretical maximum PE scaling            ,845.2          ,           
+Computation-Bound: CP_PE  x SCALE         ,6.6       , GBops/sec 
+Bandwidth-Bound:   CI x BW                ,10.1             , GBops/sec 
+Computational Intensity                   ,1.7                  , Byte-op/Byte-trasfer
+alutsKernel                               ,128         ,           
+regsKernel                                ,320          ,           
+bramKernel                                ,1          ,           
+dspKernel                                 ,1           ,           
+alutsBasePlat                             ,42272       ,           
+regsBasePlat                              ,61312        ,           
+bramBasePlat                              ,1719504        ,           
+dspBasePlat                               ,0         ,           

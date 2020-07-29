@@ -1,0 +1,750 @@
+;-- =============================================================================
+;-- Company      : Unversity of Glasgow, Comuting Science
+;-- Author:        Syed Waqar Nabi
+;-- 
+;-- Create Date  : 2014.11.03
+;-- Project Name : TyTra
+;--
+;-- Dependencies : 
+;--
+;-- Revision     : 
+;-- Revision 0.01. File Created
+;-- 
+;-- Conventions  : 
+;-- =============================================================================
+;--
+;-- =============================================================================
+;-- General Description
+;-- -----------------------------------------------------------------------------
+;-- Tytra-IR BACKEND file DYN1 kernel from 2d-shallow-water
+;--
+;--
+;-- =============================================================================
+;--
+
+#define ROWS    8
+#define COLS    8
+#define SIZE    (ROWS*COLS)
+
+;--I have the same arithmetic instructions for data_t/int for now
+#define fadd add
+#define fsub sub
+#define fmul mul
+#define fdiv udiv
+#define fabs load
+
+
+;--#define data_t float32
+#define data_t i32
+
+;--constants 
+#define dx      1 
+#define dy      2
+#define dt      3
+#define g       10
+#define eps     5
+#define hmin    5
+#define epsX4   20
+;--#define CONST1 10 
+#define CONST1 -30
+  ;-- dt*g
+#define ZERO 0
+#define ONE  1  
+; -----------------------------------------------------------------------------
+; dyn1
+; -----------------------------------------------------------------------------
+
+define void @dyn1  ( data_t %u_j_k
+                   , data_t %v_j_k
+                   , data_t %eta_j_k
+                   , data_t %eta_j_kp1
+                   , data_t %eta_jp1_k
+                   , data_t %wet_j_k
+                   , data_t %wet_j_kp1
+                   , data_t %wet_jp1_k
+                   , data_t %j
+                   , data_t %k
+                   , data_t %un_j_k
+                   , data_t %vn_j_k
+                   ;--, data_t %dummyout0
+                   ;--, data_t %dummyout1                  
+                   ) pipe
+{
+  ;-- boundary condition (
+  data_t %local1  = icmp eq i32 %j, 0
+  data_t %local2  = icmp eq i32 %j, (ROWS-1)
+  data_t %local3  = icmp eq i32 %k, 0
+  data_t %local4  = icmp eq i32 %k, (COLS-1)
+  data_t %local5  = or i32 %local1, %local2                      
+  data_t %local6  = or i32 %local3, %local4                      
+  data_t %local7  = or i32 %local5, %local6       
+  ;-- )
+    ;--%local7 is true for boundaries
+
+  
+  ;-- boundary branch {
+    data_t %un_j_k0  = load data_t %u_j_k
+    data_t %vn_j_k0  = load data_t %v_j_k
+  ;--}
+  
+  ;-- other branch {
+    ;-------
+    ;-- duu
+    ;-------
+    ;--fold these constants
+    ;--data_t %sub    = fsub data_t 0, dt
+    ;--data_t %mul    = fmul data_t %sub, g
+    data_t %sub6   = fsub data_t %eta_j_kp1, %eta_j_k
+    data_t %mul7   = fmul data_t %sub6, CONST1
+    data_t %duu    = fdiv data_t %mul7, dx
+    
+    ;-------
+    ;--dvv
+    ;-------
+    ;--fold these constants
+    ;--data_t %sub8   = fsub data_t 0, dt
+    ;--data_t %mul9   = fmul data_t %sub8, g
+    data_t %sub10  = fsub data_t %eta_jp1_k, %eta_j_k
+    data_t %mul11  = fmul data_t %sub10, CONST1
+    data_t %dvv    = fdiv data_t %mul11, dy
+    
+    ;-------
+    ;--uu
+    ;-------
+    data_t %uu     = load data_t %u_j_k
+    
+    ;-------
+    ;--vv
+    ;-------
+    data_t %vv     = load data_t %v_j_k
+    
+    ;-------
+    ;--un
+    ;------
+    ;-- condition for updating un inside this non-boundary branch
+    ;-- if (  ( (wet_j_k == 1)
+    ;--          && ( (wet_j_kp1 == 1) || (duu > 0.0)))
+    ;--     || ( (wet_j_kp1 == 1) && (duu < 0.0))     
+    ;--     ){
+    ;--      *un_j_k = uu+duu;
+    ;--  }//if
+    ;-- (
+    data_t %ulocal8  = icmp eq data_t %wet_j_k, 1      ;--(wet_j_k == 1)
+    data_t %ulocal9  = icmp eq data_t %wet_j_kp1, 1    ;--(wet_j_kp1 == 1)
+    data_t %ulocal10 = icmp gt data_t %duu, 0          ;--(duu > 0.0)
+    data_t %ulocal11 = icmp lt data_t %duu, 0          ;--(duu < 0.0)
+    data_t %ulocal12 = or  data_t %ulocal9, %ulocal10  ;--( (wet_j_kp1 == 1) || (duu > 0.0))
+    data_t %ulocal13 = and data_t %ulocal8, %ulocal12  ;--( (wet_j_k == 1)
+                                                       ;--          && ( (wet_j_kp1 == 1) || (duu > 0.0)))
+    data_t %ulocal14 = and data_t %ulocal9,  %ulocal11 ;--(wet_j_kp1 == 1) && (duu < 0.0)
+    data_t %ulocal15 = or  data_t %ulocal13, %ulocal14 ;--the whole condition
+    ;-- ) local15 is the condition
+    
+    ;--{ true branch 
+      data_t %un_j_k1_br0 = fadd data_t %uu, %duu
+    ;--}
+    
+    ;--{ false branch
+    data_t %un_j_k1_br1 = load data_t %u_j_k
+    ;--}
+    
+    data_t %un_j_k1   = select data_t %ulocal15, data_t %un_j_k1_br0, data_t %un_j_k1_br1
+    
+    ;-------
+    ;--vn
+    ;------
+    ;-- condition for updating vn inside this non-boundary branch
+    ;--  if (  (  (wet_j_k == 1)
+    ;--         && ( (wet_jp1_k == 1) || (dvv > 0.0)))
+    ;--     || ((wet_jp1_k == 1) && (dvv < 0.0))
+    ;--     ){
+    ;--      *vn_j_k = vv+dvv;
+    ;--  }    
+    ;-- (
+    data_t %vlocal8  = icmp eq data_t %wet_j_k, 1     ;--(wet_j_k == 1)
+    data_t %vlocal9  = icmp eq data_t %wet_jp1_k, 1   ;--(wet_jp1_k == 1)
+    data_t %vlocal10 = icmp gt data_t %dvv, 0         ;--(dvv > 0.0)
+    data_t %vlocal11 = icmp lt data_t %dvv, 0         ;--(dvv < 0.0)
+    data_t %vlocal12 = or  data_t %vlocal9, %vlocal10 ;--( (wet_j_kp1 == 1) || (dvv > 0.0))
+    data_t %vlocal13 = and data_t %vlocal8, %vlocal12 ;--( (wet_j_k == 1)
+                                                      ;--          && ( (wet_jp1_k == 1) || (dvv > 0.0)))
+    data_t %vlocal14 = and data_t %vlocal9 , %vlocal11 ;--(wet_jp1_k == 1) && (dvv < 0.0)
+    data_t %vlocal15 = or  data_t %vlocal13, %vlocal14 ;--the whole condition
+    ;-- ) local15 is the condition
+    
+    ;--{ true branch 
+      data_t %vn_j_k1_br0 = fadd data_t %vv, %dvv
+    ;--}
+    
+    ;--{ false branch
+    data_t %vn_j_k1_br1 = load data_t %v_j_k
+    ;--}
+    
+    data_t %vn_j_k1   = select data_t %vlocal15, data_t %vn_j_k1_br0, data_t %vn_j_k1_br1
+  ;--}
+
+  ;--(outer) select
+  ;--data_t %un_j_k_pre = select data_t %local7, data_t %un_j_k0, data_t %un_j_k1
+  ;--data_t %vn_j_k_pre = select data_t %local7, data_t %vn_j_k0, data_t %vn_j_k1
+  data_t %un_j_k = select data_t %local7, data_t %un_j_k0, data_t %un_j_k1
+  data_t %vn_j_k = select data_t %local7, data_t %vn_j_k0, data_t %vn_j_k1
+  
+  
+  ;--redundant multi-cycle instructions (effectively NO-OPS)
+  ;--data_t %un_j_k = pow data_t %un_j_k_pre, %un_j_k_pre
+  ;--data_t %vn_j_k = pow data_t %vn_j_k_pre, %vn_j_k_pre
+  
+  ;--dummy outs to balance IO width
+  ;--not needed when connecting a peer kernel (rather than gmem)
+  ;--data_t %dummyout0 = select data_t %local7, data_t %un_j_k0, data_t %un_j_k1
+    ;--dummyout0 is same as un
+  ;--data_t %dummyout1 = select data_t %local7, data_t %vn_j_k0, data_t %vn_j_k1
+  
+  ret void
+}
+
+; -----------------------------------------------------------------------------
+; redbw_dyn1_dyn2 (redundant multi-cycle unit)
+; -----------------------------------------------------------------------------
+define void @redbw_dyn1_dyn2_a(
+   data_t %un_j_k_pre
+  ,data_t %vn_j_k_pre
+  ,data_t %un_j_k
+  ,data_t %vn_j_k
+) pipe {
+  data_t %un_j_k = pow data_t %un_j_k_pre, %vn_j_k_pre
+  data_t %vn_j_k = pow data_t %vn_j_k_pre, %un_j_k_pre
+  ret void
+}
+
+define void @redbw_dyn1_dyn2_b(
+   data_t %un_j_k_pre
+  ,data_t %vn_j_k_pre
+  ,data_t %un_j_k
+  ,data_t %vn_j_k
+) pipe {
+  data_t %un_j_k = pow data_t %un_j_k_pre, %vn_j_k_pre
+  data_t %vn_j_k = pow data_t %vn_j_k_pre, %un_j_k_pre
+  ret void
+}
+
+
+define void @redbw_dyn1_dyn2_c(
+   data_t %un_j_k_pre
+  ,data_t %vn_j_k_pre
+  ,data_t %un_j_k
+  ,data_t %vn_j_k
+) pipe {
+  data_t %un_j_k = pow data_t %un_j_k_pre, %vn_j_k_pre
+  data_t %vn_j_k = pow data_t %vn_j_k_pre, %un_j_k_pre
+  ret void
+}
+
+; -----------------------------------------------------------------------------
+; dyn2
+; -----------------------------------------------------------------------------
+define void @dyn2 ( data_t %un_j_k            
+                  , data_t %un_j_km1
+                  , data_t %vn_j_k
+                  , data_t %vn_jm1_k
+                  , data_t %h_j_k
+                  , data_t %h_jm1_k
+                  , data_t %h_j_km1
+                  , data_t %h_j_kp1
+                  , data_t %h_jp1_k
+                  , data_t %eta_j_k
+                  , data_t %j
+                  , data_t %k
+                  , data_t %etan_j_k
+                  ;--, data_t %etan_j_k_dumm1
+                  ;--, data_t %etan_j_k_dumm2
+                  ;--, data_t %etan_j_k_dumm3                  
+                  ) pipe 
+{
+
+  ;-- boundary condition (
+  data_t %local1  = icmp eq i32 %j, 0
+  data_t %local2  = icmp eq i32 %j, (ROWS-1)
+  data_t %local3  = icmp eq i32 %k, 0
+  data_t %local4  = icmp eq i32 %k, (COLS-1)
+  data_t %local5  = or i32 %local1, %local2                      
+  data_t %local6  = or i32 %local3, %local4                      
+  data_t %bound   = or i32 %local5, %local6       
+  ;-- )
+    ;--%bound is true for boundaries
+
+  ;-- boundary branch {
+    data_t %etan_j_k_brT        = load data_t %eta_j_k
+    ;--data_t %etan_j_k_dumm1_brT  = load data_t %eta_j_k
+    ;--data_t %etan_j_k_dumm2_brT  = load data_t %eta_j_k
+    ;--data_t %etan_j_k_dumm3_brT  = load data_t %eta_j_k
+  ;--}
+  
+  ;-- other branch {
+    ;--%call = call float @fabs(float %un_j_k)
+    ;--call @fabs(data_t %un_j_k, data_t %call)
+    data_t %call = fabs data_t %un_j_k
+    
+    data_t %add = fadd data_t %un_j_k, %call
+    data_t %mul = fmul data_t %add, 5
+    data_t %mul1 = fmul data_t %mul, %h_j_k
+    ;--%call2 = call float @fabs(float %un_j_k)  
+    ;--call @fabs(data_t %un_j_k, data_t %call2)
+    data_t %call2 = fabs data_t %un_j_k
+    
+    data_t %sub = fsub data_t %un_j_k, %call2
+    data_t %mul3 = fmul data_t %sub, 5
+    data_t %mul4 = fmul data_t %mul3, %h_j_kp1
+    data_t %add5 = fadd data_t %mul1, %mul4
+    ;--data_t %call6 = call data_t @fabs(data_t %un_j_km1)
+    ;--call @fabs(data_t %un_j_km1, data_t %call6)
+    data_t %call6 = fabs data_t %un_j_km1
+    
+    data_t %add7 = fadd data_t %un_j_km1, %call6
+    data_t %mul8 = fmul data_t %add7, 5
+    data_t %mul9 = fmul data_t %mul8, %h_j_km1
+    ;--data_t %call10 = call data_t @fabs(data_t %un_j_km1)
+    ;--call @fabs(data_t %un_j_km1, data_t %call10)
+    data_t %call10 = fabs data_t %un_j_km1
+    
+    data_t %sub11 = fsub data_t %un_j_km1, %call10
+    data_t %mul12 = fmul data_t %sub11, 5
+    data_t %mul13 = fmul data_t %mul12, %h_j_k
+    data_t %add14 = fadd data_t %mul9, %mul13
+    ;--data_t %call15 = call data_t @fabs(data_t %vn_j_k)
+    ;--call @fabs(data_t %vn_j_k, data_t %call15)
+    data_t %call15 = fabs data_t %vn_j_k
+    
+    data_t %add16 = fadd data_t %vn_j_k, %call15
+    data_t %mul17 = fmul data_t %add16, 5
+    data_t %mul18 = fmul data_t %mul17, %h_j_k
+    ;--data_t %call19 = call data_t @fabs(data_t %vn_j_k)
+    ;--call @fabs(data_t %vn_j_k, data_t %call19)
+    data_t %call19 = fabs data_t %vn_j_k
+
+    data_t %sub20 = fsub data_t %vn_j_k, %call19
+    data_t %mul21 = fmul data_t %sub20, 5
+    data_t %mul22 = fmul data_t %mul21, %h_jp1_k
+    data_t %add23 = fadd data_t %mul18, %mul22
+    ;--data_t %call24 = call data_t @fabs(data_t %vn_jm1_k)
+    ;--call @fabs(data_t %vn_jm1_k, data_t %call24)
+    data_t %call24 = fabs data_t %vn_jm1_k
+    
+    data_t %add25 = fadd data_t %vn_jm1_k, %call24
+    data_t %mul26 = fmul data_t %add25, 5
+    data_t %mul27 = fmul data_t %mul26, %h_jm1_k
+    ;--data_t %call28 = call data_t @fabs(data_t %vn_jm1_k)
+    ;--call @fabs(data_t %vn_jm1_k, data_t %call28)
+    data_t %call28 = fabs data_t %vn_jm1_k
+    
+    data_t %sub29 = fsub data_t %vn_jm1_k, %call28
+    data_t %mul30 = fmul data_t %sub29, 5
+    data_t %mul31 = fmul data_t %mul30, %h_j_k
+    data_t %add32 = fadd data_t %mul27, %mul31
+    data_t %sub33 = fsub data_t %add5, %add14
+    data_t %mul34 = fmul data_t %sub33, dt
+    data_t %div   = fdiv data_t %mul34, dx
+    data_t %sub35 = fsub data_t %eta_j_k, %div
+    data_t %sub36 = fsub data_t %add23, %add32
+    data_t %mul37 = fmul data_t %sub36, dt
+    data_t %div38 = fdiv data_t %mul37, dy
+    
+    ;--outputs, dummies added for symmetry
+    data_t %etan_j_k_brF = fsub data_t %sub35, %div38
+    ;--data_t %etan_j_k_dumm1_brF = fsub data_t %sub35, %div38
+    ;--data_t %etan_j_k_dumm2_brF = fsub data_t %sub35, %div38
+    ;--data_t %etan_j_k_dumm3_brF = fsub data_t %sub35, %div38
+  ;--}
+  
+  ;-- select
+  data_t %etan_j_k        = select data_t %bound, data_t %etan_j_k_brT       , data_t %etan_j_k_brF
+  ;--data_t %etan_j_k_dumm1  = select data_t %bound, data_t %etan_j_k_dumm1_brT , data_t %etan_j_k_dumm1_brF  
+  ;--data_t %etan_j_k_dumm2  = select data_t %bound, data_t %etan_j_k_dumm2_brT , data_t %etan_j_k_dumm2_brF  
+  ;--data_t %etan_j_k_dumm3  = select data_t %bound, data_t %etan_j_k_dumm3_brT , data_t %etan_j_k_dumm3_brF  
+  
+  
+  ret void
+}
+
+; -----------------------------------------------------------------------------
+; redbw_dyn2_shapiro (redundant multi-cycle unit)
+; -----------------------------------------------------------------------------
+;--define void @redbw_dyn2_shapiro(
+;--   data_t %etan_j_k_pre
+;--  ,data_t %wet_j_k_pre
+;--  ,data_t %etan_j_k
+;--  ,data_t %wet_j_k
+;--) pipe {
+;--  data_t %etan_j_k = pow data_t %etan_j_k_pre, %wet_j_k_pre
+;--  data_t %wet_j_k = pow data_t %wet_j_k_pre, %etan_j_k_pre
+;--  ret void
+;--}
+
+; -----------------------------------------------------------------------------
+; shapiro
+; -----------------------------------------------------------------------------
+
+define void @shapiro  ( data_t %etan_j_k
+                      , data_t %etan_jm1_k
+                      , data_t %etan_j_km1
+                      , data_t %etan_j_kp1
+                      , data_t %etan_jp1_k
+                      , data_t %wet_j_k
+                      , data_t %wet_jm1_k
+                      , data_t %wet_j_km1
+                      , data_t %wet_j_kp1
+                      , data_t %wet_jp1_k
+                      , data_t %eta_j_k
+                      , data_t %j
+                      , data_t %k                      
+                      ) pipe  
+{
+  ;-- boundary condition (
+  data_t %local1  = icmp eq i32 %j, 0
+  data_t %local2  = icmp eq i32 %j, (ROWS-1)
+  data_t %local3  = icmp eq i32 %k, 0
+  data_t %local4  = icmp eq i32 %k, (COLS-1)
+  data_t %local5  = or i32 %local1, %local2                      
+  data_t %local6  = or i32 %local3, %local4                      
+  data_t %bound   = or i32 %local5, %local6       
+  ;-- )
+    ;--%bound is true for boundaries
+    
+  ;-- bound==TRUE {
+    data_t %eta_j_k_brT  = load data_t %etan_j_k
+  ;--}    
+  
+  ;-- bound==FALSE {
+    
+    data_t %cond2 = icmp eq i32 %wet_j_k, 1
+      ;--nested branch condition
+      
+    ;-- nested branch TRUE {  
+      data_t %add = fadd data_t %wet_j_kp1, %wet_j_km1
+      data_t %add1 = fadd data_t %add, %wet_jp1_k
+      data_t %add2 = fadd data_t %add1, %wet_jm1_k
+      data_t %mul3 = fmul data_t %add2, epsX4
+      
+      ;--data_t %one = load data_t 1 
+      ;--since constant can't be first operand, this is a workaround
+      
+      ;--sub swapped for add
+      ;--data_t %sub  = fsub data_t %one, %mul3
+      data_t %sub  = fadd data_t %mul3, 1
+      data_t %mul4 = fmul data_t %sub, %etan_j_k ;--term1
+      
+      data_t %mul6 = fmul data_t %wet_j_kp1, %etan_j_kp1
+      data_t %mul7 = fmul data_t %wet_j_km1, %etan_j_km1
+      data_t %add8 = fadd data_t %mul6, %mul7
+      data_t %mul9 = fmul data_t %add8, epsX4 ;--term2
+      
+      data_t %mul11 = fmul data_t %wet_jp1_k, %etan_jp1_k
+      data_t %mul12 = fmul data_t %wet_jm1_k, %etan_jm1_k
+      data_t %add13 = fadd data_t %mul11, %mul12
+      data_t %mul14 = fmul data_t %add13, epsX4 ;--term3
+      
+      data_t %add15 = fadd data_t %mul4, %mul9
+      data_t %eta_j_k_nested_brT = fadd data_t %add15, %mul14
+    ;--}
+    
+    ;-- nested branch FALSE {  
+      data_t %eta_j_k_nested_brF = load data_t %etan_j_k
+    ;--}
+    
+    ;--nested branch select
+    data_t %eta_j_k_brF   = select data_t %cond2, data_t %eta_j_k_nested_brT, data_t %eta_j_k_nested_brF
+  ;--}
+  
+  ;--outside branch select
+  data_t %eta_j_k       = select data_t %bound, data_t %eta_j_k_brT, data_t %eta_j_k_brF
+  ;--data_t %eta_j_k_dumm1 = select data_t %bound, data_t %eta_j_k_brT, data_t %eta_j_k_brF
+  
+#if 0
+#endif  
+  ret void
+}
+
+; -----------------------------------------------------------------------------
+; redbw_shapiro_updates (redundant multi-cycle unit)
+; -----------------------------------------------------------------------------
+;--define void @redbw_shapiro_updates(
+;--   data_t %n_eta_j_k_local_pre
+;--  ,data_t %n_eta_j_k_local
+;--) pipe {
+;--  data_t %n_eta_j_k_local = pow data_t %n_eta_j_k_local_pre, %n_eta_j_k_local_pre
+;--  ret void
+;--}
+
+; -----------------------------------------------------------------------------
+;-- updates
+; -----------------------------------------------------------------------------
+;-- disjointed graphs not allowed in a function, so removing the plain copy updates
+define void @updates  ( 
+                      ;--  data_t %un_j_k
+                      ;--, data_t %vn_j_k
+                        data_t %hzero_j_k
+                      , data_t %eta_j_k
+                      ;--, data_t %u_j_k
+                      ;--, data_t %v_j_k
+                      , data_t %h_j_k
+                      , data_t %wet_j_k
+                      ) pipe  
+{
+  
+  data_t %add         = fadd data_t %hzero_j_k, %eta_j_k
+  data_t %h_j_k_local = load data_t %add ;--output port cannot be used as internal argument
+
+  data_t %cond        = icmp lt i32 %h_j_k_local, hmin
+  
+  ;-- cond false {
+  ;--  data_t %wet_j_k_brF = load data_t 1    ;--to work around the restriction that constant operands can only be in a 2-op instruction
+  ;--}
+  ;--cond true {
+  ;--    data_t %wet_j_k_brT  = load data_t 0
+  ;--}
+  ;--data_t %wet_j_k     = select data_t %cond, data_t %wet_j_k_brT, data_t %wet_j_k_brF
+  ;--data_t %wet_j_k  = select data_t %cond, data_t %un_j_k, data_t %vn_j_k
+    ;--there is something in code gen that does not allow select to have constant operand(s); deal with it; FIXME
+  data_t %wet_j_k  = select data_t %cond, data_t ZERO, data_t ONE
+  
+  data_t %h_j_k = load data_t %h_j_k_local
+  ;--data_t %u_j_k = load data_t %un_j_k
+  ;--data_t %v_j_k = load data_t %vn_j_k
+
+  ret void
+}
+
+; ----------------------------------------------------------
+; -- top
+; ----------------------------------------------------------
+define void @kernelTop ( data_t %u_j_k
+                       , data_t %v_j_k
+                       , data_t %h_j_k
+                       , data_t %eta_j_k
+                       , data_t %wet_j_k
+                       , data_t %hzero_j_k
+                       , data_t %n_u_j_k
+                       , data_t %n_v_j_k
+                       , data_t %n_h_j_k
+                       , data_t %n_eta_j_k
+                       , data_t %n_wet_j_k
+                       , data_t %dummy
+                       ) pipe
+{
+  ;--auto indices
+  data_t %j = autoindex %u_j_k , !tir.aindex.type       !2d
+                               , !tir.aindex.range      !0 !ROWS-1
+                               , !tir.aindex.dimNum     !1
+                               , !tir.aindex.nestOver   !%k
+                              
+  data_t %k = autoindex %u_j_k , !tir.aindex.type       !2d
+                               , !tir.aindex.range      !0 !COLS-1
+                               , !tir.aindex.dimNum     !2  
+                               
+  ;-- dyn1
+  ;----------------------------------------------
+  
+  ;--offset streams
+  data_t %eta_j_kp1 = offstream  %eta_j_k, !tir.stream.offset !+1
+  data_t %eta_jp1_k = offstream  %eta_j_k, !tir.stream.offset !+COLS
+  data_t %wet_j_kp1 = offstream  %wet_j_k, !tir.stream.offset !+1
+  data_t %wet_jp1_k = offstream  %wet_j_k, !tir.stream.offset !+COLS
+  
+  ;--kernel
+  call @dyn1  ( data_t %u_j_k
+              , data_t %v_j_k
+              , data_t %eta_j_k
+              , data_t %eta_j_kp1
+              , data_t %eta_jp1_k
+              , data_t %wet_j_k
+              , data_t %wet_j_kp1
+              , data_t %wet_jp1_k
+              , data_t %j
+              , data_t %k
+              , data_t %un_j_k
+              , data_t %vn_j_k
+              ) 
+              
+  ;--redundant multi-cycle unit              
+  call @redbw_dyn1_dyn2_a(
+     data_t %un_j_k
+    ,data_t %vn_j_k
+    ,data_t %un_j_k_red_a
+    ,data_t %vn_j_k_red_a
+  )              
+  
+  call @redbw_dyn1_dyn2_b(
+     data_t %un_j_k_red_a
+    ,data_t %vn_j_k_red_a
+    ,data_t %un_j_k_red_b
+    ,data_t %vn_j_k_red_b
+  )              
+  
+  call @redbw_dyn1_dyn2_c(
+     data_t %un_j_k_red_b
+    ,data_t %vn_j_k_red_b
+    ,data_t %un_j_k_red_c
+    ,data_t %vn_j_k_red_c
+  )    
+  
+  ;-- dyn2
+  ;----------------------------------------------
+  ;--offset streams
+  ;--currently, I have this artificial limitation that offset streams cannot be created
+  ;--from these implicit connection wires between kernels. So I explicitly assign them
+  ;--to local variables before creating streams from them
+
+  data_t %un_j_k_local = load data_t %un_j_k_red_c
+  data_t %vn_j_k_local = load data_t %vn_j_k_red_c
+
+  data_t %un_j_km1  = offstream  %un_j_k_local, !tir.stream.offset !-1
+  data_t %vn_jm1_k  = offstream  %vn_j_k_local, !tir.stream.offset !-COLS
+
+
+  data_t %h_jm1_k   = offstream  %h_j_k , !tir.stream.offset !-COLS
+  data_t %h_j_km1   = offstream  %h_j_k , !tir.stream.offset !-1
+  data_t %h_j_kp1   = offstream  %h_j_k , !tir.stream.offset !+1
+  data_t %h_jp1_k   = offstream  %h_j_k , !tir.stream.offset !+COLS               
+               
+  ;-- kernels              
+  call @dyn2  ( data_t %un_j_k_local
+              , data_t %un_j_km1
+              , data_t %vn_j_k_local
+              , data_t %vn_jm1_k
+              , data_t %h_j_k
+              , data_t %h_jm1_k
+              , data_t %h_j_km1
+              , data_t %h_j_kp1
+              , data_t %h_jp1_k
+              , data_t %eta_j_k
+              , data_t %j
+              , data_t %k
+              , data_t %etan_j_k
+              )
+
+  ;--redundant multi-cycle unit              
+  ;--call @redbw_dyn2_shapiro(
+  ;-- data_t %etan_j_k
+  ;--,data_t %wet_j_k
+  ;--,data_t %etan_j_k_red
+  ;--,data_t %wet_j_k_red
+  ;--)              
+              
+              
+  ;-- shapiro
+  ;----------------------------------------------
+  
+  ;--offset streams (see note above for streams on un/vn)
+  data_t %etan_j_k_local = load data_t %etan_j_k
+  data_t %etan_jm1_k = offstream  %etan_j_k_local, !tir.stream.offset !-COLS
+  data_t %etan_j_km1 = offstream  %etan_j_k_local, !tir.stream.offset !-1
+  data_t %etan_j_kp1 = offstream  %etan_j_k_local, !tir.stream.offset !+1
+  data_t %etan_jp1_k = offstream  %etan_j_k_local, !tir.stream.offset !+COLS
+
+  data_t %wet_jm1_k = offstream  %wet_j_k, !tir.stream.offset !-COLS
+  data_t %wet_j_km1 = offstream  %wet_j_k, !tir.stream.offset !-1
+  ;--data_t %wet_j_kp1 = offstream  %wet_j_k, !tir.stream.offset !+1      ;--already available
+  ;--data_t %wet_jp1_k = offstream  %wet_j_k, !tir.stream.offset !+COLS   ;--already available
+  
+  ;-- kernel
+  call @shapiro   ( data_t %etan_j_k_local
+                  , data_t %etan_jm1_k
+                  , data_t %etan_j_km1
+                  , data_t %etan_j_kp1
+                  , data_t %etan_jp1_k
+                  , data_t %wet_j_k
+                  , data_t %wet_jm1_k
+                  , data_t %wet_j_km1
+                  , data_t %wet_j_kp1
+                  , data_t %wet_jp1_k
+                  , data_t %n_eta_j_k_local ;--global output cannot be local peer connection
+                  , data_t %j
+                  , data_t %k                      
+                  )   
+                  
+  ;--call @redbw_shapiro_updates(
+  ;--   data_t %n_eta_j_k_local
+  ;--  ,data_t %n_eta_j_k_local_red
+  ;--)                  
+                  
+  ;-- updates
+  ;----------------------------------------------             
+  call @updates  
+    ( 
+    ;--  data_t %un_j_k_local
+    ;--, data_t %vn_j_k_local
+      data_t %hzero_j_k
+    , data_t %n_eta_j_k_local
+    ;--, data_t %n_u_j_k
+    ;--, data_t %n_v_j_k
+    , data_t %n_h_j_k
+    , data_t %n_wet_j_k
+    )                  
+                
+  ;--
+                
+  ;--n_eta, n_u and n_v just loaded from already computed value, which because of being a peer connection also could not be a global output
+  data_t  %n_u_j_k = load data_t %un_j_k_local
+  data_t  %n_v_j_k = load data_t %vn_j_k_local
+  data_t  %n_eta_j_k = load data_t %n_eta_j_k_local
+  data_t  %dummy     = load data_t %n_eta_j_k_local
+  
+}
+
+; ----------------------------------------------------------
+; -- ** MAIN
+; ----------------------------------------------------------
+define void @main () {
+;--the outputs are prepended with n_
+;--this is to differentiate from identifiers like un, vn, etc, which are internal 
+;--variables _only_ passing between the CG kernels.
+;--the C code updates the original inputs (i.e., input and output pointers are same)
+;--which my TIR does not allow.
+;--In any case, the host code can take care of swapping the ins for outs
+  
+  ;--input arrays
+  %u_j_k     = alloca [SIZE x data_t], addrspace(1)  
+  %v_j_k     = alloca [SIZE x data_t], addrspace(1)
+  %h_j_k     = alloca [SIZE x data_t], addrspace(1)
+  %eta_j_k   = alloca [SIZE x data_t], addrspace(1)
+  %wet_j_k   = alloca [SIZE x data_t], addrspace(1)
+  %hzero_j_k = alloca [SIZE x data_t], addrspace(1)
+  
+  ;--output arrays
+  %n_u_j_k   = alloca [SIZE x data_t], addrspace(1)
+  %n_v_j_k   = alloca [SIZE x data_t], addrspace(1)
+  %n_h_j_k   = alloca [SIZE x data_t], addrspace(1)
+  %n_eta_j_k = alloca [SIZE x data_t], addrspace(1)  
+  %n_wet_j_k = alloca [SIZE x data_t], addrspace(1)  
+  %dummy     = alloca [SIZE x data_t], addrspace(1) ;--to have symmetry in IOs
+  
+  %stream_u_j_k     = streamread data_t, data_t*  %u_j_k     , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_v_j_k     = streamread data_t, data_t*  %v_j_k     , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_h_j_k     = streamread data_t, data_t*  %h_j_k     , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_eta_j_k   = streamread data_t, data_t*  %eta_j_k   , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_wet_j_k   = streamread data_t, data_t*  %wet_j_k   , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  %stream_hzero_j_k = streamread data_t, data_t*  %hzero_j_k , !tir.stream.type   !stream1d , !tir.stream.size   !SIZE , !tir.stream.saddr  !0, !tir.stream.stride !1
+  
+  streamwrite data_t %stream_n_u_j_k  , data_t* %n_u_j_k  , !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+  streamwrite data_t %stream_n_v_j_k  , data_t* %n_v_j_k  , !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+  streamwrite data_t %stream_n_h_j_k  , data_t* %n_h_j_k  , !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+  streamwrite data_t %stream_n_eta_j_k, data_t* %n_eta_j_k, !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+  streamwrite data_t %stream_n_wet_j_k, data_t* %n_wet_j_k, !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+  streamwrite data_t %stream_dummy    , data_t* %dummy    , !tir.stream.type   !stream1d, !tir.stream.saddr  !0, !tir.stream.size   !SIZE, !tir.stream.stride !1
+  
+  call @kernelTop  
+  ( data_t %stream_u_j_k
+  , data_t %stream_v_j_k
+  , data_t %stream_h_j_k
+  , data_t %stream_eta_j_k
+  , data_t %stream_wet_j_k
+  , data_t %stream_hzero_j_k
+  , data_t %stream_n_u_j_k
+  , data_t %stream_n_v_j_k
+  , data_t %stream_n_h_j_k
+  , data_t %stream_n_eta_j_k
+  , data_t %stream_n_wet_j_k
+  , data_t %stream_dummy
+  )
+  ret void
+}

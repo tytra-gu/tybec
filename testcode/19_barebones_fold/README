@@ -1,0 +1,25 @@
+2019.10.01: Glasgow, WN
+========================
+A barebones example for incorporating and testing fold operations.
+See following comment from NOTES on the different cases I need to test:
+
++ CASE A: This is the CASE A from the picture mentioned earlier, i.e.: MEM -> f1_map -> f2_map -> f3_map -> f4_fold -> MEM.
+  - The TB verilog code is not currently compatible and so I just checked for correctness in the waveform.
+  - I should update Testbench to deal with it next.
++ CASE B: MEM -> f1_map -> f2_map -> f3_fold -> f4_map -> MEM
+  - the output of the FOLD is _still a stream_, albeit at a slower throughput. It is used as such, and should be transparent in the code as well as the circuit.
++ CASE C: MEM |-> f1_map  -> | f3_map -> MEM
+              |-> f2_fold -> | 
+
+
+
+// ver 1 //
+Case A, the final node of the CG pipeline is the reduction.
+
+// ver 2 //
+Case B, an intermediate node peforms the reduction, resulting in a "reduced" stream from that node onwards
+(would most likley be just one element, but the mechanism should be generic).
+
+// ver 3 //
+Case C: map and fold on concurrent paths; the fold output is "out of synch" with the map, in that in needs to be computed _before_ the concurrent map. 
+

@@ -1,0 +1,52 @@
+NOTE: Find "vivado.log" for these figures
+  + in _xocc.../_vpl/ipi
+
+// available resources //
+   luts      : 1032857
+   registers : 2157619
+   brams     : 1962
+   dsps      : 6837
+
+
+// TybecBuild_20181102_vect1_oclOnly //
+required resources:
+   luts      : 12760
+   registers : 19650
+   brams     : 17
+   dsps      : 3
+
+// TybecBuild_20181028_vect1 // 
+   luts      : 12054
+   registers : 18697
+   brams     : 18.5
+   dsps      : 3
+
+// TybecBuild_20181028_vect2 //
+Post-synthesis utilization DRC check...
+required resources:
+   luts      : 12564
+   registers : 19122
+   brams     : 21
+   dsps      : 6
+
+// TybecBuild_20181028_vect4 //
+required resources:
+   luts      : 12806
+   registers : 19971
+   brams     : 26
+   dsps      : 12
+
+// TybecBuild_20181028_vect8 //
+required resources:
+   luts      : 14090
+   registers : 21634
+   brams     : 28
+   dsps      : 24
+
+// TybecBuild_20181028_vect16 //
+required resources:
+   luts      : 15913
+   registers : 24445
+   brams     : 38.5
+   dsps      : 48
+

@@ -1,0 +1,130 @@
+TyBEC: Found macro NLinear = 16
+
+=====================================
+       Running TyBEC Parser          
+=====================================
+Found FUNCT_DECLR kernel_A
+TyBEC: Found function definition of kernel_A 
+Found FUNCTION
+Found FUNCT_DECLR kernel_B
+TyBEC: Found function definition of kernel_B 
+Found FUNCTION
+Found FUNCT_DECLR kernel_C
+TyBEC: Found function definition of kernel_C 
+Found FUNCTION
+Found FUNCT_DECLR kernel_D
+TyBEC: Found function definition of kernel_D 
+Found FUNCTION
+Found FUNCT_DECLR kernelTop
+TyBEC: kernel_A called by kernelTop
+TyBEC: kernel_B called by kernelTop
+TyBEC: kernel_C called by kernelTop
+TyBEC: kernel_D called by kernelTop
+TyBEC: Found function definition of kernelTop 
+Found FUNCTION
+TyBEC: Found allocated memory: %vin0, i32 , 16 words , addressspace = 1 
+TyBEC: Found allocated memory: %vin1, i32 , 16 words , addressspace = 1 
+TyBEC: Found allocated memory: %vout, i32 , 16 words , addressspace = 1 
+TyBEC: Found STREAMREAD: %vin0_stream_load, connected to  %vin0
+TyBEC: Found STREAMREAD: %vin1_stream_load, connected to  %vin1
+TyBEC: Found STREAMWRITE: %vout_stream_store, connected to  %vout
+TyBEC: kernelTop called by main
+The top kernel called from Main is  = kernelTop
+TyBEC: Found function definition of main.
+
+============================================================================
+ Running the Cost Model (Performance and Resource Estimates       
+============================================================================
+
+Target node is   : bolamaNallatech
+Target board is  : nallatech_385_D5
+Target device is : StratixV_GS_D5
+
+
+----------------------------------------------------------------------------
+ BANDWIDTH ESTIMATES 
+----------------------------------------------------------------------------
+TyBEC: f  = 333.3 MHz 333300000 Hz
+TyBEC: host peak_Mbps  = 63000 Mbps
+TyBEC: host sust Mbps  = 63000 Mbps
+TyBEC: mem  peak Mbps  = 213248 Mbps
+TyBEC: mem  sust Mbps  = 121551.36 Mbps
+
+----------------------------------------------------------------------------
+ RESOURCE ESTIMATES (Kernel & Shell) 
+----------------------------------------------------------------------------
+
+::KERNEL::
+TyBEC: aluts = 224 (0.05 %)
+TyBEC: regs  = 672  (0.11 %)
+TyBEC: bram  = 1  (0.08 %)
+TyBEC: dsp   = 1   (0.14 %)
+
+::SHELL::
+TyBEC: aluts = 42272 (12.29 %)
+TyBEC: regs  = 61312  (8.93 %)
+TyBEC: bram  = 1719504  (4.34 %)
+TyBEC: dsp   = 0   (0.05 %)
+
+::TOTAL::
+TyBEC: aluts = 42496 (12.4 %)
+TyBEC: regs  = 61984  (9.07 %)
+TyBEC: bram  = 1719505  (4.39 %)
+TyBEC: dsp   = 1   (0.13 %)
+
+----------------------------------------------------------------------------
+ ROOFLINE ANALYSIS                                                           
+----------------------------------------------------------------------------
+TyBEC: Size of 1 input array (n_gs)              = 16
+TyBEC: Firing interval/II (n_to)                 = 1
+TyBEC: Total word operations per kernel (n_wops) = 8
+TyBEC: Words per tuple (from GMEM)      (w_pt)   = 3
+TyBEC: Size of problem (array size, words)       = 16
+TyBEC: Word size in bits (w_s_bits)              = 32
+TyBEC: Bytes per word (b_pw)                     = 4
+TyBEC: Kernel Pipeline  Latency (k_pd)           = 3
+
+TyBEC: CP of one PE              = 9 GBops/sec
+TyBEC: CP of one PE (Asymptotic) = 10.7 GBops/sec
+
+TyBEC: Theoretical maximum PE scaling         = 543.4
+
+TyBEC: Computational Intensity = 2.7 Byte-op/Byte-trasfer
+
+TyBEC: Sustained Memory Bandwidth (this variant)         = 15.2 GB/sec
+TyBEC: Theoretical Peak Memory Bandwidth (chosen target) = 26 GB/sec
+
+
+TyBEC: Computation-Bound, CP_PE  x SCALE  = 9	GBops/sec
+TyBEC: Bandwidth-Bound,   CI x BW         = 41	GBops/sec
+
+[33mTyBEC: Estimated Performance from Roofline Analysis	= ***9 GBop/sec***
+[0m
+TyBEC: Generating TEX file to plot performance on roofline graph
+TyBEC: Generated custom ROOFLINE plot TEX file 
+----------------------------------------------------------------------------
+Build took 0.33 seconds
+The graph is: 
+ kernelTop.%kt_vin0-kernelTop.kernel_A.0
+kernelTop.%kt_vin0-kernelTop.kernel_B.1
+kernelTop.%kt_vin1-kernelTop.kernel_A.0
+kernelTop.kernel_A.0-kernelTop.kernel_C.2
+kernelTop.kernel_C.2-kernelTop.kernel_D.3
+kernelTop.kernel_D.3-kernelTop.%kt_vout
+kernel_A.%ka_vin0-kernel_A.%local1
+kernel_A.%ka_vin0-kernel_A.%local2
+kernel_A.%ka_vin1-kernel_A.%local1
+kernel_A.%ka_vin1-kernel_A.%local2
+kernel_A.%local1-kernel_A.%local3
+kernel_A.%local2-kernel_A.%local3
+kernel_A.%local3-kernel_A.%local4
+kernel_A.%local4-kernel_A.%ka_vout
+kernel_B.%kb_vin-kernel_B.%kb_vout
+kernel_C.%kc_vin-kernel_C.%kc_vout
+kernel_C.%kc_vin1-kernel_C.%kc_vout
+kernel_D.%kd_vin-kernel_D.%kd_vout
+main.%vin0-main.kernelTop.0
+main.%vin1-main.kernelTop.0
+main.kernelTop.0-main.%vout
+kernelTop.kernel_B.1_b
+kernel_A.local1_b

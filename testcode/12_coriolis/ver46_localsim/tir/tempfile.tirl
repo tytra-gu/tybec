@@ -1,0 +1,94 @@
+define void @coriolis_ker0 ( float32 %u
+                            , float32 %v
+                            , float32 %un
+                            , float32 %vn
+                            ) pipe
+{
+  float32 %mul = mul float32 %u, 0.999013
+  float32 %mul1 = mul float32 %v, -0.062832
+  float32 %add = add float32 %mul, %mul1
+  float32 %un = udiv float32 %add, 1.000987
+  float32 %mul4 = mul float32 %v, 0.999013
+  float32 %mul5 = mul float32 %u, -0.062832
+  float32 %sub6 = sub float32 %mul4, %mul5
+  float32 %vn = udiv float32 %sub6, 1.000987
+  ret void
+}
+define void @coriolis_ker1_subker0 (
+    float32 %x
+  , float32 %un
+  , float32 %xn
+  ) pipe
+{
+  float32 %mul = mul float32 %un, 432.000000
+  float32 %div = udiv float32 %mul, 1000.0
+  float32 %xn = add float32 %x, %div
+  ret void
+}
+define void @coriolis_ker1_subker1 (
+    float32 %y
+  , float32 %vn
+  , float32 %yn
+  ) pipe
+{
+  float32 %mul1 = mul float32 %vn, 432.000000
+  float32 %div2 = udiv float32 %mul1, 1000.0
+  float32 %yn = add float32 %y, %div2
+  ret void
+}
+define void @kernel_top( float32 %u
+                        , float32 %v
+                        , float32 %x
+                        , float32 %y
+                        , float32 %un
+                        , float32 %vn
+                        , float32 %xn
+                        , float32 %yn
+                        ) pipe
+{
+  call @coriolis_ker0 ( float32 %u
+                      , float32 %v
+                      , float32 %un_local
+                      , float32 %vn_local
+                      )
+  call @coriolis_ker1_subker0 ( float32 %x
+                      , float32 %un_local
+                      , float32 %xn
+                      )
+  call @coriolis_ker1_subker1 ( float32 %y
+                      , float32 %vn_local
+                      , float32 %yn
+                      )
+  float32 %un = load float32 %un_local
+  float32 %vn = load float32 %vn_local
+  ret void
+}
+define void @main () {
+  %u = alloca [1024 x float32], addrspace(1)
+  %v = alloca [1024 x float32], addrspace(1)
+  %x = alloca [1024 x float32], addrspace(1)
+  %y = alloca [1024 x float32], addrspace(1)
+  %un = alloca [1024 x float32], addrspace(1)
+  %vn = alloca [1024 x float32], addrspace(1)
+  %xn = alloca [1024 x float32], addrspace(1)
+  %yn = alloca [1024 x float32], addrspace(1)
+  %u_stream = streamread float32, float32* %u , !tir.stream.type !stream1d, !tir.stream.size !1024
+  %v_stream = streamread float32, float32* %v , !tir.stream.type !stream1d, !tir.stream.size !1024
+  %x_stream = streamread float32, float32* %x , !tir.stream.type !stream1d, !tir.stream.size !1024
+  %y_stream = streamread float32, float32* %y , !tir.stream.type !stream1d, !tir.stream.size !1024
+  streamwrite float32 %un_stream, float32* %un, !tir.stream.type !stream1d, !tir.stream.size !1024
+  streamwrite float32 %vn_stream, float32* %vn, !tir.stream.type !stream1d, !tir.stream.size !1024
+  streamwrite float32 %xn_stream, float32* %xn, !tir.stream.type !stream1d, !tir.stream.size !1024
+  streamwrite float32 %yn_stream, float32* %yn, !tir.stream.type !stream1d, !tir.stream.size !1024
+  call @kernel_top (
+     float32 %u_stream
+    ,float32 %v_stream
+    ,float32 %x_stream
+    ,float32 %y_stream
+    ,float32 %un_stream
+    ,float32 %vn_stream
+    ,float32 %xn_stream
+    ,float32 %yn_stream
+    )
+  ret void
+}

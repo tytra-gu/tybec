@@ -1,0 +1,28 @@
+** Sdaccel 2017.4 (AWS compatible)
+
+* Google docs link for my doc on working with Amazon AWS-F1
+https://docs.google.com/document/d/17bUyUWYpTv-BpbUmyZVyYWGSAY1cOW0MiocNYhyY84Q/edit
+
+* user guide
+https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug1023-sdaccel-user-guide.pdf
+  - memory optimization:: https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug1023-sdaccel-user-guide.pdf#unique_62
+  
+  
+
+* SDAccel Environment Profiling  and Optimization Guide
+https://www.xilinx.com/support/documentation/sw_manuals/xilinx2017_4/ug1207-sdaccel-optimization-guide.pdf
+
+* Quick Start Guide to Accelerating your C/C++ application on an AWS F1 FPGA Instance with SDAccel
+https://github.com/aws/aws-fpga/blob/master/SDAccel/README.md
+
+* SDAccel Guide for Amazon F1
+https://github.com/aws/aws-fpga/blob/master/SDAccel/docs/SDAccel_Guide_AWS_F1.md
+
+* How to write RTL kernels for performance:
+https://www.xilinx.com/support/documentation/sw_manuals/xilinx2018_2/ug949-vivado-design-methodology.pdf
+
+* Creating and packaging custom IP in vivado
+https://www.xilinx.com/support/documentation/sw_manuals/xilinx2018_2/ug1118-vivado-creating-packaging-custom-ip.pdf
+
+* Memory performsance optimization:
+https://www.xilinx.com/support/documentation/sw_manuals/xilinx2018_2/ug1023-sdaccel-user-guide.pdf#unique_81

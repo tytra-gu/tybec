@@ -1,0 +1,179 @@
+;-- =============================================================================
+;-- Company : Unversity of Glasgow, Comuting Science
+;-- Author: Syed Waqar Nabi
+;--
+;-- Create Date : 2014.10.27
+;-- Project Name : TyTra
+;--
+;-- Dependencies :
+;--
+;-- Revision :
+;-- Revision 0.01. File Created
+;-- Revision 0.02. 2019.06.19: Updated to tybec-17 version, incorporated as a test case
+;--
+;-- Conventions :
+;-- =============================================================================
+;-- =============================================================================
+;-- General Description
+;-- -----------------------------------------------------------------------------
+;-- Tytra-IR BACKEND file for Coriolis Kernel
+;--
+;-- While this kernsl has two modes, at run time we may beed to choose one or the svn
+;-- other, set by the host-controlled MODE variable
+;-- so we instantiate BOTH mode kernels
+;-- =============================================================================
+;-- size = 1024*1024
+;--#define SIZE 1048576
+;--#define 64 64
+;--I have the same arithmetic instructions for i32/int for now
+;--constants initiliazed from values taken from C execution
+;--#define ALPHA -0.062832
+;--#define BETA 0.000987
+;--#define DT 432.000000
+;--no point computing constants in HDL (and back-end code gen
+;--not able to generate units with both constant inputs anyway, though
+;--that could be easily fixed
+;--replacing 1-beta with 10-beta, as my integer dividor can only worked with unsigned positive numbers
+;--mode also defined as a macro
+; -----------------------------------------------------------------------------
+;-- coriolis_ker0
+; -----------------------------------------------------------------------------
+;-- If one operand is constant in a leaf node, it MUST be the SECOND operand. This is a silly limitation, will fail in non-commutative operations anyway. FIXME.
+define void @coriolis_ker0 ( i32 %u
+                            , i32 %v
+                            , i32 %un
+                            , i32 %vn
+                            ) pipe
+{
+  i32 %mul = mul i32 %u, 7
+  i32 %mul1 = mul i32 %v, -1
+  i32 %add = add i32 %mul, %mul1
+  i32 %un = udiv i32 %add, 4
+  i32 %mul4 = mul i32 %v, 7
+  i32 %mul5 = mul i32 %u, -1
+  i32 %sub6 = sub i32 %mul4, %mul5
+  i32 %vn = udiv i32 %sub6, 4
+  ret void
+}
+;--WN: had to divide this ker1 into 2 sub kernels, see NOTES for 2019.07.15:
+;-- all functions must be weakly connected graphs, no disconnect allowed (for code gen purposes) FIXME
+; -----------------------------------------------------------------------------
+;-- coriolis_ker1
+; -----------------------------------------------------------------------------
+;--define void @coriolis_ker1 ( i32 %x
+;-- , i32 %y
+;-- , i32 %un
+;-- , i32 %vn
+;-- , i32 %xn
+;-- , i32 %yn
+;-- ) pipe
+;--{
+;-- i32 %mul = mul i32 432, %un
+;-- i32 %div = udiv i32 %mul, 1000.0
+;-- i32 %xn = add i32 %x, %div
+;--
+;-- i32 %mul1 = mul i32 432, %vn
+;-- i32 %div2 = udiv i32 %mul1, 1000.0
+;-- i32 %yn = add i32 %y, %div2
+;-- ret void
+;--}
+; -----------------------------------------------------------------------------
+;-- coriolis_ker1_subker0
+; -----------------------------------------------------------------------------
+;--WN: had to divide this intt
+define void @coriolis_ker1_subker0 (
+    i32 %x
+  , i32 %un
+  , i32 %xn
+  ) pipe
+{
+  i32 %mul = mul i32 %un, 432
+  i32 %div = udiv i32 %mul, 1000.0
+  i32 %xn = add i32 %x, %div
+  ret void
+}
+; -----------------------------------------------------------------------------
+;-- coriolis_ker1_subker1
+; -----------------------------------------------------------------------------
+;--WN: had to divide this intt
+define void @coriolis_ker1_subker1 (
+    i32 %y
+  , i32 %vn
+  , i32 %yn
+  ) pipe
+{
+  i32 %mul1 = mul i32 %vn, 432
+  i32 %div2 = udiv i32 %mul1, 1000.0
+  i32 %yn = add i32 %y, %div2
+  ret void
+}
+; -----------------------------------------------------------------------------
+;-- kernel_top
+; -----------------------------------------------------------------------------
+define void @kernel_top( i32 %u
+                        , i32 %v
+                        , i32 %x
+                        , i32 %y
+                        , i32 %un
+                        , i32 %vn
+                        , i32 %xn
+                        , i32 %yn
+                        ) pipe
+{
+;-- I cannot allow output arguments in hierarhichial functions to *also* be intermediate
+;-- arguments between peer kernels
+;-- That is because each module/node has to be synchronized at the output, so all
+;-- outputs must be valid _at the same index_ at the same time.
+;-- If I put delay buffers to synchronize such local-use-also ouputs to other outputs,
+;-- then their local consumption will suffer latency, delaying the other outputs further still, so
+;-- and so on ad inifintum...
+  call @coriolis_ker0 ( i32 %u
+                      , i32 %v
+                      , i32 %un_local
+                      , i32 %vn_local
+                      )
+  call @coriolis_ker1_subker0 ( i32 %x
+                      , i32 %un_local
+                      , i32 %xn
+                      )
+  call @coriolis_ker1_subker1 ( i32 %y
+                      , i32 %vn_local
+                      , i32 %yn
+                      )
+  i32 %un = load i32 %un_local
+  i32 %vn = load i32 %vn_local
+  ret void
+}
+; ----------------------------------------------------------
+; -- ** MAIN
+; ----------------------------------------------------------
+define void @main () {
+  %u = alloca [64 x i32], addrspace(1)
+  %v = alloca [64 x i32], addrspace(1)
+  %x = alloca [64 x i32], addrspace(1)
+  %y = alloca [64 x i32], addrspace(1)
+  %un = alloca [64 x i32], addrspace(1)
+  %vn = alloca [64 x i32], addrspace(1)
+  %xn = alloca [64 x i32], addrspace(1)
+  %yn = alloca [64 x i32], addrspace(1)
+  %u_stream = streamread i32, i32* %u , !tir.stream.type !stream1d, !tir.stream.size !64
+  %v_stream = streamread i32, i32* %v , !tir.stream.type !stream1d, !tir.stream.size !64
+  %x_stream = streamread i32, i32* %x , !tir.stream.type !stream1d, !tir.stream.size !64
+  %y_stream = streamread i32, i32* %y , !tir.stream.type !stream1d, !tir.stream.size !64
+  streamwrite i32 %un_stream, i32* %un, !tir.stream.type !stream1d, !tir.stream.size !64
+  streamwrite i32 %vn_stream, i32* %vn, !tir.stream.type !stream1d, !tir.stream.size !64
+  streamwrite i32 %xn_stream, i32* %xn, !tir.stream.type !stream1d, !tir.stream.size !64
+  streamwrite i32 %yn_stream, i32* %yn, !tir.stream.type !stream1d, !tir.stream.size !64
+  ;--call the top level kernel and pass it the streams and the constant
+  call @kernel_top (
+     i32 %u_stream
+    ,i32 %v_stream
+    ,i32 %x_stream
+    ,i32 %y_stream
+    ,i32 %un_stream
+    ,i32 %vn_stream
+    ,i32 %xn_stream
+    ,i32 %yn_stream
+    )
+  ret void
+}

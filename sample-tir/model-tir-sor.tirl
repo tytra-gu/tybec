@@ -1,0 +1,624 @@
+;-- =============================================================================
+;-- Company      : Unversity of Glasgow, Comuting Science
+;-- Author:        Syed Waqar Nabi
+;-- 
+;-- Create Date  : 2014.11.03
+;-- Project Name : TyTra
+;--
+;-- Dependencies : 
+;--
+;-- Revision     : 
+;-- Revision 0.01;2015.10.25;  File Created. Corresponds to TyTra Project Document v 1.1
+;-- 
+;-- Conventions  : 
+;-- =============================================================================
+;--
+;-- =============================================================================
+;-- General Description
+;-- -----------------------------------------------------------------------------
+;-- Tytra-IR BACKEND file for SOR code from LES
+;-- 
+;-- MODEL TIR FILE to indicate the latest syntax
+;-- 
+;-- Array indices start from 0
+;--
+;-- =============================================================================
+;--
+;-- *****************************************************************************
+;--                        *** MANAGE-IR ***  
+;-- *****************************************************************************
+
+; C-style macros (?)
+#define NDim1     16
+  ; km
+#define NDim2     16
+  ; jm
+#define NDim3     16
+  ; im
+#define NLinear   4096 
+  ; the assumption is that these global parameters apply to ALL array/streams
+  ; in the design. This is an artificial limitation as eventuall I should be 
+  ; working with asymmetrical streams as well
+#define NLanes    4
+#define NLinearPL 1024
+#define NKIter    100
+  ; numner of Kernel Iterations
+
+; =============================================================================
+; ** Launchpad
+; =============================================================================
+
+define void launch()
+{
+  ; ---------------------------------------------------------------------------
+  ; ** Memory Objects
+  ; ---------------------------------------------------------------------------
+  @mem_p = addrSpace(3) <NLinear x ui18>, 
+            !"hmap" , !"NULL"  ,
+            !"init" , !"a.dat" ,
+            !"readPorts"  , !4 ,
+            !"writePorts" , !1
+ 
+  @mem_rhs = addrSpace(3) <NLinear x ui18>, 
+            !"hmap" , !"NULL"  ,
+            !"init" , !"a.dat" ,
+            !"readPorts"  , !4 ,
+            !"writePorts" , !1
+
+
+  @mem_cn1 = addrSpace(3) <NLinear x ui18> , 
+            !"hmap" , !"NULL"         ,
+            !"readPorts"  , !4        ,
+            !"writePorts" , !1
+
+  @mem_cn2l = addrSpace(3) <NDim3 x ui18> , 
+            !"hmap" , !"NULL"         ,
+            !"readPorts"  , !4        ,
+            !"writePorts" , !1
+
+  @mem_cn2s = addrSpace(3) <NDim3 x ui18> , 
+            !"hmap" , !"NULL"         ,
+            !"readPorts"  , !4        ,
+            !"writePorts" , !1
+
+  @mem_cn3l = addrSpace(3) <NDim2 x ui18> , 
+            !"hmap" , !"NULL"         ,
+            !"readPorts"  , !4        ,
+            !"writePorts" , !1
+
+  @mem_cn3s = addrSpace(3) <NDim2 x ui18> , 
+            !"hmap" , !"NULL"         ,
+            !"readPorts"  , !4        ,
+            !"writePorts" , !1
+
+  @mem_cn4l = addrSpace(3) <NDim1 x ui18> , 
+            !"hmap" , !"NULL"         ,
+            !"readPorts"  , !4        ,
+            !"writePorts" , !1
+
+  @mem_cn4s = addrSpace(3) <NDim1 x ui18> , 
+            !"hmap" , !"NULL"         ,
+            !"readPorts"  , !4        ,
+            !"writePorts" , !1
+
+  @mem_pOut = addrSpace(3) <NLinear x ui18>, 
+            !"hmap" , !"NULL"  ,
+            !"init" , !"a.dat" ,
+            !"readPorts"  , !1 ,
+            !"writePorts" , !4
+
+  @mem_sorError = addrSpace(3) <NLinear x ui18>, 
+            !"hmap" , !"NULL"  ,
+            !"init" , !"a.dat" ,
+            !"readPorts"  , !1 ,
+            !"writePorts" , !4
+
+  ; ---------------------------------------------------------------------------
+  ; ** Streaming Objects
+  ; ---------------------------------------------------------------------------
+  ; NOTE: the extended semantic that allows added context 
+  ;--> 4 streams for p
+  @strobj_p0 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_p"       ,
+               !"length"   , !NLinearPL      ,
+               !"start"    , !0*NLinearPL    ,
+               !"signal"   , !"yes"          ,              
+               
+  @strobj_p1 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_p"       ,
+               !"length"   , !NLinearPL        ,
+               !"start"    , !1*NLinearPL              ,
+               !"signal"   , !"yes"          ,              
+
+  @strobj_p2 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_p"       ,
+               !"length"   , !NLinearPL        ,
+               !"start"    , !2*NLinearPL              ,
+               !"signal"   , !"yes"          ,              
+
+  @strobj_p3 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_p"       ,
+               !"length"   , !NLinearPL        ,
+               !"start"    , !3*NLinearPL              ,
+               !"signal"   , !"yes"          ,              
+
+
+  ;--> 4 streams for rhs
+  @strobj_rhs0 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_rhs"     ,
+               !"length"   , !NLinearPL      ,
+               !"start"    , !0*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_rhs1 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_rhs"     ,
+               !"length"   , !NLinearPL      ,
+               !"start"    , !1*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_rhs2 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_rhs"     ,
+               !"length"   , !NLinearPL      ,
+               !"start"    , !2*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_rhs3 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_rhs"     ,
+               !"length"   , !NLinearPL      ,
+               !"start"    , !3*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  ;--> 4 streams for cn1
+  @strobj_cn10 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn1"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !0*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn11 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn1"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !1*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn12 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn1"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !2*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn13 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn1"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !3*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  ;--> 4 streams for cn2l
+  @strobj_cn2l0 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn2l"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !0*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn2l1 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn2l"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !1*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn2l2 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn2l"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !2*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn2l3 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn2l"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !3*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  ;--> 4 streams for cn2s
+  @strobj_cn2s0 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn2s"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !0*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn2s1 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn2s"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !1*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn2s2 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn2s"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !2*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn2s3 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn2s"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !3*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  ;--> 4 streams for cn3l
+  @strobj_cn3l0 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn3l"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !0*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn3l1 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn3l"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !1*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn3l2 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn3l"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !2*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn3l3 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn3l"    ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !3*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  ;--> 4 streams for cn3s
+  @strobj_cn3s0 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn3s"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !0*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn3s1 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn3s"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !1*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn3s2 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn3s"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !2*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn3s3 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn3s"    ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !3*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  ;--> 4 streams for cn4l
+  @strobj_cn4l0 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn4l"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !0*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn4l1 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn4l"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !1*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn4l2 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn4l"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !2*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn4l3 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn4l"    ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !3*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  ;--> 4 streams for cn4s
+  @strobj_cn4s0 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn4s"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !0*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn4s1 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn4s"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !1*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn4s2 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn4s"     ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !2*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  @strobj_cn4s3 = addrSpace(10),
+               !"dir"      , !"in"           ,
+               !"memConn"  , !"@mem_cn4s"    ,
+               !"length"   , !NLinearPL      , 
+               !"start"    , !3*NLinearPL    ,
+               !"signal"   , !"yes"          ,
+
+  ;--> 4 streams for pOut
+  @strobj_pOut0 = addrSpace(10),
+              !"dir"      , !"out"        ,
+              !"memConn"  , !"@mem_pOut"  ,
+              !"length"   , !NLinearPL    ,
+              !"start"    , !0*NLinearPL  ,     
+              !"signal"   , !"no"         ,
+
+  @strobj_pOut1 = addrSpace(10),
+              !"dir"      , !"out"        ,
+              !"memConn"  , !"@mem_pOut"  ,
+              !"length"   , !NLinearPL    ,
+              !"start"    , !2*NLinearPL  ,     
+              !"signal"   , !"no"         ,
+
+  @strobj_pOut2 = addrSpace(10),
+              !"dir"      , !"out"        ,
+              !"memConn"  , !"@mem_pOut"  ,
+              !"length"   , !NLinearPL    ,
+              !"start"    , !2*NLinearPL  ,     
+              !"signal"   , !"no"         ,
+
+  @strobj_pOut3 = addrSpace(10),
+              !"dir"      , !"out"        ,
+              !"memConn"  , !"@mem_pOut"  ,
+              !"length"   , !NLinearPL    ,
+              !"start"    , !3*NLinearPL  ,     
+              !"signal"   , !"no"         ,
+
+  ;--> 4 streams for sorError
+  @strobj_sorError0 = addrSpace(10),
+              !"dir"      , !"out"            ,
+              !"memConn"  , !"@mem_sorError"  ,
+              !"length"   , !NLinearPL        ,
+              !"start"    , !0*NLinearPL      ,    
+              !"signal"   , !"no"             ,
+
+  @strobj_sorError1 = addrSpace(10),
+              !"dir"      , !"out"            ,
+              !"memConn"  , !"@mem_sorError"  ,
+              !"length"   , !NLinearPL        ,
+              !"start"    , !1*NLinearPL      ,    
+              !"signal"   , !"no"             ,
+
+  @strobj_sorError2 = addrSpace(10),
+              !"dir"      , !"out"            ,
+              !"memConn"  , !"@mem_sorError"  ,
+              !"length"   , !NLinearPL        ,
+              !"start"    , !2*NLinearPL      ,    
+              !"signal"   , !"no"             ,
+
+  @strobj_sorError3 = addrSpace(10),
+              !"dir"      , !"out"            ,
+              !"memConn"  , !"@mem_sorError"  ,
+              !"length"   , !NLinearPL        ,
+              !"start"    , !3*NLinearPL      ,    
+              !"signal"   , !"no"             ,
+
+; ---------------------------------------------------------------------------
+  ; ** Launching kernels
+  ;   as of date, this part of TIR allows three things only, though this list can
+  ;   be expected to grow
+  ;     1. launch a "main" core
+  ;     2. launch it multiple times
+  ;     3. do mem-mem transfers in between
+  ; *NOTE*: For prototype, the mem-mem transfers and execution are strictly
+  ; sequential. We may save some cycles by overlapping; later... TODO
+  ; ---------------------------------------------------------------------------
+  ;repeat k=1:NKIter
+  ;{
+  
+  call @main()
+  
+  ;    ; main will be repeated NSTEP times; the controller will wait
+  ;    ; until pipeline is completely flushed (last element exit) before
+  ;    ; launching next iteration 
+  ;  @mem_p =  @mem_pOut, !"tir.lmem.copy",
+  ;            !"srcStartAddr" , !0,
+  ;            !"destStartAddr", !0,
+  ;            !"trSizeWords"  , !NLinear
+
+  ;    ; since this is successive relaxation on the same data, so at the
+  ;    ; end of every iteration, the input memory source is overwritten by
+  ;    ; the result of the iteration
+  ;      ; TODO; think about whether this should be left a host functionality?
+  ;} 
+}
+
+
+; *****************************************************************************
+;                        *** COMPUTE-IR ***
+; *****************************************************************************
+; ModuleID = 'top'
+  ; top level module for LLVM
+
+; =============================================================================
+; ** DATAFLOW
+; =============================================================================
+  
+; -----------------------------------------------------------------------------
+; ** Main execution pipeline function
+; -----------------------------------------------------------------------------
+define void @f0(ui18 %pOut , ui18 %sorError, ui18 %p  , ui18 %rhs, ui18 %cn1, ui18 %cn2l, ui18 %cn2s, ui18 %cn3l, ui18 %cn3s, ui18 %cn4l, ui18 %cn4s) pipe
+{
+  ui18 %p_i_p1 = ui18 %p, !tir.stream.offset, !+1
+  ui18 %p_i_n1 = ui18 %p, !tir.stream.offset, !-1
+  ui18 %p_j_p1 = ui18 %p, !tir.stream.offset, !+NDim1
+  ui18 %p_j_n1 = ui18 %p, !tir.stream.offset, !-NDim1
+  ui18 %p_k_p1 = ui18 %p, !tir.stream.offset, !+NDim1*NDim2
+  ui18 %p_k_n1 = ui18 %p, !tir.stream.offset, !-NDim1*NDim2
+    ; TODO, juist to get going
+ 
+  ;stage 0
+  ; TODO (Avoiding input stream of constant weighting factors
+  ; just for the prototype. Should have negligible impact on resources
+  ; and none on EWGT calculation, so should be ok for FPL?
+    ;should have instruction of this type: 
+    ; ui18 %1 = ui18 mul ui18 %p_i_p1, CONST1 (actually input stream of constant)
+      ;from the perspective of this core, makes no differece whether stream is of constants or not
+  
+  ui18 %1 = mul ui18 %p_i_p1, %cn2l
+  ui18 %2 = mul ui18 %p_i_n1, %cn2s
+  ui18 %3 = mul ui18 %p_j_p1, %cn3l
+  ui18 %4 = mul ui18 %p_j_n1, %cn3s
+  ui18 %5 = mul ui18 %p_k_p1, %cn4l
+  ui18 %6 = mul ui18 %p_k_n1, %cn4s
+
+  ;stage 1
+  ui18 %7 = add ui18 %1, %2
+  ui18 %8 = add ui18 %3, %4
+  ui18 %9 = add ui18 %5, %6
+
+  ;stage 2
+  ui18 %10 = add ui18 %7, %8
+
+  ;stage 3
+  ui18 %11 = add ui18 %9, %10
+
+  ;stage 4
+  ui18 %12 = sub ui18 %11,  %rhs
+
+  ;stage 5
+  ui18 %13 = mul ui18 %12, %cn1 
+
+  ;stage 6
+  ui18 %14 = sub ui18 %13, %p
+
+  ;stage 7
+  ui18 %reltemp = mul ui18 %14, %14 
+    ; OMEGA_CONST <-- TODO: one of the operands should be this SCALAR constant input
+    ;this is reltmp
+
+  ;stage 8
+  ui18 %pOut      = add ui18 %p, %reltemp
+  ui18 %sorError  = mul ui18 %reltemp, %reltemp
+  
+  ;stage 9 
+  ;-- reduction. Note the use of GLOBAL prefix '@' of LLVM to indicate that 
+  ;-- the destination operand is part of a reduction operation, so should 
+  ;-- retain value across calls (effectively a STATIC type in C-terms)
+    ;-- BUT, how to initialize the accumulator?
+    ;-- for now, use identity w.r.t the operation (0 for add, 1 for mul)
+  ui18 @sorErrorCumulative = add ui18 %sorError, @sorErrorCumulative, !INIT_VALUE
+}
+
+; -----------------------------------------------------------------------------
+; THREAD PARALLELISM function
+; -----------------------------------------------------------------------------
+define void @f1
+    ( ui18 %pOut0, ui18 %sorError0, ui18 %p0,  ui18 %rhs0,  ui18 %cn10, ui18 %cn2l0, ui18 %cn2s0, ui18 %cn3l0, ui18 %cn3s0, ui18 %cn4l0, ui18 %cn4s0,
+      ui18 %pOut1, ui18 %sorError1, ui18 %p1,  ui18 %rhs1,  ui18 %cn11, ui18 %cn2l1, ui18 %cn2s1, ui18 %cn3l1, ui18 %cn3s1, ui18 %cn4l1, ui18 %cn4s1,
+      ui18 %pOut2, ui18 %sorError2, ui18 %p2,  ui18 %rhs2,  ui18 %cn12, ui18 %cn2l2, ui18 %cn2s2, ui18 %cn3l2, ui18 %cn3s2, ui18 %cn4l2, ui18 %cn4s2,
+      ui18 %pOut3, ui18 %sorError3, ui18 %p3,  ui18 %rhs3,  ui18 %cn13, ui18 %cn2l3, ui18 %cn2s3, ui18 %cn3l3, ui18 %cn3s3, ui18 %cn4l3, ui18 %cn4s3 ) par
+{
+  call @f0( ui18 %pOut0, ui18 %sorError0, ui18 %p0,  ui18 %rhs0,  ui18 %cn10, ui18 %cn2l0, ui18 %cn2s0, ui18 %cn3l0, ui18 %cn3s0, ui18 %cn4l0, ui18 %cn4s0) pipe
+  call @f0( ui18 %pOut1, ui18 %sorError1, ui18 %p1,  ui18 %rhs1,  ui18 %cn11, ui18 %cn2l1, ui18 %cn2s1, ui18 %cn3l1, ui18 %cn3s1, ui18 %cn4l1, ui18 %cn4s1) pipe
+  call @f0( ui18 %pOut2, ui18 %sorError2, ui18 %p2,  ui18 %rhs2,  ui18 %cn12, ui18 %cn2l2, ui18 %cn2s2, ui18 %cn3l2, ui18 %cn3s2, ui18 %cn4l2, ui18 %cn4s2) pipe
+  call @f0( ui18 %pOut3, ui18 %sorError3, ui18 %p3,  ui18 %rhs3,  ui18 %cn13, ui18 %cn2l3, ui18 %cn2s3, ui18 %cn3l3, ui18 %cn3s3, ui18 %cn4l3, ui18 %cn4s3) pipe
+  ret void
+}
+
+; -----------------------------------------------------------------------------
+; main 
+; -----------------------------------------------------------------------------
+define void @main ()
+{
+; =============================================================================
+; ** GLOBAL VARIABLES (PORTS)
+; =============================================================================
+@main.p0         = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_p0" 
+@main.p1         = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_p1" 
+@main.p2         = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_p2" 
+@main.p3         = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_p3" 
+@main.rhs0       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_rhs0" 
+@main.rhs1       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_rhs1" 
+@main.rhs2       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_rhs2" 
+@main.rhs3       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_rhs3" 
+@main.cn10       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn10" 
+@main.cn11       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn11" 
+@main.cn12       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn12" 
+@main.cn13       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn13" 
+@main.cn2l0       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn2l0" 
+@main.cn2l1       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn2l1" 
+@main.cn2l2       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn2l2" 
+@main.cn2l3       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn2l3" 
+@main.cn2s0       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn2s0" 
+@main.cn2s1       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn2s1" 
+@main.cn2s2       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn2s2" 
+@main.cn2s3       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn2s3" 
+@main.cn3l0       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn3l0" 
+@main.cn3l1       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn3l1" 
+@main.cn3l2       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn3l2" 
+@main.cn3l3       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn3l3" 
+@main.cn3s0       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn3s0" 
+@main.cn3s1       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn3s1" 
+@main.cn3s2       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn3s2" 
+@main.cn3s3       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn3s3" 
+@main.cn4l0       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn4l0" 
+@main.cn4l1       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn4l1" 
+@main.cn4l2       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn4l2" 
+@main.cn4l3       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn4l3" 
+@main.cn4s0       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn4s0" 
+@main.cn4s1       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn4s1" 
+@main.cn4s2       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn4s2" 
+@main.cn4s3       = addrSpace(12) ui18, !"istream", !"CONT", !0, !"strobj_cn4s3" 
+@main.pOut0      = addrSpace(12) ui18, !"ostream", !"CONT", !T, !"strobj_pOut0"                 
+@main.pOut1      = addrSpace(12) ui18, !"ostream", !"CONT", !T, !"strobj_pOut1"                 
+@main.pOut2      = addrSpace(12) ui18, !"ostream", !"CONT", !T, !"strobj_pOut2"                 
+@main.pOut3      = addrSpace(12) ui18, !"ostream", !"CONT", !T, !"strobj_pOut3"                 
+@main.sorError0  = addrSpace(12) ui18, !"ostream", !"CONT", !T, !"strobj_sorError0"               
+@main.sorError1  = addrSpace(12) ui18, !"ostream", !"CONT", !T, !"strobj_sorError1"               
+@main.sorError2  = addrSpace(12) ui18, !"ostream", !"CONT", !T, !"strobj_sorError2"               
+@main.sorError3  = addrSpace(12) ui18, !"ostream", !"CONT", !T, !"strobj_sorError3"               
+
+
+call @f1 
+    ( ui18 %pOut0, ui18 %sorError0, ui18 %p0,  ui18 %rhs0,  ui18 %cn1_0, ui18 %cn2l0, ui18 %cn2s0, ui18 %cn3l0, ui18 %cn3s0, ui18 %cn4l0, ui18 %cn4s0,
+      ui18 %pOut1, ui18 %sorError1, ui18 %p1,  ui18 %rhs1,  ui18 %cn1_1, ui18 %cn2l1, ui18 %cn2s1, ui18 %cn3l1, ui18 %cn3s1, ui18 %cn4l1, ui18 %cn4s1,
+      ui18 %pOut2, ui18 %sorError2, ui18 %p2,  ui18 %rhs2,  ui18 %cn1_2, ui18 %cn2l2, ui18 %cn2s2, ui18 %cn3l2, ui18 %cn3s2, ui18 %cn4l2, ui18 %cn4s2,
+      ui18 %pOut3, ui18 %sorError3, ui18 %p3,  ui18 %rhs3,  ui18 %cn1_3, ui18 %cn2l3, ui18 %cn2s3, ui18 %cn3l3, ui18 %cn3s3, ui18 %cn4l3, ui18 %cn4s3 ) par
+      
+      ret void
+}

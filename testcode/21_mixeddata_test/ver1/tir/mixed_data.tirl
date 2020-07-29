@@ -1,0 +1,109 @@
+;-- =========================================================
+;-- Company      : Unversity of Glasgow, Comuting Science
+;-- Author:        Syed Waqar Nabi
+;-- 
+;-- Create Date  : 2019.10.21
+;-- Project Name : TyTra
+;--
+;-- Dependencies : 
+;--
+;-- Revision     : 
+;-- Revision 0.01. File Created
+;-- 
+;-- Conventions  : 
+;-- =========================================================
+;--
+;-- =========================================================
+;-- General Description
+;-- ---------------------------------------------------------
+;-- Tytra-IR BACKEND file for mixed-data prototype
+;-- 
+;-- This is TIR-17 version
+;-- =========================================================
+
+;-- **************************************************
+;--            *** MANAGE-IR ***  
+;-- **************************************************
+;-- C-style macros 
+#define NLinear 16
+#define data_t  float32
+
+
+; ----------------------------------------------------------
+; -- ** kernel_A
+; ----------------------------------------------------------
+define void @kernel_A ( data_t %ka_vin0 
+                      , data_t %ka_vin1
+                      , i32    %cond
+                      , data_t %ka_vout
+                      ) pipe {
+  data_t %local1_t = add data_t %ka_vin0, %ka_vin1
+  data_t %local1_f = mul data_t %ka_vin0, %ka_vin1
+ 
+  data_t %temp     = select i32 %cond, data_t %local1_t, data_t %local1_f
+  data_t %ka_vout  = add data_t %temp, %temp
+  
+  ret void
+}
+
+; ----------------------------------------------------------
+; -- ** kernelTop
+; ----------------------------------------------------------
+define void @kernelTop  ( data_t %kt_vin0
+                        , data_t %kt_vin1
+                        , i32    %cond
+                        , data_t %kt_vout
+                        ) pipe
+{
+  call @kernel_A ( data_t %kt_vin0
+                 , data_t %kt_vin1
+                 , i32    %cond
+                 , data_t %kt_vout
+                 ) 
+
+  ret void
+}
+
+; ----------------------------------------------------------
+; -- ** MAIN
+; ----------------------------------------------------------
+
+define void @main () {
+ %vin0  = alloca [NLinear x data_t], addrspace(1) 
+ %vin1  = alloca [NLinear x data_t], addrspace(1) 
+ %cond  = alloca [NLinear x i32   ], addrspace(1) 
+ %vout  = alloca [NLinear x data_t], addrspace(1)  
+
+ %vin0_stream = streamread data_t, data_t*  %vin0 
+                   , !tir.stream.type   !stream1d
+                   , !tir.stream.size   !NLinear
+                   , !tir.stream.saddr  !0
+                   , !tir.stream.stride !1
+
+  %vin1_stream = streamread data_t, data_t* %vin1
+                    , !tir.stream.type   !stream1d
+                    , !tir.stream.size   !NLinear
+                    , !tir.stream.saddr  !0
+                    , !tir.stream.stride !1
+  
+  %cond_stream = streamread i32, i32* %cond
+                    , !tir.stream.type   !stream1d
+                    , !tir.stream.size   !NLinear
+                    , !tir.stream.saddr  !0
+                    , !tir.stream.stride !1
+
+
+  streamwrite data_t %vout_stream, data_t* %vout
+                    , !tir.stream.type   !stream1d
+                    , !tir.stream.saddr  !0
+                    , !tir.stream.size   !NLinear
+                    , !tir.stream.stride !1
+                    
+  ;--call the top level kernel and pass it the streams and the constant
+  call @kernelTop ( data_t %vin0_stream
+                  , data_t %vin1_stream
+                  , i32    %cond_stream
+                  , data_t %vout_stream
+                  )
+  ret void
+}

@@ -1,0 +1,32 @@
+TC: output kernel not writing to correct channel (get name from topKernel, not from memory)
+
+TC: Do the outputs (writes to channels) for compute kernels
+
+TC: make correct calls to func_libs (or aocl-Only) functions
+
+TC: test the aoc-only for correctness
+
+TC: update HDL integration, lib generation etc for multiple kernels/hdl functions
+
+TC: test
+
+TC: integrate stencil buffers
+
+TC: test aoc only
+
+TC: test aoc-hdl
+
+TC: integrate vectorization
+
+TC: test aoc only
+
+TC: test aoc-hdl
+
+TC: debud flopoco (or replace)
+
+TC: test with flopoco
+
+TC: do left-overs needed for 2dshallow-water
+
+TC: test 2dshallow water with autoTuning
+

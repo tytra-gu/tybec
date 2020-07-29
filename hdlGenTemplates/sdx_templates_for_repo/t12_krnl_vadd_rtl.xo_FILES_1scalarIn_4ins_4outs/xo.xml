@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root VersionMajor="3" VersionMinor="3" IpCache="no">
+  <Kernels>
+    <Kernel Name="krnl_vadd_rtl" Dir="krnl_vadd_rtl" IP="ip_repo/tybec_kernel_krnl_vadd_rtl_1_0" TopIpDir="." ProjectID="7bad448fcab6413a9d54725a5ba6bc8e">
+      <SupportedFlows>
+        <SupportedFlow>HW_EMU</SupportedFlow>
+        <SupportedFlow>SYSTEM</SupportedFlow>
+      </SupportedFlows>
+    </Kernel>
+  </Kernels>
+</Root>
